@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Master Scout</title>
+<title>The Vision</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#fdfbf7;color:#2c2c2c;font-family:Inter,Arial,sans-serif}
 .app{max-width:1250px;margin:auto;padding:20px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:2px solid #2c2c2c;padding-bottom:10px}
@@ -38,7 +38,7 @@ select{background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3
 </head>
 <body>
 <div class="app">
-<div class="header"><div class="logo">MASTER SCOUT ⚽</div><div class="badge" id="status">Ready</div></div>
+<div class="header"><div class="logo">The Vision</div><div class="badge" id="status">Ready</div></div>
 
 <section id="home" class="screen active">
 <div class="hero">
@@ -53,7 +53,7 @@ select{background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3
 </div>
 <div style="margin-bottom: 24px;">
     <span style="color:#8997ad;font-size:12px;margin-right:8px;text-transform:uppercase;font-family:monospace">Team Name</span>
-    <input type="text" id="teamName" value="Master Scout FC" style="background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3px;padding:9px 12px;font-family:monospace;width:200px;">
+    <input type="text" id="teamName" value="The Vision FC" style="background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3px;padding:9px 12px;font-family:monospace;width:200px;">
 </div>
 <button class="primary" onclick="start()">Start Scouting</button>
 </div>
@@ -607,7 +607,7 @@ function simulateCurrentSeason() {
   
   const myOvr = getLiveOvr();
   const teamNameInput = document.getElementById("teamName");
-  const tName = teamNameInput ? (teamNameInput.value || "Master Scout FC") : "Master Scout FC";
+  const tName = teamNameInput ? (teamNameInput.value || "The Vision FC") : "The Vision FC";
   teams.push({team: tName, ovr: myOvr, isPlayer: true});
   
   const standings = teams.map(t => ({...t, p:0, w:0, d:0, l:0, gf:0, ga:0, pts:0}));
