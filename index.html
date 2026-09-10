@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Master Scout</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fdfbf7;color:#2c2c2c;font-family:Inter,Arial,sans-serif}
+.app{max-width:1250px;margin:auto;padding:20px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:2px solid #2c2c2c;padding-bottom:10px}
+.logo{font-family:Georgia,serif;font-weight:900;font-size:28px}.badge{padding:7px 12px;border:1px solid #2c2c2c;border-radius:3px;color:#2c2c2c;font-size:12px;font-family:monospace;text-transform:uppercase}
+.screen{display:none}.screen.active{display:block}
+button,select{font:inherit}button{border:1px solid #2c2c2c;border-radius:3px;padding:11px 17px;font-weight:800;cursor:pointer;font-family:monospace;text-transform:uppercase}
+.primary{background:#2c2c2c;color:#fdfbf7}.secondary{background:transparent;color:#2c2c2c}.primary:disabled{background:#888;border-color:#888;cursor:not-allowed}
+.hero{text-align:center;margin-top:9vh;padding:70px 25px;background:#fffdfa;border:2px solid #2c2c2c;border-radius:5px;box-shadow:4px 4px 0 rgba(0,0,0,0.1)}
+.hero h1{font-family:Georgia,serif;font-size:58px;letter-spacing:-1px;margin:0 0 14px;color:#111}.hero p{max-width:700px;margin:0 auto 28px;color:#555;line-height:1.6}
+.top{display:flex;justify-content:space-between;align-items:end;margin-bottom:14px;border-bottom:1px dashed #2c2c2c;padding-bottom:10px}.kicker{font-size:11px;font-family:monospace;text-transform:uppercase;letter-spacing:1.2px;color:#666}.title{font-family:Georgia,serif;font-size:30px;font-weight:900;margin-top:3px}
+select{background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3px;padding:9px 12px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:16px}
+.panel{background:#fffdfa;border:1px solid #2c2c2c;border-radius:5px;padding:16px;box-shadow:2px 2px 0 rgba(0,0,0,0.05)}
+.pitch{position:relative;width:100%;aspect-ratio:1.2;background:#84c784;border:2px solid #2c2c2c;border-radius:5px;overflow:hidden;border-bottom:none;border-bottom-left-radius:0;border-bottom-right-radius:0}
+.pitch:before{content:"";position:absolute;bottom:0;left:20%;right:20%;height:35%;border:2px solid #fffdfa;border-bottom:none}
+.pitch:after{content:"";position:absolute;bottom:0;left:35%;right:35%;height:15%;border:2px solid #fffdfa;border-bottom:none}
+.circle{position:absolute;width:20%;aspect-ratio:1;border:2px solid #fffdfa;border-radius:50%;left:40%;bottom:25%;z-index:1;clip-path:polygon(0 0, 100% 0, 100% 50%, 0 50%)}
+.slotWrap{position:absolute;transform:translate(-50%,-50%);width:92px;text-align:center;z-index:3;cursor:pointer}
+.slot{width:52px;height:52px;border-radius:50%;margin:auto;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:monospace;font-weight:900;background:#fdfbf7;color:#2c2c2c;border:2px solid #2c2c2c;box-shadow:2px 2px 0 rgba(0,0,0,0.1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px;transition: background 0.15s;}
+.slot.empty{background:#e8e4d9;color:#666;border:1px dashed #2c2c2c;box-shadow:none}
+.label{margin-top:4px;background:#fffdfa;border:1px solid #2c2c2c;border-radius:3px;padding:3px 4px;font-size:10px;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#2c2c2c}
+.options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:9px}
+.card{background:#fffdfa;border:1px solid #d0c8b6;border-radius:5px;padding:14px;cursor:pointer;box-shadow:1px 1px 3px rgba(0,0,0,0.05)}.card:hover{border-color:#2c2c2c}
+.card.selected{border-color:#2c2c2c;box-shadow:0 0 0 2px #2c2c2c}.anon{font-size:11px;font-family:monospace;color:#666}.pos{font-family:Georgia,serif;font-size:20px;font-weight:900;margin-top:7px;color:#111}.club{font-size:11px;color:#555;margin:3px 0 12px;font-style:italic}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;border-top:1px solid #eee;padding-top:10px}.stat{background:#f4f1ea;border:1px solid #d0c8b6;border-radius:3px;padding:7px;text-align:center}.stat small{display:block;color:#666;font-size:8px;font-family:monospace}.stat b{font-size:14px;font-family:Georgia,serif}
+.squadPlayer{padding:10px;background:#fffdfa;border:1px solid #2c2c2c;border-radius:3px;margin:7px 0;cursor:pointer;box-shadow:2px 2px 0 rgba(0,0,0,0.05); transition: background 0.15s;}.squadPlayer strong{display:block;font-size:12px;font-family:monospace}.squadPlayer span{font-size:10px;color:#555;font-style:italic}
+.note{color:#555;font-size:11px;line-height:1.45;margin-top:8px;font-style:italic}.actions{display:flex;justify-content:space-between;margin-top:14px;align-items:center}
+.finalGrid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px}.reveal{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.revealCard{background:#fffdfa;border:1px solid #2c2c2c;border-radius:5px;padding:15px;box-shadow:2px 2px 0 rgba(0,0,0,0.05)}.revealCard .small{font-size:10px;font-family:monospace;color:#666;border-bottom:1px solid #eee;padding-bottom:5px;margin-bottom:8px}.revealCard h3{margin:6px 0;font-family:Georgia,serif;color:#111}.career{font-size:11px;color:#444;line-height:1.55;font-family:monospace}.score{text-align:center;margin:35px 0;border:2px solid #2c2c2c;padding:20px;background:#fffdfa;border-radius:5px;box-shadow:4px 4px 0 rgba(0,0,0,0.1)}.score small{color:#666;letter-spacing:2px;font-family:monospace}.score strong{display:block;font-size:60px;font-family:Georgia,serif;color:#111}
+@media(max-width:900px){.main,.finalGrid{grid-template-columns:1fr}.options,.reveal{grid-template-columns:1fr}.hero h1{font-size:43px}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header"><div class="logo">MASTER SCOUT ⚽</div><div class="badge" id="status">Ready</div></div>
+
+<section id="home" class="screen active">
+<div class="hero">
+<h1>Can you scout the future?</h1>
+<p>You start with a squad of under-80 rated players and a €1 Billion budget. Draft one player every season. Build the highest rated squad possible!</p>
+<div style="margin-bottom: 24px;">
+    <span style="color:#8997ad;font-size:12px;margin-right:8px;text-transform:uppercase;font-family:monospace">Select Formation</span>
+    <select id="formation">
+        <option value="433">4-3-3</option><option value="442">4-4-2</option><option value="4231">4-2-3-1</option>
+        <option value="352">3-5-2</option><option value="343">3-4-3</option><option value="532">5-3-2</option>
+    </select>
+</div>
+<div style="margin-bottom: 24px;">
+    <span style="color:#8997ad;font-size:12px;margin-right:8px;text-transform:uppercase;font-family:monospace">Team Name</span>
+    <input type="text" id="teamName" value="Master Scout FC" style="background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3px;padding:9px 12px;font-family:monospace;width:200px;">
+</div>
+<button class="primary" onclick="start()">Start Scouting</button>
+</div>
+</section>
+
+<section id="draft" class="screen">
+<div class="top">
+<div><div class="kicker" id="round"></div><div class="title" id="season"></div></div>
+<div style="text-align:right;">
+    <div class="kicker">Budget</div>
+    <div class="title" id="budgetText" style="color:#2c7a2c;">€1.0B</div>
+    <div style="font-size:12px;font-family:monospace;margin-top:4px;">SQUAD OVR: <b id="liveOvr">0</b> <span id="ovrChange" style="font-weight:bold;margin-left:4px;"></span></div>
+</div>
+</div>
+
+<div class="main" style="display:grid; grid-template-columns:minmax(0,1fr) 390px; gap:16px; align-items:start;">
+<div style="display:flex; flex-direction:column; gap:16px;">
+<div class="panel" id="liveFormationPanel">
+<div class="pitch" id="pitch" style="max-width:800px; margin:auto;"><div class="circle"></div></div>
+<div class="note">The formation is visible during every selection. Drafting is completely independent of position.</div>
+</div>
+
+<div class="panel">
+<div class="kicker">Choose one</div>
+<div class="options" id="options"></div>
+<div class="actions">
+    <span class="note">Pick a player to add them to your XI.</span>
+    <div>
+        <button class="secondary" onclick="skipDraft()" style="margin-right:8px;">Skip</button>
+        <button id="draftBtn" class="primary" disabled onclick="draft()">Draft</button>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="panel" style="height:100%;">
+<div class="kicker">Your XI</div>
+<h3 style="margin:4px 0 12px">Squad</h3>
+<div id="squad"></div>
+<div class="note">Click a player here and click a slot on the pitch to swap them.</div>
+</div>
+</div>
+</section>
+
+<section id="final" class="screen">
+<div class="top"><div><div class="kicker">11 rounds complete</div><div class="title">Your final XI</div></div><div class="badge" id="finalFormation"></div></div>
+<div class="panel"><div class="pitch" id="finalPitch" style="aspect-ratio:1.2; max-width:800px; margin:auto;"><div class="circle"></div></div></div>
+<div class="actions"><button class="secondary" onclick="backToDraft()">Back</button><button class="primary" onclick="reveal()">Reveal Players</button></div>
+</section>
+
+<section id="reveal" class="screen">
+<div style="text-align:center;margin:35px 0 24px"><div class="kicker">The reveal</div><div class="title" style="font-size:45px">Final Squad</div><p style="color:#8f9db4">The anonymous IDs are finally revealed.</p></div>
+<div class="panel" style="background:#fffdfa; border: 2px solid #2c2c2c; padding:20px; border-radius:5px;"><div class="pitch" id="revealPitch" style="max-width:900px; margin:auto;"><div class="circle"></div></div></div>
+<div class="score"><small>FINAL SQUAD OVR</small><strong id="score">0</strong></div>
+<div style="text-align:center"><button class="primary" onclick="location.reload()">Play Again</button></div>
+</section>
+<section id="simulation" class="screen">
+<div class="top"><div><div class="kicker" id="simKicker"></div><div class="title" id="simTitle">Season Results</div></div></div>
+<div class="panel">
+  <table id="leagueTable" style="width:100%; border-collapse:collapse; text-align:left; font-family:monospace;">
+    <thead><tr style="border-bottom:1px solid #ccc;"><th style="padding:8px">Pos</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead>
+    <tbody id="leagueTableBody"></tbody>
+  </table>
+</div>
+<div class="actions" style="margin-top:16px;">
+  <button class="primary" onclick="endSimulation()">Continue</button>
+</div>
+</section>
+</div>
+
+<script>
+const seasons=[
+["2014/2015","FIFA 16","160058"],["2015/2016","FIFA 17","170099"],["2016/2017","FIFA 18","180084"],
+["2017/2018","FIFA 19","190075"],["2018/2019","FIFA 20","200061"],["2019/2020","FIFA 21","210064"],
+["2020/2021","FIFA 22","220069"],["2021/2022","FIFA 23","230054"],["2022/2023","FC 24","240050"],
+["2023/2024","FC 25","250044"],["2024/2025","FC 26","260006"]];
+
+const formations={
+433:[["GK",50,91],["LB",20,76],["CB",40,82],["CB",60,82],["RB",80,76],["CM",35,59],["CDM",50,53],["CM",65,59],["LW",20,31],["ST",50,25],["RW",80,31]],
+442:[["GK",50,91],["LB",20,76],["CB",40,82],["CB",60,82],["RB",80,76],["LM",18,56],["CM",40,56],["CM",60,56],["RM",82,56],["ST",40,28],["ST",60,28]],
+4231:[["GK",50,91],["LB",20,76],["CB",40,82],["CB",60,82],["RB",80,76],["CDM",40,59],["CDM",60,59],["LW",20,40],["CAM",50,43],["RW",80,40],["ST",50,27]],
+352:[["GK",50,91],["CB",30,79],["CB",50,82],["CB",70,79],["LM",15,54],["CM",35,57],["CDM",50,51],["CM",65,57],["RM",85,54],["ST",40,28],["ST",60,28]],
+343:[["GK",50,91],["CB",30,79],["CB",50,82],["CB",70,79],["LM",17,55],["CM",38,56],["CM",62,56],["RM",83,55],["LW",20,32],["ST",50,26],["RW",80,32]],
+532:[["GK",50,91],["LB",12,73],["CB",34,79],["CB",50,82],["CB",66,79],["RB",88,73],["CM",35,58],["CDM",50,52],["CM",65,58],["ST",40,28],["ST",60,28]]
+};
+
+const interchangeable = [
+  new Set(["LM", "LW"]),
+  new Set(["RM", "RW"]),
+  new Set(["LB", "LWB"]),
+  new Set(["RB", "RWB"]),
+  new Set(["ST", "CF"]),
+  new Set(["CM", "CAM", "CDM"])
+];
+
+function getEffectiveOvr(playerOvr, playerPos, slotLabel) {
+  let ovr = Number(playerOvr) || 0;
+  if (!playerPos || !slotLabel) return ovr;
+  if (playerPos === slotLabel) return ovr;
+  
+  if (playerPos === "GK" && slotLabel !== "GK") return 0;
+  if (playerPos !== "GK" && slotLabel === "GK") return 0;
+  
+  for (let s of interchangeable) {
+    if (s.has(playerPos) && s.has(slotLabel)) {
+      return ovr - 2;
+    }
+  }
+  return ovr - 5;
+}
+
+let pools=null,allPlayers=null,selections=[],used=new Set(),options=[],chosen=null,round=0,placements={};
+let budget=200000000;
+let plData={};
+let seasonResults=[];
+
+function parseValue(valStr){
+ if(!valStr||typeof valStr!=='string')return 0;
+ let num=parseFloat(valStr.replace(/[^0-9.]/g,''));
+ if(valStr.includes('M'))return num*1000000;
+ if(valStr.includes('K'))return num*1000;
+ return num;
+}
+function formatMoney(num){
+ if(num>=1000000)return "€"+(num/1000000).toFixed(1)+"M";
+ if(num>=1000)return "€"+(num/1000).toFixed(0)+"K";
+ return "€"+num;
+}
+function getInitials(name) {
+  if (!name || name === "Default") return "+";
+  if (name.startsWith("SCOUT #")) return name.split("#")[1];
+  return name.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
+}
+function getCurrentOvr(p, currentVersion) {
+  const r = realPlayer(p);
+  if (!r || !r.overall_history) return p.overall || 0;
+  
+  let ovr = r.overall_history[currentVersion];
+  if (!ovr || ovr <= 1) {
+    const versionList = seasons.map(s => s[2]);
+    const currentIndex = versionList.indexOf(currentVersion);
+    
+    // Check backwards first
+    for (let i = currentIndex - 1; i >= 0; i--) {
+       let previousOvr = r.overall_history[versionList[i]];
+       if (previousOvr && previousOvr > 1) {
+           return previousOvr;
+       }
+    }
+    // Check forwards if backwards didn't find anything
+    for (let i = currentIndex + 1; i < versionList.length; i++) {
+       let nextOvr = r.overall_history[versionList[i]];
+       if (nextOvr && nextOvr > 1) {
+           return nextOvr;
+       }
+    }
+  }
+  return ovr && ovr > 1 ? ovr : (p.overall || 0);
+}
+function getLiveOvr(){
+ let total=0, count=0;
+ const slots=formations[document.getElementById("formation").value];
+ const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
+ for(let i=0;i<11;i++){
+  let p=placements[i];
+  if(p){
+   let actualOvr = getCurrentOvr(p, currentVersion);
+   total+=getEffectiveOvr(actualOvr, p.position, slots[i][0]);
+   count++;
+  }
+ }
+ return count>0?Math.floor(total/count):0;
+}
+function updateLiveStats(){
+ document.getElementById("budgetText").textContent=formatMoney(budget);
+ document.getElementById("liveOvr").textContent=getLiveOvr();
+}
+
+async function start(){
+ try{
+  const p=await fetch("season_pools.json"); if(!p.ok)throw Error();
+  pools=await p.json();
+  try{const a=await fetch("all_players_processed.json");if(a.ok){allPlayers=await a.json()}else{console.warn("all_players_processed.json not found")}}catch(e){console.warn(e)}
+  
+  try{
+   const plReq=await fetch("pl.csv");
+   if(plReq.ok){
+    const text=await plReq.text();
+    const cleanText=text.replace(/"([^"]*)"/g,(m,p1)=>p1.replace(/[\r\n]+/g,'').trim());
+    const lines=cleanText.split('\n');
+    plData={};
+    for(let i=1;i<lines.length;i++){
+     const parts=lines[i].split(',');
+     if(parts.length>=3){
+      let team=parts[0].trim();
+      let ovr=parseInt(parts[1],10);
+      let version=parts[2].trim();
+      if(!plData[version])plData[version]=[];
+      plData[version].push({team,ovr});
+     }
+    }
+    for(let v in plData) plData[v].sort((a,b)=>b.ovr-a.ovr);
+   }
+  }catch(e){console.warn(e)}
+ }catch(e){alert("season_pools.json must be in the same folder as index.html.");return}
+ selections=[];used.clear();placements={};round=0;budget=200000000;seasonResults=[];
+ 
+ // Generate default squad
+ if(allPlayers){
+  const ps = Array.isArray(allPlayers.players) ? allPlayers.players : Object.values(allPlayers.players);
+  let pool = ps.filter(p => {
+   let ovr26 = p.overall_history ? p.overall_history["260006"] : 0;
+   return ovr26 > 0 && ovr26 < 80;
+  });
+  pool = pool.sort(() => Math.random() - 0.5);
+
+  const currentFormation = formations[document.getElementById("formation").value];
+  currentFormation.forEach((slot, i) => {
+   const targetPos = slot[0];
+   let pIndex = pool.findIndex(p => {
+      if (p.position === targetPos) return true;
+      for(let s of interchangeable) {
+        if (s.has(p.position) && s.has(targetPos)) return true;
+      }
+      return false;
+   });
+   
+   if(pIndex === -1) pIndex = 0;
+   
+   const p = pool[pIndex];
+   pool.splice(pIndex, 1);
+   
+   const draftP = {
+    player_id: p.player_id,
+    anonymous_id: p.name || "Default",
+    position: p.position,
+    club: p.season_stats ? Object.values(p.season_stats)[0]?.club : "Unknown",
+    overall: p.overall_history["260006"],
+    potential: p.potential_history ? p.potential_history["260006"] : p.overall_history["260006"],
+    season: "FC 26",
+    price: 0,
+    is_default: true
+   };
+   selections.push(draftP);
+   placements[i] = draftP;
+  });
+ }
+ 
+ nextRound();
+}
+
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function club(c){return Array.isArray(c)?c.join(" / "):(c||"Unknown")}
+function rating(x){return x==null?"N/A":Number(x).toFixed(2)}
+function formationName(){return document.getElementById("formation").options[document.getElementById("formation").selectedIndex].text}
+
+function nextRound(){
+ if(round===11){openFinal();return}
+ const [season,game,version]=seasons[round],d=pools[season];
+ let available=(d.players||[]).filter(p=>{
+  if(used.has(String(p.player_id))) return false;
+  if(allPlayers){
+   const r=realPlayer(p);
+   if(!r || !r.name) return false;
+  }
+  return true;
+ }).sort(()=>Math.random()-.5);
+ 
+ let chosenOpts = [];
+ let gkCount = 0;
+ for (let p of available) {
+  if (chosenOpts.length === 3) break;
+  if (p.position === 'GK') {
+   if (gkCount < 1) { gkCount++; chosenOpts.push(p); }
+  } else { chosenOpts.push(p); }
+ }
+ options=chosenOpts;chosen=null;
+ 
+ // Calculate prices
+ options.forEach(o=>{
+  const r=realPlayer(o);
+  if(!r){o.price=0;return;}
+  const val=parseValue(r.value);
+  const ovrCurrent=Number(o.overall||0);
+  const ovr26=r.overall_history?Number(r.overall_history["260006"]||1):1;
+  o.price=Math.floor((val*ovrCurrent)/(ovr26||1));
+ });
+ 
+ document.getElementById("status").textContent=`Round ${round+1} / 11`;
+ document.getElementById("round").textContent=`Round ${round+1} of 11 · ${game}`;
+ document.getElementById("season").textContent=season;
+ document.getElementById("options").innerHTML=options.map((p,i)=>{
+  const canAfford = budget >= p.price;
+  return `
+  <div class="card ${canAfford?'':'disabled'}" onclick="${canAfford?`choose(${i})`:''}" style="${canAfford?'':'opacity:0.5;cursor:not-allowed'}">
+   <div class="anon">SCOUT #${p.anonymous_id}</div><div class="pos">${p.position||"N/A"}</div><div class="club">${club(p.club)}</div>
+   <div class="stats">
+    <div class="stat"><small>PRICE</small><b style="color:${canAfford?'#2c7a2c':'#a00'}">${formatMoney(p.price)}</b></div>
+    <div class="stat"><small>OVERALL</small><b>${p.overall??"N/A"}</b></div>
+    <div class="stat"><small>POTENTIAL</small><b>${p.potential??"N/A"}</b></div>
+    <div class="stat"><small>GOALS</small><b>${p.goals??0}</b></div>
+   </div>
+  </div>`
+ }).join("");
+ document.getElementById("options").style.display="grid";
+ document.querySelector("#draft .actions").innerHTML=`
+    <span class="note">Pick a player to add them to your XI.</span>
+    <div>
+        <button class="secondary" onclick="skipDraft()" style="margin-right:8px;">Skip</button>
+        <button id="draftBtn" class="primary" disabled onclick="draft()">Draft</button>
+    </div>
+ `;
+ updateLiveStats();
+ renderPitch();renderSquad();show("draft");
+}
+
+function choose(i){chosen=i;document.querySelectorAll(".card").forEach((x,n)=>x.classList.toggle("selected",n===i));document.getElementById("draftBtn").disabled=false}
+
+function skipDraft() {
+ const prevOvr = getLiveOvr();
+ const newOvr = getLiveOvr();
+ 
+ const diff = newOvr - prevOvr;
+ const ovrChangeEl = document.getElementById("ovrChange");
+ if (diff > 0) { ovrChangeEl.innerHTML = `<span style="color:#2c7a2c;">(+${diff})</span>`; }
+ else if (diff < 0) { ovrChangeEl.innerHTML = `<span style="color:#a00;">(${diff})</span>`; }
+ else { ovrChangeEl.innerHTML = `<span style="color:#555;">(0)</span>`; }
+ 
+ document.getElementById("options").style.display="none";
+ document.querySelector("#draft .actions").innerHTML=`<button class="primary" onclick="simulateCurrentSeason()" style="width:100%">Simulate Season</button>`;
+}
+
+function draft(){
+ const prevOvr = getLiveOvr();
+ const [season,game,version]=seasons[round],p={...options[chosen],season,game,version};
+ selections.push(p);used.add(String(p.player_id));
+ budget -= p.price;
+ const firstEmpty=formations[document.getElementById("formation").value].findIndex((_,i)=>!placements[i]);
+ if(firstEmpty>=0)placements[firstEmpty]=p;
+ const newOvr = getLiveOvr();
+ 
+ const diff = newOvr - prevOvr;
+ const ovrChangeEl = document.getElementById("ovrChange");
+ if (diff > 0) { ovrChangeEl.innerHTML = `<span style="color:#2c7a2c;">(+${diff})</span>`; }
+ else if (diff < 0) { ovrChangeEl.innerHTML = `<span style="color:#a00;">(${diff})</span>`; }
+ else { ovrChangeEl.innerHTML = `<span style="color:#555;">(0)</span>`; }
+ 
+ updateLiveStats(); renderPitch(); renderSquad();
+ document.getElementById("options").style.display="none";
+ document.querySelector("#draft .actions").innerHTML=`<button class="primary" onclick="simulateCurrentSeason()" style="width:100%">Simulate Season</button>`;
+}
+
+function formationChanged(){
+ renderPitch();renderSquad();
+}
+
+let swapSelection = null;
+
+function renderPitch(target="pitch"){
+ const pitch=document.getElementById(target);if(!pitch)return;
+ pitch.innerHTML='<div class="circle"></div>';
+ const slots=formations[document.getElementById("formation").value];
+ const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
+ slots.forEach((slot,i)=>{
+  const [label,x,y]=slot,p=placements[i];
+  const w=document.createElement("div");w.className="slotWrap";w.style.left=x+"%";w.style.top=y+"%";
+  
+  let displayName = "+";
+  let displayOvr = "";
+  let isOutOfPos = false;
+  if(p) {
+    displayName = p.is_default ? getInitials(p.anonymous_id) : p.anonymous_id;
+    displayOvr = getCurrentOvr(p, currentVersion);
+    const eff = getEffectiveOvr(displayOvr, p.position, label);
+    if(eff < displayOvr || eff === 0) isOutOfPos = true;
+  }
+  
+  const isSelected = swapSelection && swapSelection.type === 'pitch' && swapSelection.index === i;
+  let slotStyle = isSelected ? 'border-color:#2c7a2c; background:#e8f4e8;' : '';
+  if(!isSelected && isOutOfPos) slotStyle = 'border-color:#cc4444; background:#ffe6e6;';
+  
+  w.innerHTML=`<div class="slot ${p?"":"empty"}" style="${slotStyle}">${displayName}</div><div class="label" style="${isOutOfPos ? 'color:#cc4444' : ''}">${p?p.position:label} ${p?displayOvr:''}</div>`;
+  const s=w.querySelector(".slot");
+  
+  s.onclick = () => handleSwapClick('pitch', i);
+  pitch.appendChild(w);
+ });
+}
+
+function handleSwapClick(type, index) {
+  if (!swapSelection) {
+    swapSelection = { type, index };
+    renderPitch(); renderSquad();
+    return;
+  }
+  
+  if (swapSelection.type === type && swapSelection.index === index) {
+    swapSelection = null;
+    renderPitch(); renderSquad();
+    return;
+  }
+  
+  // Do swap
+  let p1 = swapSelection.type === 'pitch' ? placements[swapSelection.index] : selections[swapSelection.index];
+  let p2 = type === 'pitch' ? placements[index] : selections[index];
+  
+  // Find their real indices in placements if any
+  let old1 = -1, old2 = -1;
+  for(const k of Object.keys(placements)) {
+    if(placements[k] && p1 && String(placements[k].player_id)===String(p1.player_id)) old1=Number(k);
+    if(placements[k] && p2 && String(placements[k].player_id)===String(p2.player_id)) old2=Number(k);
+  }
+  
+  if (type === 'pitch' && swapSelection.type === 'pitch') {
+     // Swap pitch to pitch
+     placements[index] = p1;
+     placements[swapSelection.index] = p2;
+  } else if (type === 'pitch' && swapSelection.type === 'squad') {
+     // Swap squad to pitch
+     if(p2) { placements[old2] = p1; } else { delete placements[old2]; }
+     placements[index] = p1;
+  } else if (type === 'squad' && swapSelection.type === 'pitch') {
+     // Swap pitch to squad
+     if(p1) { placements[old1] = p2; } else { delete placements[old1]; }
+     placements[swapSelection.index] = p2;
+  }
+  
+  swapSelection = null;
+  updateLiveStats(); renderPitch(); renderSquad();
+}
+
+function renderSquad(){
+ const box=document.getElementById("squad");
+ const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
+ 
+ let defaultHtml = "";
+ let scoutedHtml = "";
+ 
+ selections.forEach((p,i)=>{
+  const placed=Object.values(placements).some(x=>x&&String(x.player_id)===String(p.player_id));
+  const isSelected = swapSelection && swapSelection.type === 'squad' && swapSelection.index === i;
+  const actualOvr = getCurrentOvr(p, currentVersion);
+  let nameDisp = p.is_default ? p.anonymous_id : `SCOUT #${p.anonymous_id}`;
+  const html = `<div class="squadPlayer" onclick="handleSwapClick('squad', ${i})" style="opacity:${placed?0.4:1}; ${isSelected?'border-color:#2c7a2c; background:#e8f4e8;':''}">
+   <strong>${nameDisp} · ${p.position||"N/A"} · OVR ${actualOvr}</strong>
+   <span>${p.season} · ${club(p.club)}</span>
+  </div>`;
+  if(p.is_default) defaultHtml += html;
+  else scoutedHtml += html;
+ });
+ 
+ box.innerHTML = `
+   <div style="display:flex; flex-direction:column; gap:8px;">
+      ${scoutedHtml ? `<div style="font-family:monospace;font-weight:bold;margin-top:5px;border-bottom:1px solid #ddd;padding-bottom:4px;">Scouted Players</div>${scoutedHtml}` : ''}
+      <div style="font-family:monospace;font-weight:bold;margin-top:5px;border-bottom:1px solid #ddd;padding-bottom:4px;">Default Squad</div>
+      ${defaultHtml}
+   </div>
+ `;
+}
+
+function openFinal(){
+ document.getElementById("status").textContent="Draft Complete";
+ document.getElementById("finalFormation").textContent=formationName();
+ renderPitch("finalPitch");show("final");
+}
+function backToDraft(){show("draft");renderPitch();renderSquad()}
+
+function realPlayer(p){
+ if(!allPlayers)return null;
+ const ps=allPlayers.players||allPlayers;
+ const id=String(p.player_id);
+ if(Array.isArray(ps)){
+   return ps.find(x=>String(x.player_id??x.id)===id)||null;
+ }
+ return ps[id]||ps[p.player_id]||null;
+}
+function peak(real,p){
+ if(!real)return Math.max(Number(p.overall||0),Number(p.potential||0));
+ const vals=Object.values(real.overall_history||{}).filter(v=>typeof v==="number");
+ return vals.length?Math.max(...vals):Number(p.overall||0);
+}
+function career(real){
+ if(!real||!real.overall_history)return "Career history unavailable.";
+ return Object.entries(real.overall_history).filter(([s,v])=>typeof v==="number").sort((a,b)=>a[0].localeCompare(b[0])).map(([s,v])=>`${s}: ${v}`).join(" · ");
+}
+function reveal(){
+ let squadTotal=0;
+ const currentFormation = formations[document.getElementById("formation").value];
+ const currentVersion = seasons[10][2]; // Final season
+  const revealPitch=document.getElementById("revealPitch");
+  revealPitch.innerHTML='<div class="circle" style="border-color:#555"></div>';
+  
+  let historyHtml = '<div style="margin-top:24px;"><h3 style="font-family:Georgia,serif;font-size:20px;border-bottom:1px solid #ddd;padding-bottom:8px;margin-bottom:12px;">Season Results</h3><div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:12px;">';
+  seasonResults.forEach(r => {
+    let suffix = 'th';
+    if(r.pos===1) suffix='st'; else if(r.pos===2) suffix='nd'; else if(r.pos===3) suffix='rd';
+    historyHtml += `<div style="background:#f4f1ea;padding:10px;border:1px solid #d0c8b6;border-radius:4px;"><small style="color:#666;font-family:monospace;display:block;">${r.season}</small><strong style="font-size:18px;">${r.pos}${suffix}</strong><span style="float:right;color:#666;font-size:12px;margin-top:4px;">OVR ${r.ovr}</span></div>`;
+  });
+  historyHtml += '</div></div>';
+  document.getElementById("score").insertAdjacentHTML("afterend", historyHtml);
+
+  currentFormation.forEach((slot,i)=>{
+  const [label,x,y]=slot,p=placements[i];
+  if(!p) return;
+  const r=realPlayer(p),name=r?.name||(p.is_default ? p.anonymous_id : null);
+  if(!name) return; // Hide player entirely if no name found
+  const actualOvr = getCurrentOvr(p, currentVersion);
+  const effectiveOvr = getEffectiveOvr(actualOvr, p.position, label);
+  squadTotal+=effectiveOvr;
+  
+  let penaltyText = "";
+  if(effectiveOvr === 0 && actualOvr > 0) penaltyText = "<br><span style='color:#ff6b6b;'>Out of Pos</span>";
+  else if (effectiveOvr < actualOvr) penaltyText = `<br><span style='color:#ffb8b8;'>- ${actualOvr - effectiveOvr} Penalty</span>`;
+
+  const w=document.createElement("div");
+  w.style.position="absolute";
+  w.style.transform="translate(-50%,-50%)";
+  w.style.left=x+"%";
+  w.style.top=y+"%";
+  w.style.textAlign="center";
+  w.style.zIndex="3";
+  
+  w.innerHTML=`
+   <div style="background:#fffdfa; color:#111; padding:4px 8px; border-radius:5px; font-family:monospace; font-size:11px; border:2px solid #fffdfa; box-shadow: 2px 2px 0 rgba(0,0,0,0.5);">
+    <strong style="font-family:Georgia,serif; font-size:14px; display:block;">${name}</strong>
+    <div style="color:#666; margin-top:2px;">OVR ${actualOvr}</div>
+    <div style="background:#2c2c2c; color:#fff; display:inline-block; padding:2px 4px; border-radius:2px; font-size:9px; margin-top:4px;">${label}</div>
+   </div>
+  `;
+  revealPitch.appendChild(w);
+ });
+ 
+ const finalSquadOvr = Math.floor(squadTotal / 11);
+ 
+ document.getElementById("score").innerHTML=`<strong>${finalSquadOvr}</strong>`;
+ document.getElementById("status").textContent="Revealed";show("reveal");
+}
+
+function simulateCurrentSeason() {
+  const [season, game, version] = seasons[round];
+  
+  let teams = [];
+  if (plData[game]) {
+    teams = JSON.parse(JSON.stringify(plData[game]));
+  } else {
+    teams = Array(20).fill(0).map((_,i) => ({team: "Generic Team "+i, ovr: 75}));
+  }
+  
+  teams.sort((a,b) => b.ovr - a.ovr);
+  teams.pop();
+  
+  const myOvr = getLiveOvr();
+  const teamNameInput = document.getElementById("teamName");
+  const tName = teamNameInput ? (teamNameInput.value || "Master Scout FC") : "Master Scout FC";
+  teams.push({team: tName, ovr: myOvr, isPlayer: true});
+  
+  const standings = teams.map(t => ({...t, p:0, w:0, d:0, l:0, gf:0, ga:0, pts:0}));
+  
+  for(let i=0; i<standings.length; i++) {
+    for(let j=0; j<standings.length; j++) {
+      if(i === j) continue;
+      let t1 = standings[i];
+      let t2 = standings[j];
+      
+      const D = t1.ovr - t2.ovr;
+
+      let lambda1 = 1.4 * Math.exp(D / 75) + 0.2;
+      let lambda2 = 1.4 * Math.exp(-D / 75);
+      
+      let g1 = samplePoisson(lambda1);
+      let g2 = samplePoisson(lambda2);
+      
+      t1.p++; t2.p++;
+      t1.gf += g1; t1.ga += g2;
+      t2.gf += g2; t2.ga += g1;
+      
+      if(g1 > g2) { t1.pts+=3; t1.w++; t2.l++; }
+      else if(g2 > g1) { t2.pts+=3; t2.w++; t1.l++; }
+      else { t1.pts+=1; t2.pts+=1; t1.d++; t2.d++; }
+    }
+  }
+  
+  standings.sort((a,b) => {
+    if(b.pts !== a.pts) return b.pts - a.pts;
+    let gdA = a.gf - a.ga, gdB = b.gf - b.ga;
+    if(gdB !== gdA) return gdB - gdA;
+    return b.gf - a.gf;
+  });
+  
+  const myPos = standings.findIndex(t => t.isPlayer) + 1;
+  seasonResults.push({season, game, pos: myPos, ovr: myOvr});
+  
+  document.getElementById("simKicker").textContent = `${game} · ${season}`;
+  document.getElementById("leagueTableBody").innerHTML = standings.map((t, idx) => `
+    <tr style="${t.isPlayer ? 'background:#e8f4e8; font-weight:bold; border-left:3px solid #2c7a2c;' : ''}">
+      <td>${idx+1}</td>
+      <td>${t.team}</td>
+      <td>${t.p}</td>
+      <td>${t.w}</td>
+      <td>${t.d}</td>
+      <td>${t.l}</td>
+      <td>${t.gf - t.ga > 0 ? '+'+(t.gf-t.ga) : t.gf-t.ga}</td>
+      <td><strong>${t.pts}</strong></td>
+    </tr>
+  `).join("");
+  
+  show("simulation");
+}
+
+function endSimulation() {
+  round++;
+  nextRound();
+}
+
+function samplePoisson(lambda) {
+  let L = Math.exp(-lambda), p = 1.0, k = 0;
+  do { k++; p *= Math.random(); } while(p > L);
+  return k - 1;
+}
+</script>
+</body>
+</html>
