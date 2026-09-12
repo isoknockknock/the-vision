@@ -34,29 +34,235 @@ select{background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3
 .finalGrid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px}.reveal{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .revealCard{background:#fffdfa;border:1px solid #2c2c2c;border-radius:5px;padding:15px;box-shadow:2px 2px 0 rgba(0,0,0,0.05)}.revealCard .small{font-size:10px;font-family:monospace;color:#666;border-bottom:1px solid #eee;padding-bottom:5px;margin-bottom:8px}.revealCard h3{margin:6px 0;font-family:Georgia,serif;color:#111}.career{font-size:11px;color:#444;line-height:1.55;font-family:monospace}.score{text-align:center;margin:35px 0;border:2px solid #2c2c2c;padding:20px;background:#fffdfa;border-radius:5px;box-shadow:4px 4px 0 rgba(0,0,0,0.1)}.score small{color:#666;letter-spacing:2px;font-family:monospace}.score strong{display:block;font-size:60px;font-family:Georgia,serif;color:#111}
 @media(max-width:900px){.main,.finalGrid{grid-template-columns:1fr}.options,.reveal{grid-template-columns:1fr}.hero h1{font-size:43px}}
+.achievementGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.achievement{
+    background:#fffdfa;
+    border:1px solid #d0c8b6;
+    border-radius:5px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    box-shadow:2px 2px 0 rgba(0,0,0,0.05);
+}
+
+.achievement.locked{
+    opacity:0.45;
+}
+
+.achievementIcon{
+    width:55px;
+    height:55px;
+    border:1px solid #2c2c2c;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    background:#f4f1ea;
+    flex-shrink:0;
+}
+
+.achievementInfo{
+    flex:1;
+}
+
+.achievementName{
+    font-family:Georgia,serif;
+    font-size:18px;
+    font-weight:900;
+    color:#111;
+}
+
+.achievementDescription{
+    font-size:11px;
+    color:#555;
+    line-height:1.45;
+    margin-top:4px;
+}
+
+.achievementStatus{
+    margin-top:8px;
+    font-family:monospace;
+    font-size:9px;
+    text-transform:uppercase;
+    font-weight:bold;
+}
+
+.achievementUnlocked{
+    color:#2c7a2c;
+}
+
+.achievementLocked{
+    color:#888;
+}
+
+@media(max-width:700px){
+    .achievementGrid{
+        grid-template-columns:1fr;
+    }
+}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="header"><div class="logo">The Vision</div><div class="badge" id="status">Ready</div></div>
 
-<section id="home" class="screen active">
-<div class="hero">
-<h1>Identify the ballers</h1>
-<p>Can you conquer England with just a €200M budget?</p>
-<div style="margin-bottom: 24px;">
-    <span style="color:#8997ad;font-size:12px;margin-right:8px;text-transform:uppercase;font-family:monospace">Select Formation</span>
-    <select id="formation">
-        <option value="433">4-3-3</option><option value="442">4-4-2</option><option value="4231">4-2-3-1</option>
-        <option value="352">3-5-2</option><option value="343">3-4-3</option><option value="532">5-3-2</option>
-    </select>
-</div>
-<div style="margin-bottom: 24px;">
-    <span style="color:#8997ad;font-size:12px;margin-right:8px;text-transform:uppercase;font-family:monospace">Team Name</span>
-    <input type="text" id="teamName" value="The Vision FC" style="background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3px;padding:9px 12px;font-family:monospace;width:200px;">
-</div>
-<button class="primary" onclick="start()">Start Scouting</button>
-</div>
+<section id="auth" class="screen active">
+    <div class="hero">
+        <h1>The Vision</h1>
+
+        <p>
+            Build your squad. Scout the unknown. Conquer England.
+        </p>
+
+        <div style="max-width:360px;margin:30px auto 0;">
+
+            <input
+                type="email"
+                id="authEmail"
+                placeholder="Email"
+                style="width:100%;margin-bottom:10px;
+                background:#fffdfa;color:#2c2c2c;
+                border:1px solid #2c2c2c;border-radius:3px;
+                padding:12px;font-family:monospace;"
+            >
+
+            <input
+                type="password"
+                id="authPassword"
+                placeholder="Password"
+                style="width:100%;margin-bottom:14px;
+                background:#fffdfa;color:#2c2c2c;
+                border:1px solid #2c2c2c;border-radius:3px;
+                padding:12px;font-family:monospace;"
+            >
+
+            <button class="primary"
+                    onclick="register()"
+                    style="width:100%;margin-bottom:8px;">
+                Create Account
+            </button>
+
+            <button class="secondary"
+                    onclick="login()"
+                    style="width:100%;">
+                Login
+            </button>
+
+            <div id="authMessage"
+                 style="margin-top:15px;
+                 font-family:monospace;
+                 font-size:11px;">
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="menu" class="screen">
+    <div class="hero">
+
+        <div class="kicker">Manager Profile</div>
+
+        <h1>The Vision</h1>
+
+        <p id="welcomeMessage">
+            Welcome back.
+        </p>
+
+        <div style="max-width:360px;margin:30px auto 0;display:flex;flex-direction:column;gap:10px;">
+
+            <button class="primary"
+                    onclick="showCareerSetup()"
+                    style="width:100%;">
+                Play
+            </button>
+
+            <button class="secondary"
+                    onclick="showAchievements()"
+                    style="width:100%;">
+                Achievements
+            </button>
+
+            <button class="secondary"
+                    onclick="logout()"
+                    style="width:100%;">
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+</section>
+
+<section id="achievements" class="screen">
+
+    <div class="top">
+        <div>
+            <div class="kicker">Manager Profile</div>
+            <div class="title">Achievements</div>
+        </div>
+
+        <div class="badge" id="achievementCount">
+            0 / 0
+        </div>
+    </div>
+
+    <div id="achievementList"></div>
+
+    <div class="actions">
+        <button class="secondary" onclick="showMainMenu()">
+            Back
+        </button>
+    </div>
+
+</section>
+
+<section id="home" class="screen">
+    <div class="hero">
+
+        <button class="secondary" onclick="showMainMenu()" style="margin-bottom: 24px;">
+            ← Back
+        </button>
+
+        <h1>Identify the ballers</h1>
+        <p>Can you conquer England with just a €200M budget?</p>
+
+        <div style="margin-bottom: 24px;">
+            <span style="color:#8997ad;font-size:12px;margin-right:8px;text-transform:uppercase;font-family:monospace">
+                Select Formation
+            </span>
+            <select id="formation">
+                <option value="433">4-3-3</option>
+                <option value="442">4-4-2</option>
+                <option value="4231">4-2-3-1</option>
+                <option value="352">3-5-2</option>
+                <option value="343">3-4-3</option>
+                <option value="532">5-3-2</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <span style="color:#8997ad;font-size:12px;margin-right:8px;text-transform:uppercase;font-family:monospace">
+                Team Name
+            </span>
+            <input
+                type="text"
+                id="teamName"
+                value="The Vision FC"
+                style="background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3px;padding:9px 12px;font-family:monospace;width:200px;"
+            >
+        </div>
+
+        <button class="primary" onclick="start()">Start Scouting</button>
+
+    </div>
 </section>
 
 <section id="draft" class="screen">
@@ -124,7 +330,186 @@ select{background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3
 </section>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+
+const SUPABASE_URL = "https://jqxldhimffsafkjghguy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_5m7EfZach86cPfe7ZUXCFA_3PhFe-JQ";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+let currentUser = null;
+
+async function register() {
+    const email = document.getElementById("authEmail").value.trim();
+    const password = document.getElementById("authPassword").value;
+
+    const message = document.getElementById("authMessage");
+
+    if (!email || !password) {
+        message.textContent = "Enter an email and password.";
+        return;
+    }
+
+    const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password
+    });
+
+    if (error) {
+        console.error(error);
+        message.textContent = error.message;
+        return;
+    }
+
+    if (data.session) {
+      currentUser = data.session.user;
+      showMainMenu();
+    } else {
+      show("auth");
+    }
+
+    message.textContent =
+        "Account created. Check your email to confirm your account.";
+}
+
+async function login() {
+    const email = document.getElementById("authEmail").value.trim();
+    const password = document.getElementById("authPassword").value;
+
+    const message = document.getElementById("authMessage");
+
+    if (!email || !password) {
+        message.textContent = "Enter an email and password.";
+        return;
+    }
+
+    const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+        });
+
+    if (error) {
+        console.error(error);
+        message.textContent = error.message;
+        return;
+    }
+
+    currentUser = data.user;
+
+    message.textContent = "";
+
+    showMainMenu();
+}
+
+async function showMainMenu() {
+    if (!currentUser) {
+        show("auth");
+        return;
+    }
+
+    await loadAchievements();
+    await loadUserAchievements();
+
+    const welcome = document.getElementById("welcomeMessage");
+
+    let username = currentUser.email;
+
+    const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("username")
+        .eq("id", currentUser.id)
+        .single();
+
+    if (!error && data && data.username) {
+        username = data.username;
+    }
+
+    welcome.textContent = `Welcome back, ${username}.`;
+
+    document.getElementById("status").textContent = "Online";
+
+    show("menu");
+}
+
+function showCareerSetup() {
+    show("home");
+    document.getElementById("status").textContent = "New Career";
+}
+
+async function checkAuth() {
+    const { data, error } =
+        await supabaseClient.auth.getSession();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    if (data.session) {
+        currentUser = data.session.user;
+        show("home");
+    } else {
+        show("auth");
+    }
+}
+
+async function logout() {
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    currentUser = null;
+
+    document.getElementById("status").textContent = "Ready";
+
+    show("auth");
+}
+
+async function loadAchievements() {
+
+    const { data, error } = await supabaseClient
+        .from("achievements")
+        .select("*")
+        .order("category")
+        .order("name");
+
+    if (error) {
+        console.error("Failed to load achievements:", error);
+        return;
+    }
+
+    achievementDefinitions = data || [];
+}
+
+async function loadUserAchievements() {
+
+    if (!currentUser) return;
+
+    const { data, error } = await supabaseClient
+        .from("user_achievements")
+        .select("achievement_id")
+        .eq("user_id", currentUser.id);
+
+    if (error) {
+        console.error("Failed to load user achievements:", error);
+        return;
+    }
+
+    unlockedAchievements = new Set(
+        (data || []).map(row => row.achievement_id)
+    );
+}
+
 const seasons=[
 ["2014/2015","FIFA 16","160058"],["2015/2016","FIFA 17","170099"],["2016/2017","FIFA 18","180084"],
 ["2017/2018","FIFA 19","190075"],["2018/2019","FIFA 20","200061"],["2019/2020","FIFA 21","210064"],
@@ -165,10 +550,13 @@ function getEffectiveOvr(playerOvr, playerPos, slotLabel) {
   return ovr - 5;
 }
 
+
 let pools=null,allPlayers=null,selections=[],used=new Set(),options=[],chosen=null,round=0,placements={};
 let budget=200000000;
 let plData={};
 let seasonResults=[];
+let achievementDefinitions = [];
+let unlockedAchievements = new Set();
 
 function parseValue(valStr){
  if(!valStr||typeof valStr!=='string')return 0;
@@ -231,6 +619,180 @@ function updateLiveStats(){
  document.getElementById("budgetText").textContent=formatMoney(budget);
  document.getElementById("liveOvr").textContent=getLiveOvr();
 }
+
+
+async function showAchievements() {
+
+    if (!currentUser) {
+        show("auth");
+        return;
+    }
+
+    await loadAchievements();
+    await loadUserAchievements();
+
+    renderAchievements();
+
+    document.getElementById("status").textContent = "Achievements";
+
+    show("achievements");
+}
+
+
+function renderAchievements() {
+
+    const container = document.getElementById("achievementList");
+
+    const unlockedCount = achievementDefinitions.filter(a =>
+        unlockedAchievements.has(a.id)
+    ).length;
+
+    document.getElementById("achievementCount").textContent =
+        `${unlockedCount} / ${achievementDefinitions.length}`;
+
+    container.innerHTML = `
+        <div class="achievementGrid">
+
+            ${achievementDefinitions.map(a => {
+
+                const unlocked = unlockedAchievements.has(a.id);
+
+                return `
+                    <div class="achievement ${unlocked ? "" : "locked"}">
+
+                        <div class="achievementIcon">
+                            ${unlocked ? (a.icon || "🏆") : "🔒"}
+                        </div>
+
+                        <div class="achievementInfo">
+
+                            <div class="achievementName">
+                                ${a.name}
+                            </div>
+
+                            <div class="achievementDescription">
+                                ${a.description}
+                            </div>
+
+                            <div class="achievementStatus ${
+                                unlocked
+                                    ? "achievementUnlocked"
+                                    : "achievementLocked"
+                            }">
+                                ${unlocked ? "✓ Unlocked" : "🔒 Locked"}
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("")}
+
+        </div>
+    `;
+}
+
+async function unlockAchievement(id) {
+
+    if (!currentUser) return;
+
+    // Already unlocked locally
+    if (unlockedAchievements.has(id)) {
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("user_achievements")
+        .insert({
+            user_id: currentUser.id,
+            achievement_id: id
+        });
+
+    if (error) {
+
+        // Ignore duplicate unlock attempts
+        if (error.code === "23505") {
+            unlockedAchievements.add(id);
+            return;
+        }
+
+        console.error(
+            `Failed to unlock achievement ${id}:`,
+            error
+        );
+
+        return;
+    }
+
+    unlockedAchievements.add(id);
+
+    console.log(`🏆 Achievement unlocked: ${id}`);
+
+    showAchievementNotification(id);
+}
+
+
+function showAchievementNotification(id) {
+
+    const achievement = achievementDefinitions.find(
+        a => a.id === id
+    );
+
+    if (!achievement) return;
+
+    const notification = document.createElement("div");
+
+    notification.style.cssText = `
+        position:fixed;
+        right:20px;
+        bottom:20px;
+        z-index:9999;
+        background:#fffdfa;
+        color:#2c2c2c;
+        border:2px solid #2c2c2c;
+        border-radius:5px;
+        padding:16px 20px;
+        width:300px;
+        box-shadow:5px 5px 0 rgba(0,0,0,0.15);
+        font-family:monospace;
+    `;
+
+    notification.innerHTML = `
+        <div style="
+            font-size:10px;
+            color:#666;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            margin-bottom:5px;
+        ">
+            Achievement Unlocked
+        </div>
+
+        <div style="
+            font-family:Georgia,serif;
+            font-size:20px;
+            font-weight:900;
+        ">
+            ${achievement.icon || "🏆"} ${achievement.name}
+        </div>
+
+        <div style="
+            font-size:11px;
+            color:#555;
+            margin-top:5px;
+        ">
+            ${achievement.description}
+        </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+}
+
 
 async function start(){
  try{
@@ -371,6 +933,8 @@ function nextRound(){
 }
 
 function choose(i){chosen=i;document.querySelectorAll(".card").forEach((x,n)=>x.classList.toggle("selected",n===i));document.getElementById("draftBtn").disabled=false}
+
+
 
 function skipDraft() {
  const prevOvr = getLiveOvr();
@@ -589,7 +1153,80 @@ function reveal(){
  const finalSquadOvr = Math.floor(squadTotal / 11);
  
  document.getElementById("score").innerHTML=`<strong>${finalSquadOvr}</strong>`;
- document.getElementById("status").textContent="Revealed";show("reveal");
+ checkScoutingAchievements();
+ checkMoneyballAchievement();
+ checkOracleAchievement();
+ if (budget >= 100000000) {
+    unlockAchievement("billionaire");
+ }
+ document.getElementById("status").textContent="Revealed";
+ unlockAchievement("first_career");
+ show("reveal");
+}
+
+function checkOracleAchievement() {
+
+    for (const p of selections) {
+
+        if (p.is_default) continue;
+
+        const real = realPlayer(p);
+
+        if (!real) continue;
+
+        const startingOvr = Number(p.overall || 0);
+        const peakOvr = peak(real, p);
+
+        if (
+            startingOvr > 0 &&
+            peakOvr - startingOvr >= 20
+        ) {
+            unlockAchievement("perfect_scout");
+            return;
+        }
+    }
+}
+
+
+
+function checkMoneyballAchievement() {
+
+    for (const p of selections) {
+
+        if (p.is_default) continue;
+
+        const real = realPlayer(p);
+
+        if (!real) continue;
+
+        const peakOvr = peak(real, p);
+
+        if (
+            Number(p.price) < 5000000 &&
+            peakOvr >= 85
+        ) {
+            unlockAchievement("moneyball");
+            return;
+        }
+    }
+}
+
+function checkScoutingAchievements() {
+
+    for (const p of selections) {
+
+        if (p.is_default) continue;
+
+        const real = realPlayer(p);
+
+        if (!real) continue;
+
+        const peakOvr = peak(real, p);
+
+        if (peakOvr >= 90) {
+            unlockAchievement("wonderkid");
+        }
+    }
 }
 
 function simulateCurrentSeason() {
@@ -643,7 +1280,14 @@ function simulateCurrentSeason() {
     return b.gf - a.gf;
   });
   
+  const myTeam = standings.find(t => t.isPlayer);
   const myPos = standings.findIndex(t => t.isPlayer) + 1;
+  if (myPos === 1) {
+    unlockAchievement("league_champion");
+  }
+  if (myTeam && myTeam.l === 0) {
+    unlockAchievement("invincibles");
+}
   seasonResults.push({season, game, pos: myPos, ovr: myOvr});
   
   document.getElementById("simKicker").textContent = `${game} · ${season}`;
@@ -673,6 +1317,10 @@ function samplePoisson(lambda) {
   do { k++; p *= Math.random(); } while(p > L);
   return k - 1;
 }
+
+checkAuth();
+
+
 </script>
 </body>
 </html>
