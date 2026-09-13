@@ -62,7 +62,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Barcelona",
         "overall": 90,
         "potential": 90,
@@ -319,7 +319,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 86,
         "potential": 86,
@@ -944,7 +944,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A85",
-        "position": "CF",
+        "position": "ST",
         "club": "Juventus",
         "overall": 80,
         "potential": 85,
@@ -1032,7 +1032,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A93",
-        "position": "CF",
+        "position": "ST",
         "club": "PSV",
         "overall": 79,
         "potential": 86,
@@ -2146,7 +2146,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B89",
-        "position": "CF",
+        "position": "ST",
         "club": "SL Benfica",
         "overall": 75,
         "potential": 80,
@@ -2441,7 +2441,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C15",
-        "position": "CF",
+        "position": "ST",
         "club": "Newcastle United",
         "overall": 73,
         "potential": 81,
@@ -4080,7 +4080,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D61",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 59,
         "potential": 78,
@@ -4190,7 +4190,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "D71",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 69,
         "potential": 85,
@@ -4494,7 +4494,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Barcelona",
         "overall": 92,
         "potential": 92,
@@ -4750,7 +4750,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 86,
         "potential": 86,
@@ -5384,7 +5384,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A85",
-        "position": "CF",
+        "position": "ST",
         "club": "Juventus",
         "overall": 82,
         "potential": 86,
@@ -5475,7 +5475,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A93",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 79,
         "potential": 84,
@@ -6569,7 +6569,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B90",
-        "position": "CF",
+        "position": "ST",
         "club": "SL Benfica",
         "overall": 78,
         "potential": 83,
@@ -6867,7 +6867,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C16",
-        "position": "CF",
+        "position": "ST",
         "club": "Newcastle United",
         "overall": 74,
         "potential": 81,
@@ -8733,7 +8733,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D82",
-        "position": "CF",
+        "position": "ST",
         "club": "Charlton Athletic",
         "overall": 65,
         "potential": 83,
@@ -8865,7 +8865,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "D94",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 78,
         "potential": 89,
@@ -9859,7 +9859,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "E83",
-        "position": "CF",
+        "position": "ST",
         "club": "Jong PSV",
         "overall": 66,
         "potential": 78,
@@ -9965,7 +9965,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Barcelona",
         "overall": 92,
         "potential": 92,
@@ -10218,7 +10218,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 86,
         "potential": 86,
@@ -10843,7 +10843,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A85",
-        "position": "CF",
+        "position": "ST",
         "club": "Real Madrid",
         "overall": 84,
         "potential": 88,
@@ -10931,7 +10931,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A93",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Olympique Lyonnais",
           "Manchester United"
@@ -12030,7 +12030,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B91",
-        "position": "CF",
+        "position": "ST",
         "club": "Beşiktaş JK",
         "overall": 81,
         "potential": 88,
@@ -12331,7 +12331,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C17",
-        "position": "CF",
+        "position": "ST",
         "club": "Newcastle United",
         "overall": 75,
         "potential": 81,
@@ -14175,7 +14175,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D78",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Charlton Athletic",
           "Everton"
@@ -14313,7 +14313,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "D90",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 81,
         "potential": 90,
@@ -15477,7 +15477,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "E90",
-        "position": "CF",
+        "position": "ST",
         "club": "Jong PSV",
         "overall": 67,
         "potential": 77,
@@ -16080,7 +16080,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F44",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 64,
         "potential": 81,
@@ -16252,7 +16252,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Barcelona",
         "overall": 91,
         "potential": 91,
@@ -16511,7 +16511,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 86,
         "potential": 86,
@@ -17136,7 +17136,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A85",
-        "position": "CF",
+        "position": "ST",
         "club": "Chelsea",
         "overall": 82,
         "potential": 84,
@@ -17224,7 +17224,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A93",
-        "position": "CF",
+        "position": "ST",
         "club": "Olympique Lyonnais",
         "overall": 84,
         "potential": 88,
@@ -18336,7 +18336,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B91",
-        "position": "CF",
+        "position": "ST",
         "club": "Beşiktaş JK",
         "overall": 83,
         "potential": 88,
@@ -18642,7 +18642,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C18",
-        "position": "CF",
+        "position": "ST",
         "club": "Newcastle United",
         "overall": 77,
         "potential": 80,
@@ -20477,7 +20477,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D81",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "RB Leipzig",
           "Everton"
@@ -20629,7 +20629,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "D94",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 83,
         "potential": 90,
@@ -21874,7 +21874,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "F01",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Jong PSV",
           "PSV"
@@ -22669,7 +22669,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F68",
-        "position": "CF",
+        "position": "ST",
         "club": "Atalanta",
         "overall": 69,
         "potential": 86,
@@ -23575,7 +23575,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Barcelona",
         "overall": 89,
         "potential": 89,
@@ -23831,7 +23831,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 85,
         "potential": 85,
@@ -24450,7 +24450,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A85",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Atlético Madrid",
           "Chelsea"
@@ -24541,7 +24541,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A93",
-        "position": "CF",
+        "position": "ST",
         "club": "Olympique Lyonnais",
         "overall": 84,
         "potential": 87,
@@ -25658,7 +25658,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B92",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 83,
         "potential": 86,
@@ -25961,7 +25961,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C19",
-        "position": "CF",
+        "position": "ST",
         "club": "Newcastle United",
         "overall": 78,
         "potential": 79,
@@ -27885,7 +27885,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D89",
-        "position": "CF",
+        "position": "ST",
         "club": "Everton",
         "overall": 74,
         "potential": 84,
@@ -28031,7 +28031,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "E02",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 84,
         "potential": 89,
@@ -29291,7 +29291,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "F11",
-        "position": "CF",
+        "position": "ST",
         "club": "AZ Alkmaar",
         "overall": 70,
         "potential": 77,
@@ -30133,7 +30133,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F84",
-        "position": "CF",
+        "position": "ST",
         "club": "Atalanta",
         "overall": 70,
         "potential": 81,
@@ -30827,7 +30827,7 @@
       {
         "player_id": "246321",
         "anonymous_id": "G41",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 68,
         "potential": 74,
@@ -31921,7 +31921,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Barcelona",
         "overall": 87,
         "potential": 87,
@@ -32174,7 +32174,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 87,
         "potential": 87,
@@ -32799,7 +32799,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A85",
-        "position": "CF",
+        "position": "ST",
         "club": "Atlético Madrid",
         "overall": 83,
         "potential": 83,
@@ -32887,7 +32887,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A93",
-        "position": "CF",
+        "position": "ST",
         "club": "Olympique Lyonnais",
         "overall": 84,
         "potential": 85,
@@ -33991,7 +33991,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B92",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 82.5,
         "potential": 84.0,
@@ -34297,7 +34297,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C19",
-        "position": "CF",
+        "position": "ST",
         "club": "Leicester City",
         "overall": 78,
         "potential": 78,
@@ -36236,7 +36236,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D90",
-        "position": "CF",
+        "position": "ST",
         "club": "RB Leipzig",
         "overall": 77,
         "potential": 84,
@@ -36382,7 +36382,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "E03",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 85,
         "potential": 91,
@@ -37638,7 +37638,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "F12",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Jong AZ",
           "AZ Alkmaar"
@@ -38491,7 +38491,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F85",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Bologna",
           "Atalanta"
@@ -39193,7 +39193,7 @@
       {
         "player_id": "246321",
         "anonymous_id": "G43",
-        "position": "CF",
+        "position": "ST",
         "club": "Marítimo",
         "overall": 69,
         "potential": 74,
@@ -41178,7 +41178,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": "Atlético Madrid",
         "overall": 86,
         "potential": 86,
@@ -41437,7 +41437,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 87,
         "potential": 87,
@@ -42059,7 +42059,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A85",
-        "position": "CF",
+        "position": "ST",
         "club": "Juventus",
         "overall": 81,
         "potential": 81,
@@ -42150,7 +42150,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A93",
-        "position": "CF",
+        "position": "ST",
         "club": "Olympique Lyonnais",
         "overall": 85,
         "potential": 85,
@@ -43257,7 +43257,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B92",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 82,
         "potential": 82,
@@ -43573,7 +43573,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C19",
-        "position": "CF",
+        "position": "ST",
         "club": "Leicester City",
         "overall": 76,
         "potential": 76,
@@ -45489,7 +45489,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D91",
-        "position": "CF",
+        "position": "ST",
         "club": "Fulham FC",
         "overall": 77,
         "potential": 81,
@@ -45632,7 +45632,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "E04",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 82,
         "potential": 86,
@@ -46923,7 +46923,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "F16",
-        "position": "CF",
+        "position": "ST",
         "club": "AZ Alkmaar",
         "overall": 72,
         "potential": 78,
@@ -47760,7 +47760,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F89",
-        "position": "CF",
+        "position": "ST",
         "club": "Bologna",
         "overall": 77,
         "potential": 82,
@@ -48417,7 +48417,7 @@
       {
         "player_id": "246321",
         "anonymous_id": "G47",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 71.0,
         "potential": 74.0,
@@ -50829,7 +50829,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": "Atlético Madrid",
         "overall": 85.0,
         "potential": 85.0,
@@ -51091,7 +51091,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 85,
         "potential": 85,
@@ -51719,7 +51719,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A85",
-        "position": "CF",
+        "position": "ST",
         "club": "Juventus",
         "overall": 82,
         "potential": 82,
@@ -51807,7 +51807,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A93",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Barcelona",
         "overall": 85,
         "potential": 85,
@@ -52894,7 +52894,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B91",
-        "position": "CF",
+        "position": "ST",
         "club": "Al Nassr",
         "overall": 82,
         "potential": 82,
@@ -53197,7 +53197,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C18",
-        "position": "CF",
+        "position": "ST",
         "club": "Leicester City",
         "overall": 78,
         "potential": 78,
@@ -55125,7 +55125,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D90",
-        "position": "CF",
+        "position": "ST",
         "club": "Leicester City",
         "overall": 78,
         "potential": 80,
@@ -55274,7 +55274,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "E03",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 85,
         "potential": 88,
@@ -56530,7 +56530,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "F15",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Genoa",
           "AZ Alkmaar"
@@ -57372,7 +57372,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F88",
-        "position": "CF",
+        "position": "ST",
         "club": "Bologna",
         "overall": 77,
         "potential": 83,
@@ -58045,7 +58045,7 @@
       {
         "player_id": "246321",
         "anonymous_id": "G47",
-        "position": "CF",
+        "position": "ST",
         "club": "Celtic",
         "overall": 73,
         "potential": 74,
@@ -60761,7 +60761,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A06",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 84,
         "potential": 84,
@@ -61020,7 +61020,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A29",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 82,
         "potential": 82,
@@ -61634,7 +61634,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A84",
-        "position": "CF",
+        "position": "ST",
         "club": "Atlético Madrid",
         "overall": 84,
         "potential": 84,
@@ -61722,7 +61722,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A92",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "FC Barcelona",
           "Atlético Madrid"
@@ -62824,7 +62824,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B90",
-        "position": "CF",
+        "position": "ST",
         "club": "Al Nassr",
         "overall": 82,
         "potential": 82,
@@ -63136,7 +63136,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C17",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Real Betis Balompié",
           "Leicester City"
@@ -65071,7 +65071,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D91",
-        "position": "CF",
+        "position": "ST",
         "club": "Atalanta",
         "overall": 81,
         "potential": 83,
@@ -65217,7 +65217,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "E04",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 82,
         "potential": 83,
@@ -66476,7 +66476,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "F16",
-        "position": "CF",
+        "position": "ST",
         "club": "Genoa",
         "overall": 79,
         "potential": 80,
@@ -67306,7 +67306,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F89",
-        "position": "CF",
+        "position": "ST",
         "club": "Bologna",
         "overall": 77,
         "potential": 82,
@@ -68010,7 +68010,7 @@
       {
         "player_id": "246321",
         "anonymous_id": "G50",
-        "position": "CF",
+        "position": "ST",
         "club": "Celtic",
         "overall": 74,
         "potential": 75,
@@ -70895,7 +70895,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A08",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 81,
         "potential": 81,
@@ -71154,7 +71154,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A31",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 81,
         "potential": 81,
@@ -71762,7 +71762,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A86",
-        "position": "CF",
+        "position": "ST",
         "club": "Atlético Madrid",
         "overall": 83,
         "potential": 83,
@@ -71853,7 +71853,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A94",
-        "position": "CF",
+        "position": "ST",
         "club": "Atlético Madrid",
         "overall": 82,
         "potential": 82,
@@ -72968,7 +72968,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B94",
-        "position": "CF",
+        "position": "ST",
         "club": "Al Nassr",
         "overall": 82,
         "potential": 82,
@@ -73274,7 +73274,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C21",
-        "position": "CF",
+        "position": "ST",
         "club": "Real Betis Balompié",
         "overall": 81,
         "potential": 81,
@@ -75209,7 +75209,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D95",
-        "position": "CF",
+        "position": "ST",
         "club": "Atalanta",
         "overall": 84,
         "potential": 85,
@@ -75355,7 +75355,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "E08",
-        "position": "CF",
+        "position": "ST",
         "club": "Manchester United",
         "overall": 80,
         "potential": 80,
@@ -76632,7 +76632,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "F21",
-        "position": "CF",
+        "position": "ST",
         "club": "Genoa",
         "overall": 80,
         "potential": 80,
@@ -77458,7 +77458,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F95",
-        "position": "CF",
+        "position": "ST",
         "club": "Al Taawoun FC",
         "overall": 77,
         "potential": 78,
@@ -78150,7 +78150,7 @@
       {
         "player_id": "246321",
         "anonymous_id": "G56",
-        "position": "CF",
+        "position": "ST",
         "club": "Celtic",
         "overall": 78,
         "potential": 78,
@@ -81005,7 +81005,7 @@
       {
         "player_id": "176580",
         "anonymous_id": "A08",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 79,
         "potential": 79,
@@ -81267,7 +81267,7 @@
       {
         "player_id": "189596",
         "anonymous_id": "A31",
-        "position": "CF",
+        "position": "ST",
         "club": "FC Bayern München",
         "overall": 80,
         "potential": 80,
@@ -81883,7 +81883,7 @@
       {
         "player_id": "201153",
         "anonymous_id": "A87",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Galatasaray SK",
           "AC Milan"
@@ -81977,7 +81977,7 @@
       {
         "player_id": "202556",
         "anonymous_id": "A95",
-        "position": "CF",
+        "position": "ST",
         "club": null,
         "overall": 81,
         "potential": 81,
@@ -83095,7 +83095,7 @@
       {
         "player_id": "212523",
         "anonymous_id": "B95",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Al Nassr",
           "Fenerbahçe SK"
@@ -83404,7 +83404,7 @@
       {
         "player_id": "215590",
         "anonymous_id": "C22",
-        "position": "CF",
+        "position": "ST",
         "club": "Villarreal CF",
         "overall": 83,
         "potential": 83,
@@ -85363,7 +85363,7 @@
       {
         "player_id": "230899",
         "anonymous_id": "D96",
-        "position": "CF",
+        "position": "ST",
         "club": "Atalanta",
         "overall": 84,
         "potential": 84,
@@ -85512,7 +85512,7 @@
       {
         "player_id": "231677",
         "anonymous_id": "E09",
-        "position": "CF",
+        "position": "ST",
         "club": [
           "Aston Villa",
           "Manchester United"
@@ -86782,7 +86782,7 @@
       {
         "player_id": "238004",
         "anonymous_id": "F22",
-        "position": "CF",
+        "position": "ST",
         "club": "Fiorentina",
         "overall": 79,
         "potential": 79,
@@ -87625,7 +87625,7 @@
       {
         "player_id": "242374",
         "anonymous_id": "F97",
-        "position": "CF",
+        "position": "ST",
         "club": "Al Taawoun FC",
         "overall": 78,
         "potential": 79,
@@ -88311,7 +88311,7 @@
       {
         "player_id": "246321",
         "anonymous_id": "G58",
-        "position": "CF",
+        "position": "ST",
         "club": "Celtic",
         "overall": 79,
         "potential": 79,
