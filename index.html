@@ -1019,7 +1019,7 @@
         username = data.username;
       }
 
-      welcome.textContent = `Welcome back, ${username}.`;
+      welcome.textContent = `Welcome back!`;
 
       document.getElementById("status").textContent = "Online";
 
@@ -1880,6 +1880,9 @@
 
           let lambda1 = 1.4 * Math.exp(D / 60) + 0.2;
           let lambda2 = 1.4 * Math.exp(-D / 60);
+
+          if (t1.isPlayer) lambda1 *= 1.04;
+if (t2.isPlayer) lambda2 *= 1.04;
 
           let g1 = samplePoisson(lambda1);
           let g2 = samplePoisson(lambda2);
