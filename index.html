@@ -1119,7 +1119,6 @@
       new Set(["LB", "LWB"]),
       new Set(["RB", "RWB"]),
       new Set(["ST", "CF"]),
-      new Set(["CM", "CAM", "CDM"])
     ];
 
     function getEffectiveOvr(playerOvr, playerPos, slotLabel) {
@@ -1132,7 +1131,7 @@
 
       for (let s of interchangeable) {
         if (s.has(playerPos) && s.has(slotLabel)) {
-          return ovr - 2;
+          return ovr;
         }
       }
       return ovr - 5;
