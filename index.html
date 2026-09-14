@@ -661,6 +661,11 @@
 
 <body>
   <div class="app">
+    <div id="injuryModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fffdfa; padding:25px; border:2px solid #2c2c2c; border-radius:5px; z-index:100; box-shadow: 4px 4px 0 rgba(0,0,0,0.1); max-width:400px; text-align:center;">
+      <h3 style="margin-top:0; font-family:Georgia, serif;">Injury Report</h3>
+      <p id="injuryMessage" style="font-family:monospace; color:#555; line-height:1.5;"></p>
+      <button class="primary" onclick="document.getElementById('injuryModal').style.display='none'" style="margin-top:15px;">OK</button>
+    </div>
     <div class="header">
       <div class="logo">The Vision</div>
       <div class="badge" id="status">Ready</div>
@@ -913,6 +918,7 @@
           <tbody id="leagueTableBody"></tbody>
         </table>
       </div>
+      <div id="goalscorersUI"></div>
       <div class="actions" style="margin-top:16px;">
         <button class="primary" onclick="endSimulation()">Continue</button>
       </div>
@@ -1109,9 +1115,9 @@
       433: [["GK", 50, 91], ["LB", 20, 76], ["CB", 40, 82], ["CB", 60, 82], ["RB", 80, 76], ["CM", 35, 53], ["CDM", 50, 59], ["CM", 65, 53], ["LW", 20, 31], ["ST", 50, 25], ["RW", 80, 31]],
       442: [["GK", 50, 91], ["LB", 20, 76], ["CB", 40, 82], ["CB", 60, 82], ["RB", 80, 76], ["LM", 18, 56], ["CM", 40, 56], ["CM", 60, 56], ["RM", 82, 56], ["ST", 40, 28], ["ST", 60, 28]],
       4231: [["GK", 50, 91], ["LB", 20, 76], ["CB", 40, 82], ["CB", 60, 82], ["RB", 80, 76], ["CDM", 40, 59], ["CDM", 60, 59], ["LW", 20, 40], ["CAM", 50, 43], ["RW", 80, 40], ["ST", 50, 27]],
-      352: [["GK", 50, 91], ["CB", 30, 79], ["CB", 50, 82], ["CB", 70, 79], ["LM", 15, 54], ["CM", 35, 57], ["CDM", 50, 51], ["CM", 65, 57], ["RM", 85, 54], ["ST", 40, 28], ["ST", 60, 28]],
-      343: [["GK", 50, 91], ["CB", 30, 79], ["CB", 50, 82], ["CB", 70, 79], ["LM", 17, 55], ["CM", 38, 56], ["CM", 62, 56], ["RM", 83, 55], ["LW", 20, 32], ["ST", 50, 26], ["RW", 80, 32]],
-      532: [["GK", 50, 91], ["LB", 12, 73], ["CB", 34, 79], ["CB", 50, 82], ["CB", 66, 79], ["RB", 88, 73], ["CM", 35, 58], ["CDM", 50, 52], ["CM", 65, 58], ["ST", 40, 28], ["ST", 60, 28]]
+      352: [["GK", 50, 91], ["CB", 30, 76], ["CB", 50, 76], ["CB", 70, 76], ["LM", 15, 51], ["CDM", 35, 62], ["CDM", 65, 62], ["RM", 85, 51], ["CAM", 50, 50], ["ST", 40, 25], ["ST", 60, 25]],
+      343: [["GK", 50, 91], ["CB", 30, 76], ["CB", 50, 76], ["CB", 70, 76], ["LM", 17, 55], ["CM", 38, 56], ["CM", 62, 56], ["RM", 83, 55], ["LW", 20, 32], ["ST", 50, 26], ["RW", 80, 32]],
+      532: [["GK", 50, 91], ["LB", 12, 73], ["CB", 34, 79], ["CB", 50, 79], ["CB", 66, 79], ["RB", 88, 73], ["CM", 35, 58], ["CDM", 50, 52], ["CM", 65, 58], ["ST", 40, 28], ["ST", 60, 28]]
     };
 
     const interchangeable = [
@@ -1159,7 +1165,7 @@
     }
     function getInitials(name) {
       if (!name || name === "Default") return "+";
-      if (name.startsWith("SCOUT #")) return name.split("#")[1];
+      if (name.startsWith("PLAYER #")) return name.split("#")[1];
       return name.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
     }
     function getCurrentOvr(p, currentVersion) {
@@ -1530,7 +1536,7 @@
         const canAfford = budget >= p.price;
         return `
   <div class="card ${canAfford ? '' : 'disabled'}" onclick="${canAfford ? `choose(${i})` : ''}" style="${canAfford ? '' : 'opacity:0.5;cursor:not-allowed'}">
-   <div class="anon">SCOUT #${p.anonymous_id}</div><div class="pos">${p.position || "N/A"}</div><div class="club">${club(p.club)}</div>
+   <div class="anon">PLAYER #${p.anonymous_id}</div><div class="pos">${p.position || "N/A"}</div><div class="club">${club(p.club)}</div>
    <div class="stats">
     <div class="stat"><small>PRICE</small><b style="color:${canAfford ? '#2c7a2c' : '#a00'}">${formatMoney(p.price)}</b></div>
     <div class="stat"><small>OVERALL</small><b>${p.overall ?? "N/A"}</b></div>
@@ -1627,6 +1633,12 @@
     }
 
     function handleSwapClick(type, index) {
+      let clickedPlayer = type === 'pitch' ? placements[index] : selections[index];
+      if (clickedPlayer && clickedPlayer.injured_until === round) {
+        alert("This player is injured and cannot be selected until next season.");
+        return;
+      }
+
       if (!swapSelection) {
         swapSelection = { type, index };
         renderPitch(); renderSquad();
@@ -1679,10 +1691,12 @@
         const placed = Object.values(placements).some(x => x && String(x.player_id) === String(p.player_id));
         const isSelected = swapSelection && swapSelection.type === 'squad' && swapSelection.index === i;
         const actualOvr = getCurrentOvr(p, currentVersion);
-        let nameDisp = p.is_default ? p.anonymous_id : `SCOUT #${p.anonymous_id}`;
-        const html = `<div class="squadPlayer" onclick="handleSwapClick('squad', ${i})" style="opacity:${placed ? 0.4 : 1}; ${isSelected ? 'border-color:#2c7a2c; background:#e8f4e8;' : ''}">
+        let nameDisp = p.is_default ? p.anonymous_id : `PLAYER #${p.anonymous_id}`;
+        let isInjured = p.injured_until === round;
+        const html = `<div class="squadPlayer" onclick="handleSwapClick('squad', ${i})" style="opacity:${placed ? 0.4 : (isInjured ? 0.5 : 1)}; ${isSelected ? 'border-color:#2c7a2c; background:#e8f4e8;' : ''} ${isInjured ? 'background:#fcc;' : ''}">
    <strong>${nameDisp} · ${p.position || "N/A"} · OVR ${actualOvr}</strong>
    <span>${p.season} · ${club(p.club)}</span>
+   ${isInjured ? '<span style="color:#a00;font-weight:bold;margin-left:5px;font-size:10px;">(INJURED)</span>' : ''}
   </div>`;
         if (p.is_default) defaultHtml += html;
         else scoutedHtml += html;
@@ -1848,7 +1862,13 @@
       }
     }
 
+    let currentSeasonStandings = null;
+
     function simulateCurrentSeason() {
+      for (let i = 0; i < 11; i++) {
+        if (placements[i]) placements[i].seasonGoals = 0;
+      }
+
       const [season, game, version] = seasons[round];
 
       let teams = [];
@@ -1869,32 +1889,78 @@
       const standings = teams.map(t => ({ ...t, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 }));
 
       for (let i = 0; i < standings.length; i++) {
-        for (let j = 0; j < standings.length; j++) {
-          if (i === j) continue;
-          let t1 = standings[i];
-          let t2 = standings[j];
-
-          const D = t1.ovr - t2.ovr;
-
-          let lambda1 = 1.4 * Math.exp(D / 60) + 0.2;
-          let lambda2 = 1.4 * Math.exp(-D / 60);
-
-          if (t1.isPlayer) lambda1 *= 1.04;
-if (t2.isPlayer) lambda2 *= 1.04;
-
-          let g1 = samplePoisson(lambda1);
-          let g2 = samplePoisson(lambda2);
-
-          t1.p++; t2.p++;
-          t1.gf += g1; t1.ga += g2;
-          t2.gf += g2; t2.ga += g1;
-
-          if (g1 > g2) { t1.pts += 3; t1.w++; t2.l++; }
-          else if (g2 > g1) { t2.pts += 3; t2.w++; t1.l++; }
-          else { t1.pts += 1; t2.pts += 1; t1.d++; t2.d++; }
+        for (let j = i + 1; j < standings.length; j++) {
+          simulateMatch(standings[i], standings[j]);
         }
       }
 
+      currentSeasonStandings = standings;
+      renderStandings("Mid-Season Results", "Finish Season", "finishSeason()");
+    }
+
+    function simulateMatch(t1, t2) {
+      const D = t1.ovr - t2.ovr;
+      let lambda1 = 1.4 * Math.exp(D / 60) + 0.2;
+      let lambda2 = 1.4 * Math.exp(-D / 60);
+
+      if (t1.isPlayer) lambda1 *= 1.04;
+      if (t2.isPlayer) lambda2 *= 1.04;
+
+      let g1 = samplePoisson(lambda1);
+      let g2 = samplePoisson(lambda2);
+
+      t1.p++; t2.p++;
+      t1.gf += g1; t1.ga += g2;
+      t2.gf += g2; t2.ga += g1;
+
+      if (g1 > g2) { t1.pts += 3; t1.w++; t2.l++; }
+      else if (g2 > g1) { t2.pts += 3; t2.w++; t1.l++; }
+      else { t1.pts += 1; t2.pts += 1; t1.d++; t2.d++; }
+
+      if (t1.isPlayer || t2.isPlayer) {
+         const playerTeamGoals = t1.isPlayer ? g1 : g2;
+         distributeGoals(playerTeamGoals);
+      }
+    }
+
+    function distributeGoals(goals) {
+      if (goals <= 0) return;
+      const fwds = [], mids = [], defs = [];
+      const slots = formations[document.getElementById("formation").value];
+      
+      for (let i = 0; i < 11; i++) {
+        let p = placements[i];
+        if (p) {
+          let label = slots[i][0];
+          if (['ST', 'CF', 'LW', 'RW'].includes(label)) fwds.push(p);
+          else if (['CM', 'CDM', 'CAM', 'LM', 'RM'].includes(label)) mids.push(p);
+          else defs.push(p);
+        }
+      }
+
+      for (let i = 0; i < goals; i++) {
+        let r = Math.random();
+        let group = null;
+        if (r < 0.60) group = fwds.length > 0 ? fwds : (mids.length > 0 ? mids : defs);
+        else if (r < 0.90) group = mids.length > 0 ? mids : (fwds.length > 0 ? fwds : defs);
+        else group = defs.length > 0 ? defs : (mids.length > 0 ? mids : fwds);
+        
+        if (group && group.length > 0) {
+          let scorer = group[Math.floor(Math.random() * group.length)];
+          scorer.goals = (scorer.goals || 0) + 1;
+          scorer.seasonGoals = (scorer.seasonGoals || 0) + 1;
+        }
+      }
+    }
+
+    function finishSeason() {
+      const standings = currentSeasonStandings;
+      for (let i = 0; i < standings.length; i++) {
+        for (let j = 0; j < i; j++) {
+          simulateMatch(standings[i], standings[j]);
+        }
+      }
+      
       standings.sort((a, b) => {
         if (b.pts !== a.pts) return b.pts - a.pts;
         let gdA = a.gf - a.ga, gdB = b.gf - b.ga;
@@ -1902,29 +1968,89 @@ if (t2.isPlayer) lambda2 *= 1.04;
         return b.gf - a.gf;
       });
 
+      const [season, game, version] = seasons[round];
       const myTeam = standings.find(t => t.isPlayer);
       const myPos = standings.findIndex(t => t.isPlayer) + 1;
+      const myOvr = getLiveOvr();
+
       if (myPos === 1) {
         unlockAchievement("league_champion");
+        let signings = selections.filter(p => !p.is_default).length;
+        if (signings === 0) unlockAchievement("in_a_pinch");
+        if (seasonResults.length > 0) {
+          let prev = seasonResults[seasonResults.length - 1];
+          if (prev.pos >= 18) unlockAchievement("kaiserslaughter");
+        }
       }
       if (myTeam && myTeam.l === 0) {
         unlockAchievement("invincibles");
       }
       seasonResults.push({ season, game, pos: myPos, ovr: myOvr });
 
+      renderStandings("End of Season Results", "Continue", "endSimulation()", true);
+    }
+
+    function renderStandings(title, buttonText, buttonAction, showScorer = false) {
+      const standings = currentSeasonStandings;
+      standings.sort((a, b) => {
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        let gdA = a.gf - a.ga, gdB = b.gf - b.ga;
+        if (gdB !== gdA) return gdB - gdA;
+        return b.gf - a.gf;
+      });
+
+      const [season, game] = seasons[round];
       document.getElementById("simKicker").textContent = `${game} · ${season}`;
+      document.getElementById("simTitle").textContent = title;
       document.getElementById("leagueTableBody").innerHTML = standings.map((t, idx) => `
-    <tr style="${t.isPlayer ? 'background:#e8f4e8; font-weight:bold; border-left:3px solid #2c7a2c;' : ''}">
-      <td>${idx + 1}</td>
-      <td>${t.team}</td>
-      <td>${t.p}</td>
-      <td>${t.w}</td>
-      <td>${t.d}</td>
-      <td>${t.l}</td>
-      <td>${t.gf - t.ga > 0 ? '+' + (t.gf - t.ga) : t.gf - t.ga}</td>
-      <td><strong>${t.pts}</strong></td>
-    </tr>
-  `).join("");
+        <tr style="${t.isPlayer ? 'background:#e8f4e8; font-weight:bold; border-left:3px solid #2c7a2c;' : ''}">
+          <td>${idx + 1}</td>
+          <td>${t.team}</td>
+          <td>${t.p}</td>
+          <td>${t.w}</td>
+          <td>${t.d}</td>
+          <td>${t.l}</td>
+          <td>${t.gf - t.ga > 0 ? '+' + (t.gf - t.ga) : t.gf - t.ga}</td>
+          <td><strong>${t.pts}</strong></td>
+        </tr>
+      `).join("");
+
+      document.querySelector("#simulation .actions").innerHTML = `<button class="primary" onclick="${buttonAction}">${buttonText}</button>`;
+      
+      if (showScorer) {
+        let topScorer = null;
+        let maxGoals = 0;
+        for (let i = 0; i < 11; i++) {
+          if (placements[i] && placements[i].seasonGoals > maxGoals) {
+            maxGoals = placements[i].seasonGoals;
+            topScorer = placements[i];
+          }
+        }
+        const teamGoals = standings.find(t => t.isPlayer).gf;
+        let goalHtml = "";
+        if (topScorer) {
+           let scorerName = topScorer.is_default ? topScorer.anonymous_id : `PLAYER #${topScorer.anonymous_id}`;
+           goalHtml = `<div style="margin-top:20px; padding:15px; border:1px solid #2c2c2c; border-radius:5px; background:#fffdfa;">
+             <div class="kicker">Team Stats</div>
+             <div style="display:flex; justify-content:space-between; align-items:center;">
+               <div>
+                 <h3 style="margin:5px 0; font-family:Georgia, serif; font-size:22px;">${scorerName}</h3>
+                 <p style="font-family:monospace; margin:0; font-size:12px; color:#555;">${topScorer.position} - Top Goalscorer</p>
+               </div>
+               <div style="text-align:right;">
+                 <div style="font-family:Georgia, serif; font-size:28px; font-weight:bold;">${maxGoals}</div>
+                 <div style="font-family:monospace; font-size:10px; color:#666;">GOALS</div>
+               </div>
+             </div>
+             <div style="margin-top:15px; padding-top:10px; border-top:1px dashed #ccc; font-family:monospace; font-size:11px; color:#555; text-align:center;">
+               Team Total: ${teamGoals} goals
+             </div>
+           </div>`;
+        }
+        document.getElementById("goalscorersUI").innerHTML = goalHtml;
+      } else {
+        document.getElementById("goalscorersUI").innerHTML = "";
+      }
 
       show("simulation");
     }
@@ -2291,6 +2417,14 @@ if (t2.isPlayer) lambda2 *= 1.04;
 
       if (champion.team === playerTeam) {
         unlockAchievement("ucl_champion");
+        let uclWinsInRow = 0;
+        for (let i = seasonResults.length - 1; i >= 0; i--) {
+          if (seasonResults[i].ucl && seasonResults[i].ucl.playerChampion) uclWinsInRow++;
+          else break;
+        }
+        if (uclWinsInRow >= 3) {
+          unlockAchievement("threepeat");
+        }
       }
 
       currentUCLStep = 0;
@@ -2340,6 +2474,31 @@ if (t2.isPlayer) lambda2 *= 1.04;
     }
 
     function continueAfterUCL() {
+      if (Math.random() < 0.10) {
+        let active = [];
+        for (let i = 0; i < 11; i++) if (placements[i]) active.push(i);
+        if (active.length > 0) {
+          let i = active[Math.floor(Math.random() * active.length)];
+          let p = placements[i];
+          p.injured_until = round + 1;
+          placements[i] = null;
+          document.getElementById('injuryMessage').innerText = `Oh no! ${p.name || "PLAYER #" + p.anonymous_id} was injured and will miss the entire next campaign!`;
+          document.getElementById('injuryModal').style.display = 'block';
+        }
+      }
+
+      const latest = seasonResults[seasonResults.length - 1];
+      let uclEarnings = 0;
+      if (latest.ucl && latest.ucl.qualified) {
+        if (latest.ucl.playerChampion) uclEarnings = 75000000;
+        else if (latest.ucl.eliminatedRound === "Final") uclEarnings = 60000000;
+        else if (latest.ucl.eliminatedRound === "Semi-finals") uclEarnings = 50000000;
+        else if (latest.ucl.eliminatedRound === "Quarter-finals") uclEarnings = 30000000;
+        else if (latest.ucl.eliminatedRound === "Round of 16") uclEarnings = 25000000;
+        else uclEarnings = 15000000;
+      }
+      budget += uclEarnings;
+
       round++;
       nextRound();
     }
