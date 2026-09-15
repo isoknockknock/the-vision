@@ -1116,7 +1116,7 @@
 
       welcome.textContent = `Welcome back!`;
 
-      document.getElementById("status").textContent = "Online";
+      document.getElementById("status").textContent = "Home";
 
       show("menu");
     }
@@ -1299,7 +1299,7 @@
         // Move the central midfielder with the mentality switch.
         // Attacking mode pushes the middle player higher into the CAM area;
         // defensive mode drops them back into the CDM area.
-        slots[centralIndex][2] = formationMode === "up" ? 43 : (formation === "433" ? 59 : 52);
+        slots[centralIndex][2] = formationMode === "up" ? 43 : (formation === "433" ? 59 : 57);
       }
       return slots;
     }
