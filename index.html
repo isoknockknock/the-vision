@@ -7,6 +7,35 @@
   <title>The Vision</title>
   <link rel="icon" type="image/png" href="fav.png">
   <style>
+
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter-Bold.ttf") format("truetype");
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter-Black.ttf") format("truetype");
+      font-weight: 900;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter-Thin.ttf") format("truetype");
+      font-weight: 300;
+      font-style: normal;
+    }
+
     * {
       box-sizing: border-box
     }
@@ -15,7 +44,7 @@
       margin: 0;
       background: #fdfbf7;
       color: #2c2c2c;
-      font-family: Inter, Arial, sans-serif
+      font-family: "JMH Typewriter", monospace;
     }
 
     .app {
@@ -34,7 +63,7 @@
     }
 
     .logo {
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       font-weight: 900;
       font-size: 28px
     }
@@ -99,7 +128,7 @@
     }
 
     .hero h1 {
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       font-size: 58px;
       letter-spacing: -1px;
       margin: 0 0 14px;
@@ -131,7 +160,7 @@
     }
 
     .title {
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       font-size: 30px;
       font-weight: 900;
       margin-top: 3px
@@ -170,6 +199,58 @@
       border-bottom: none;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0
+    }
+
+    .formationControls {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex: 0 0 54px;
+    }
+
+    .formationControls.visible { display: flex; }
+
+    .formationArrow {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      line-height: 1;
+      background: #fffdfa;
+      border: 1px solid #2c2c2c;
+      border-radius: 3px;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+    }
+
+    .formationArrow.selected {
+      background: #2c2c2c;
+      color: #fffdfa;
+    }
+
+    .formationArrow:hover { background: #f4f1ea; color: #2c2c2c; }
+    .formationArrow.selected:hover { background: #2c2c2c; color: #fffdfa; }
+
+    .formationControlsLabel {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font: 8px monospace;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .pitchRow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      max-width: 870px;
+      margin: auto;
     }
 
     .pitch:before {
@@ -290,7 +371,7 @@
     }
 
     .pos {
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       font-size: 20px;
       font-weight: 900;
       margin-top: 7px;
@@ -329,7 +410,7 @@
 
     .stat b {
       font-size: 14px;
-      font-family: Georgia, serif
+      font-family: "JMH Typewriter", monospace
     }
 
     .squadPlayer {
@@ -392,7 +473,7 @@
 
     .revealCard .small {
       font-size: 10px;
-      font-family: monospace;
+      font-family: "JMH Typewriter", monospace;
       color: #666;
       border-bottom: 1px solid #eee;
       padding-bottom: 5px;
@@ -401,7 +482,7 @@
 
     .revealCard h3 {
       margin: 6px 0;
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       color: #111
     }
 
@@ -431,7 +512,7 @@
     .score strong {
       display: block;
       font-size: 60px;
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       color: #111
     }
 
@@ -478,7 +559,7 @@
       text-align: center;
       border: 1px solid #2c2c2c;
       padding: 6px 8px;
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       font-size: 16px;
       margin-bottom: 8px;
       background: #f4f1ea
@@ -572,7 +653,7 @@
     }
 
     .uclSummaryCard strong {
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       font-size: 18px;
       color: #111
     }
@@ -622,7 +703,7 @@
     }
 
     .achievementName {
-      font-family: Georgia, serif;
+      font-family: "JMH Typewriter", monospace;
       font-size: 18px;
       font-weight: 900;
       color: #111;
@@ -775,7 +856,7 @@
           <span style="color:#8997ad;font-size:12px;margin-right:8px;text-transform:uppercase;font-family:monospace">
             Select Formation
           </span>
-          <select id="formation">
+          <select id="formation" onchange="formationChanged()">
             <option value="433">4-3-3</option>
             <option value="442">4-4-2</option>
             <option value="4231">4-2-3-1</option>
@@ -815,8 +896,15 @@
       <div class="main" style="display:grid; grid-template-columns:minmax(0,1fr) 390px; gap:16px; align-items:start;">
         <div style="display:flex; flex-direction:column; gap:16px;">
           <div class="panel" id="liveFormationPanel">
-            <div class="pitch" id="pitch" style="max-width:800px; margin:auto;">
-              <div class="circle"></div>
+            <div class="pitchRow">
+              <div id="formationControls" class="formationControls" aria-label="Formation mentality">
+                <button type="button" id="formationUp" class="formationArrow" onclick="setFormationMode('up')" aria-label="Attacking: CAM">▲</button>
+                <div class="formationControlsLabel">mentality</div>
+                <button type="button" id="formationDown" class="formationArrow selected" onclick="setFormationMode('down')" aria-label="Defensive: CDM">▼</button>
+              </div>
+              <div class="pitch" id="pitch" style="max-width:800px; margin:auto;">
+                <div class="circle"></div>
+              </div>
             </div>
             <div class="note">The formation is visible during every selection. Drafting is completely independent of
               position.</div>
@@ -1194,15 +1282,67 @@
       }
       return ovr && ovr > 1 ? ovr : (p.overall || 0);
     }
+    let formationMode = "down";
+
+    function isToggleFormation() {
+      const formation = document.getElementById("formation")?.value;
+      return formation === "433" || formation === "532";
+    }
+
+    function getFormationSlots() {
+      const formation = document.getElementById("formation")?.value;
+      const slots = formations[formation].map(slot => [...slot]);
+      if (isToggleFormation()) {
+        const centralIndex = formation === "433" ? 6 : 7;
+        slots[centralIndex][0] = formationMode === "up" ? "CAM" : "CDM";
+
+        // Move the central midfielder with the mentality switch.
+        // Attacking mode pushes the middle player higher into the CAM area;
+        // defensive mode drops them back into the CDM area.
+        slots[centralIndex][2] = formationMode === "up" ? 43 : (formation === "433" ? 59 : 52);
+      }
+      return slots;
+    }
+
+    function getFormationBoost(slotLabel) {
+      if (!isToggleFormation()) return 0;
+      if (formationMode === "up" && ["ST", "CF", "LW", "RW"].includes(slotLabel)) return 2;
+      if (formationMode === "down" && ["GK", "LB", "CB", "RB", "LWB", "RWB"].includes(slotLabel)) return 1;
+      return 0;
+    }
+
+    function setFormationMode(mode) {
+      if (!isToggleFormation()) return;
+      formationMode = mode;
+      updateFormationControls();
+      updateLiveStats();
+      renderPitch();
+      renderSquad();
+    }
+
+    function updateFormationControls() {
+      const controls = document.getElementById("formationControls");
+      if (!controls) return;
+      const visible = isToggleFormation();
+      controls.classList.toggle("visible", visible);
+      document.getElementById("formationUp")?.classList.toggle("selected", visible && formationMode === "up");
+      document.getElementById("formationDown")?.classList.toggle("selected", visible && formationMode === "down");
+    }
+
+    function getBoostedOvr(effectiveOvr, slotLabel) {
+      if (!effectiveOvr) return effectiveOvr;
+      return effectiveOvr + getFormationBoost(slotLabel);
+    }
+
     function getLiveOvr() {
       let total = 0, count = 0;
-      const slots = formations[document.getElementById("formation").value];
+      const slots = getFormationSlots();
       const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
       for (let i = 0; i < 11; i++) {
         let p = placements[i];
         if (p) {
           let actualOvr = getCurrentOvr(p, currentVersion);
-          total += getEffectiveOvr(actualOvr, p.position, slots[i][0]);
+          total += getBoostedOvr(getEffectiveOvr(actualOvr, p.position, slots[i][0]), slots[i][0]);
           count++;
         }
       }
@@ -1457,7 +1597,7 @@
         });
         pool = pool.sort(() => Math.random() - 0.5);
 
-        const currentFormation = formations[document.getElementById("formation").value];
+        const currentFormation = getFormationSlots();
         currentFormation.forEach((slot, i) => {
           const targetPos = slot[0];
           let pIndex = pool.findIndex(p => {
@@ -1596,15 +1736,19 @@
     }
 
     function formationChanged() {
-      renderPitch(); renderSquad();
+      updateFormationControls();
+      renderPitch();
+      renderSquad();
+      updateLiveStats();
     }
 
     let swapSelection = null;
 
     function renderPitch(target = "pitch") {
+      updateFormationControls();
       const pitch = document.getElementById(target); if (!pitch) return;
       pitch.innerHTML = '<div class="circle"></div>';
-      const slots = formations[document.getElementById("formation").value];
+      const slots = getFormationSlots();
       const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
       slots.forEach((slot, i) => {
         const [label, x, y] = slot, p = placements[i];
@@ -1618,6 +1762,7 @@
           displayOvr = getCurrentOvr(p, currentVersion);
           const eff = getEffectiveOvr(displayOvr, p.position, label);
           if (eff < displayOvr || eff === 0) isOutOfPos = true;
+          displayOvr = getBoostedOvr(eff, label);
         }
 
         const isSelected = swapSelection && swapSelection.type === 'pitch' && swapSelection.index === i;
@@ -1667,9 +1812,17 @@
         placements[index] = p1;
         placements[swapSelection.index] = p2;
       } else if (type === 'pitch' && swapSelection.type === 'squad') {
-        // Swap squad to pitch
-        if (p2) { placements[old2] = p1; } else { delete placements[old2]; }
-        placements[index] = p1;
+        // Move/swap a squad player onto the pitch.
+        // If that player is already on the pitch, swap the two pitch positions.
+        if (old1 >= 0) {
+          placements[index] = p1;
+          placements[old1] = p2;
+        } else {
+          // p1 was an unplaced squad player. Remove the player currently in the target
+          // slot, then put p1 there. This keeps every player unique in the XI.
+          placements[index] = p1;
+          if (old2 >= 0 && old2 !== index) delete placements[old2];
+        }
       } else if (type === 'squad' && swapSelection.type === 'pitch') {
         // Swap pitch to squad
         if (p1) { placements[old1] = p2; } else { delete placements[old1]; }
@@ -1738,7 +1891,7 @@
     }
     function reveal() {
       let squadTotal = 0;
-      const currentFormation = formations[document.getElementById("formation").value];
+      const currentFormation = getFormationSlots();
       const currentVersion = seasons[10][2]; // Final season
       const revealPitch = document.getElementById("revealPitch");
       revealPitch.innerHTML = '<div class="circle" style="border-color:#555"></div>';
@@ -1758,7 +1911,8 @@
         const r = realPlayer(p), name = r?.name || (p.is_default ? p.anonymous_id : null);
         if (!name) return; // Hide player entirely if no name found
         const actualOvr = getCurrentOvr(p, currentVersion);
-        const effectiveOvr = getEffectiveOvr(actualOvr, p.position, label);
+        const positionOvr = getEffectiveOvr(actualOvr, p.position, label);
+        const effectiveOvr = getBoostedOvr(positionOvr, label);
         squadTotal += effectiveOvr;
 
         let penaltyText = "";
@@ -1776,7 +1930,7 @@
         w.innerHTML = `
    <div style="background:#fffdfa; color:#111; padding:4px 8px; border-radius:5px; font-family:monospace; font-size:11px; border:2px solid #fffdfa; box-shadow: 2px 2px 0 rgba(0,0,0,0.5);">
     <strong style="font-family:Georgia,serif; font-size:14px; display:block;">${name}</strong>
-    <div style="color:#666; margin-top:2px;">OVR ${actualOvr}</div>
+    <div style="color:#666; margin-top:2px;">OVR ${effectiveOvr}${getFormationBoost(label) ? ` (+${getFormationBoost(label)})` : ''}</div>
     <div style="background:#2c2c2c; color:#fff; display:inline-block; padding:2px 4px; border-radius:2px; font-size:9px; margin-top:4px;">${label}</div>
    </div>
   `;
@@ -2514,5 +2668,6 @@
 
   </script>
 </body>
+
 
 </html>
