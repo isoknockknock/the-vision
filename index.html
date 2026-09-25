@@ -436,6 +436,29 @@
       font-style: italic
     }
 
+    .positionGroup {
+      margin-bottom: 14px;
+    }
+
+    .positionGroupTitle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: "JMH Typewriter", monospace;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      border-bottom: 2px solid #2c2c2c;
+      padding: 6px 2px;
+      margin-bottom: 7px;
+    }
+
+    .positionGroupCount {
+      font: 9px monospace;
+      color: #666;
+      font-weight: normal;
+    }
+
     .note {
       color: #555;
       font-size: 11px;
@@ -757,7 +780,7 @@
         <h1>The Vision</h1>
 
         <p>
-          Build your squad. Scout the unknown. Conquer England.
+          Build your squad. Trust your instincts. Conquer England.
         </p>
 
         <div style="max-width:360px;margin:30px auto 0;">
@@ -874,7 +897,7 @@
             style="background:#fffdfa;color:#2c2c2c;border:1px solid #2c2c2c;border-radius:3px;padding:9px 12px;font-family:monospace;width:200px;">
         </div>
 
-        <button class="primary" onclick="start()">Start Scouting</button>
+        <button class="primary" onclick="start()">Start Career</button>
 
       </div>
     </section>
@@ -908,6 +931,7 @@
             </div>
             <div class="note">The formation is visible during every selection. Drafting is completely independent of
               position.</div>
+            <div class="note" style="margin-top:4px;">Every player is represented by a unique random 2-letter code until the final reveal.</div>
           </div>
 
           <div class="panel">
@@ -953,7 +977,7 @@
       <div style="text-align:center;margin:35px 0 24px">
         <div class="kicker">The reveal</div>
         <div class="title" style="font-size:45px">Final Squad</div>
-        <p style="color:#8f9db4">The anonymous IDs are finally revealed.</p>
+        <p style="color:#8f9db4">The player identities are finally revealed.</p>
       </div>
       <div class="panel" style="background:#fffdfa; border: 2px solid #2c2c2c; padding:20px; border-radius:5px;">
         <div class="pitch" id="revealPitch" style="max-width:900px; margin:auto;">
@@ -1251,10 +1275,52 @@
       if (num >= 1000) return "€" + (num / 1000).toFixed(0) + "K";
       return "€" + num;
     }
-    function getInitials(name) {
-      if (!name || name === "Default") return "+";
-      if (name.startsWith("PLAYER #")) return name.split("#")[1];
-      return name.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
+    // Every player gets a unique random two-letter identity code for this career.
+    // Real names are only shown on the final reveal.
+    let playerCodeMap = new Map();
+    let usedPlayerCodes = new Set();
+
+    function randomTwoLetterCode() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      let code;
+      do {
+        code =
+          letters[Math.floor(Math.random() * letters.length)] +
+          letters[Math.floor(Math.random() * letters.length)];
+      } while (usedPlayerCodes.has(code) && usedPlayerCodes.size < 676);
+
+      usedPlayerCodes.add(code);
+      return code;
+    }
+
+    function playerIdentityKey(p) {
+      if (!p) return null;
+      if (p.player_id != null) return String(p.player_id);
+      if (p.id != null) return String(p.id);
+      if (p.name) return `name:${p.name}`;
+      return null;
+    }
+
+    function assignPlayerCode(p) {
+      if (!p) return "??";
+
+      const key = playerIdentityKey(p);
+      if (key && playerCodeMap.has(key)) {
+        p.anonymous_id = playerCodeMap.get(key);
+        return p.anonymous_id;
+      }
+
+      const code = randomTwoLetterCode();
+      if (key) playerCodeMap.set(key, code);
+      p.anonymous_id = code;
+      return code;
+    }
+
+    function getPlayerCode(p) {
+      if (!p) return "??";
+      const key = playerIdentityKey(p);
+      if (key && playerCodeMap.has(key)) return playerCodeMap.get(key);
+      return assignPlayerCode(p);
     }
     function getCurrentOvr(p, currentVersion) {
       const r = realPlayer(p);
@@ -1588,6 +1654,18 @@
       } catch (e) { alert("season_pools.json must be in the same folder as index.html."); return }
       selections = []; used.clear(); placements = {}; round = 0; budget = 200000000; seasonResults = [];
 
+      // Random identity codes are regenerated for every new career.
+      playerCodeMap = new Map();
+      usedPlayerCodes = new Set();
+
+      // Pre-assign a code to every player in the master database.
+      if (allPlayers) {
+        const masterPlayers = Array.isArray(allPlayers.players)
+          ? allPlayers.players
+          : Object.values(allPlayers.players);
+        masterPlayers.forEach(assignPlayerCode);
+      }
+
       // Generate default squad
       if (allPlayers) {
         const ps = Array.isArray(allPlayers.players) ? allPlayers.players : Object.values(allPlayers.players);
@@ -1615,7 +1693,7 @@
 
           const draftP = {
             player_id: p.player_id,
-            anonymous_id: p.name || "Default",
+            anonymous_id: getPlayerCode(p),
             position: p.position,
             club: p.season_stats ? Object.values(p.season_stats)[0]?.club : "Unknown",
             overall: p.overall_history["260006"],
@@ -1676,7 +1754,7 @@
         const canAfford = budget >= p.price;
         return `
   <div class="card ${canAfford ? '' : 'disabled'}" onclick="${canAfford ? `choose(${i})` : ''}" style="${canAfford ? '' : 'opacity:0.5;cursor:not-allowed'}">
-   <div class="anon">PLAYER #${p.anonymous_id}</div><div class="pos">${p.position || "N/A"}</div><div class="club">${club(p.club)}</div>
+   <div class="anon">ID · ${getPlayerCode(p)}</div><div class="pos">${p.position || "N/A"}</div><div class="club">${club(p.club)}</div>
    <div class="stats">
     <div class="stat"><small>PRICE</small><b style="color:${canAfford ? '#2c7a2c' : '#a00'}">${formatMoney(p.price)}</b></div>
     <div class="stat"><small>OVERALL</small><b>${p.overall ?? "N/A"}</b></div>
@@ -1758,7 +1836,7 @@
         let displayOvr = "";
         let isOutOfPos = false;
         if (p) {
-          displayName = p.is_default ? getInitials(p.anonymous_id) : p.anonymous_id;
+          displayName = getPlayerCode(p);
           displayOvr = getCurrentOvr(p, currentVersion);
           const eff = getEffectiveOvr(displayOvr, p.position, label);
           if (eff < displayOvr || eff === 0) isOutOfPos = true;
@@ -1837,31 +1915,87 @@
       const box = document.getElementById("squad");
       const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
 
-      let defaultHtml = "";
-      let scoutedHtml = "";
+      const groups = {
+        goalkeepers: [],
+        defenders: [],
+        midfielders: [],
+        forwards: []
+      };
+
+      function positionGroup(position) {
+        const pos = String(position || "").toUpperCase();
+
+        if (pos === "GK") return "goalkeepers";
+
+        if (["LB", "LWB", "CB", "RB", "RWB", "SW"].includes(pos)) {
+          return "defenders";
+        }
+
+        if (["CDM", "CM", "CAM", "LM", "RM", "DM", "AM"].includes(pos)) {
+          return "midfielders";
+        }
+
+        if (["LW", "RW", "ST", "CF", "LF", "RF"].includes(pos)) {
+          return "forwards";
+        }
+
+        // Unknown positions are grouped with midfielders rather than hidden.
+        return "midfielders";
+      }
 
       selections.forEach((p, i) => {
-        const placed = Object.values(placements).some(x => x && String(x.player_id) === String(p.player_id));
-        const isSelected = swapSelection && swapSelection.type === 'squad' && swapSelection.index === i;
-        const actualOvr = getCurrentOvr(p, currentVersion);
-        let nameDisp = p.is_default ? p.anonymous_id : `PLAYER #${p.anonymous_id}`;
-        let isInjured = p.injured_until === round;
-        const html = `<div class="squadPlayer" onclick="handleSwapClick('squad', ${i})" style="opacity:${placed ? 0.4 : (isInjured ? 0.5 : 1)}; ${isSelected ? 'border-color:#2c7a2c; background:#e8f4e8;' : ''} ${isInjured ? 'background:#fcc;' : ''}">
-   <strong>${nameDisp} · ${p.position || "N/A"} · OVR ${actualOvr}</strong>
-   <span>${p.season} · ${club(p.club)}</span>
-   ${isInjured ? '<span style="color:#a00;font-weight:bold;margin-left:5px;font-size:10px;">(INJURED)</span>' : ''}
-  </div>`;
-        if (p.is_default) defaultHtml += html;
-        else scoutedHtml += html;
+        const group = positionGroup(p.position);
+        groups[group].push({ p, i });
       });
 
-      box.innerHTML = `
-   <div style="display:flex; flex-direction:column; gap:8px;">
-      ${scoutedHtml ? `<div style="font-family:monospace;font-weight:bold;margin-top:5px;border-bottom:1px solid #ddd;padding-bottom:4px;">Scouted Players</div>${scoutedHtml}` : ''}
-      <div style="font-family:monospace;font-weight:bold;margin-top:5px;border-bottom:1px solid #ddd;padding-bottom:4px;">Default Squad</div>
-      ${defaultHtml}
-   </div>
- `;
+      function playerCard(p, i) {
+        const placed = Object.values(placements).some(
+          x => x && String(x.player_id) === String(p.player_id)
+        );
+        const isSelected =
+          swapSelection &&
+          swapSelection.type === "squad" &&
+          swapSelection.index === i;
+
+        const actualOvr = getCurrentOvr(p, currentVersion);
+        const nameDisp = getPlayerCode(p);
+        const isInjured = p.injured_until === round;
+
+        return `<div class="squadPlayer"
+          onclick="handleSwapClick('squad', ${i})"
+          style="opacity:${placed ? 0.4 : (isInjured ? 0.5 : 1)};
+                 ${isSelected ? 'border-color:#2c7a2c; background:#e8f4e8;' : ''}
+                 ${isInjured ? 'background:#fcc;' : ''}">
+          <strong>${nameDisp} · ${p.position || "N/A"} · OVR ${actualOvr}</strong>
+          <span>${p.season} · ${club(p.club)}</span>
+          ${isInjured
+            ? '<span style="color:#a00;font-weight:bold;margin-left:5px;font-size:10px;">(INJURED)</span>'
+            : ''}
+        </div>`;
+      }
+
+      const groupInfo = [
+        ["goalkeepers", "Goalkeepers"],
+        ["defenders", "Defenders"],
+        ["midfielders", "Midfielders"],
+        ["forwards", "Forwards"]
+      ];
+
+      box.innerHTML = groupInfo.map(([key, title]) => {
+        const players = groups[key];
+
+        return `
+          <div class="positionGroup">
+            <div class="positionGroupTitle">
+              <span>${title}</span>
+              <span class="positionGroupCount">${players.length} PLAYER${players.length === 1 ? "" : "S"}</span>
+            </div>
+            ${players.length
+              ? players.map(({ p, i }) => playerCard(p, i)).join("")
+              : `<div class="note" style="padding:6px 2px;">No players</div>`}
+          </div>
+        `;
+      }).join("");
     }
 
     function openFinal() {
@@ -1908,7 +2042,7 @@
       currentFormation.forEach((slot, i) => {
         const [label, x, y] = slot, p = placements[i];
         if (!p) return;
-        const r = realPlayer(p), name = r?.name || (p.is_default ? p.anonymous_id : null);
+        const r = realPlayer(p), name = r?.name || null;
         if (!name) return; // Hide player entirely if no name found
         const actualOvr = getCurrentOvr(p, currentVersion);
         const positionOvr = getEffectiveOvr(actualOvr, p.position, label);
@@ -2183,7 +2317,7 @@
         const teamGoals = standings.find(t => t.isPlayer).gf;
         let goalHtml = "";
         if (topScorer) {
-           let scorerName = topScorer.is_default ? topScorer.anonymous_id : `PLAYER #${topScorer.anonymous_id}`;
+           let scorerName = getPlayerCode(topScorer);
            goalHtml = `<div style="margin-top:20px; padding:15px; border:1px solid #2c2c2c; border-radius:5px; background:#fffdfa;">
              <div class="kicker">Team Stats</div>
              <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -2636,7 +2770,7 @@
           let p = placements[i];
           p.injured_until = round + 1;
           placements[i] = null;
-          document.getElementById('injuryMessage').innerText = `Oh no! ${p.name || "PLAYER #" + p.anonymous_id} was injured and will miss the entire next campaign!`;
+          document.getElementById('injuryMessage').innerText = `Oh no! ${"Player " + getPlayerCode(p)} was injured and will miss the entire next campaign!`;
           document.getElementById('injuryModal').style.display = 'block';
         }
       }
