@@ -1527,7 +1527,7 @@
       ["2014/2015", "FIFA 16", "160058"], ["2015/2016", "FIFA 17", "170099"], ["2016/2017", "FIFA 18", "180084"],
       ["2017/2018", "FIFA 19", "190075"], ["2018/2019", "FIFA 20", "200061"], ["2019/2020", "FIFA 21", "210064"],
       ["2020/2021", "FIFA 22", "220069"], ["2021/2022", "FIFA 23", "230054"], ["2022/2023", "FC 24", "240050"],
-      ["2023/2024", "FC 25", "250044"], ["2024/2025", "FC 26", "260006"], ["2025/2026", "FC 27", "270001"]
+      ["2023/2024", "FC 25", "250044"], ["2024/2025", "FC 26", "260006"], ["2025/2026", "FC 27", "270002"]
     ];
 
     const SEASON_COUNT = seasons.length;
@@ -2345,7 +2345,6 @@
                  ${isSelected ? 'border-color:#2c7a2c; background:#e8f4e8;' : ''}
                  ${isInjured ? 'background:#fcc;' : ''}">
           <strong>${nameDisp} · ${p.position || "N/A"} · OVR ${actualOvr}</strong>
-          <span>${p.season} · ${club(p.club)}</span>
           ${isInjured
             ? '<span style="color:#a00;font-weight:bold;margin-left:5px;font-size:10px;">(INJURED)</span>'
             : ''}
@@ -3066,7 +3065,7 @@
         }
       }
 
-      if (game === "FC 26") {
+      if (game === "FC 26" || game == "FC 27") {
         // 2024/25: 8 r vs 8 ir in the play-off.
         playoffMatches = makeUCLMatchups(availableR, availableIR);
         checkEliminatedRound(playoffMatches, "Play-offs");
@@ -3102,7 +3101,7 @@
         semiMatches,
         finalMatch,
         champion,
-        hasPlayoff: game === "FC 26",
+        hasPlayoff: game === "FC 26" || game === "FC 27",
         eliminatedRound
       };
 
