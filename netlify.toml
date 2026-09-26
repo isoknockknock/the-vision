@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "thevisionscouting.netlify.app/*"
+  to = "https://the-vision-scouting.vercel.app//:splat"
+  status = 301
+  force = true
