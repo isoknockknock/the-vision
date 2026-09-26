@@ -993,6 +993,249 @@
       margin-top: 4px;
     }
 
+    /* --- Integrated Scouting Record / Pokédex --- */
+    .scoutingRecord {
+      margin-top: 34px;
+      padding-top: 24px;
+      border-top: 4px double var(--ink);
+    }
+
+    .scoutingRecordHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 15px;
+    }
+
+    .scoutingRecordTitle {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .scoutingRecordIntro {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+      margin-top: 5px;
+    }
+
+    .recordProgress {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+
+    .recordProgressCard {
+      position: relative;
+      padding: 13px 14px 12px;
+      background: var(--paper);
+      border: 1px solid rgba(37,35,31,.28);
+      box-shadow: 3px 4px 0 rgba(55,40,15,.10);
+      transform: rotate(-.35deg);
+    }
+
+    .recordProgressCard:nth-child(2) { transform: rotate(.35deg); }
+
+    .recordProgressLabel {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 900;
+    }
+
+    .recordProgressTrack {
+      height: 7px;
+      margin-top: 9px;
+      background: rgba(37,35,31,.10);
+      border: 1px solid rgba(37,35,31,.18);
+    }
+
+    .recordProgressFill {
+      height: 100%;
+      background: var(--ink);
+      transition: width .2s ease;
+    }
+
+    .recordProgressCard.signed .recordProgressFill {
+      background: var(--green-ink);
+    }
+
+    .recordFilterBar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 0 0 14px;
+      padding: 10px 12px;
+      background: rgba(248,241,221,.58);
+      border-top: 1px dashed rgba(37,35,31,.32);
+      border-bottom: 1px dashed rgba(37,35,31,.32);
+    }
+
+    .recordFilterBar select {
+      min-width: 170px;
+      padding: 7px 9px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      background: var(--paper);
+    }
+
+    .recordFilterLabel {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 900;
+    }
+
+    .recordFilterCount {
+      margin-left: auto;
+      color: var(--muted);
+      font: 9px monospace;
+      text-transform: uppercase;
+    }
+
+    .recordLegend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .recordLegendItem {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .recordLegendSwatch {
+      width: 17px;
+      height: 12px;
+      border: 1px solid rgba(37,35,31,.28);
+      box-shadow: 1px 1px 0 rgba(55,40,15,.10);
+    }
+
+    .recordLegendSwatch.unknown { background: #d9d1bd; }
+    .recordLegendSwatch.discovered { background: #eee9d9; }
+    .recordLegendSwatch.signed { background: #c2d0ae; }
+
+    .recordGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 13px;
+    }
+
+    .recordCard {
+      position: relative;
+      min-height: 126px;
+      padding: 17px 14px 13px;
+      border: 0;
+      box-shadow: 4px 5px 0 rgba(55,40,15,.12);
+      transform: rotate(-.45deg);
+      overflow: hidden;
+    }
+
+    .recordCard:nth-child(3n) { transform: rotate(.45deg); }
+    .recordCard:nth-child(5n) { transform: rotate(-.75deg); }
+
+    .recordCard::before {
+      content: "";
+      position: absolute;
+      width: 55px;
+      height: 14px;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(163, 255, 223, 0.72);
+    }
+
+    .recordCard.undiscovered {
+      background: #d9d1bd;
+      color: #716b60;
+    }
+
+    .recordCard.discovered {
+      background: #eee9d9;
+      color: #777168;
+    }
+
+    .recordCard.signed {
+      background: #c2d0ae;
+      color: var(--ink);
+      box-shadow: 5px 6px 0 rgba(55,40,15,.16);
+    }
+
+    .recordCardCode {
+      font: 8px monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: .65;
+    }
+
+    .recordCardName {
+      margin-top: 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.02;
+      font-weight: 900;
+    }
+
+    .recordCard.undiscovered .recordCardName {
+      font-family: "JMH Typewriter", monospace;
+      font-size: 28px;
+      letter-spacing: 2px;
+    }
+
+    .recordCard.discovered .recordCardName { color: #777168; }
+    .recordCard.signed .recordCardName { color: #171613; }
+
+    .recordCardMeta {
+      margin-top: 9px;
+      font-size: 9px;
+      line-height: 1.45;
+      opacity: .82;
+    }
+
+    .recordCardStatus {
+      position: absolute;
+      right: 9px;
+      top: 9px;
+      padding: 2px 4px;
+      border: 1px solid currentColor;
+      font: 7px monospace;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      opacity: .72;
+      transform: rotate(2deg);
+    }
+
+    .recordPagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .recordPageLabel {
+      min-width: 100px;
+      text-align: center;
+      font: 9px monospace;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
     .achievementStatus {
       margin-top: 8px;
       font-size: 9px;
@@ -1072,17 +1315,17 @@
         <h1>The Vision</h1>
 
         <p>
-          Please login or create an account to continue.
+          Login, create an account, or play as a guest.
         </p>
 
         <div style="max-width:360px;margin:30px auto 0;">
 
-          <input type="email" id="authEmail" placeholder="Email" style="width:100%;margin-bottom:10px;
+          <input type="text" id="authUsername" placeholder="Username" maxlength="20" autocomplete="username" style="width:100%;margin-bottom:10px;
                 background:#fffdfa;color:#2c2c2c;
                 border:1px solid #2c2c2c;border-radius:3px;
                 padding:12px;font-family:monospace;">
 
-          <input type="password" id="authPassword" placeholder="Password" style="width:100%;margin-bottom:14px;
+          <input type="password" id="authPassword" placeholder="Password" minlength="8" autocomplete="current-password" style="width:100%;margin-bottom:14px;
                 background:#fffdfa;color:#2c2c2c;
                 border:1px solid #2c2c2c;border-radius:3px;
                 padding:12px;font-family:monospace;">
@@ -1091,8 +1334,12 @@
             Create Account
           </button>
 
-          <button class="secondary" onclick="login()" style="width:100%;">
+          <button class="secondary" onclick="login()" style="width:100%;margin-bottom:8px;">
             Login
+          </button>
+
+          <button class="secondary" onclick="playAsGuest()" style="width:100%;">
+            Play as Guest
           </button>
 
           <div id="authMessage" style="margin-top:15px;
@@ -1123,7 +1370,7 @@
             Achievements
           </button>
 
-          <button class="secondary" onclick="logout()" style="width:100%;">
+          <button id="menuAccountButton" class="secondary" onclick="logout()" style="width:100%;">
             Logout
           </button>
 
@@ -1147,6 +1394,8 @@
 
       <div id="achievementList"></div>
 
+      <div id="scoutingRecord" class="scoutingRecord"></div>
+
       <div class="actions">
         <button class="secondary" onclick="showMainMenu()">
           Back
@@ -1154,6 +1403,7 @@
       </div>
 
     </section>
+
 
     <section id="careerSetup" class="screen">
       <div class="hero">
@@ -1270,7 +1520,15 @@
         </div>
       </div>
       <div class="score"><small>FINAL SQUAD OVR</small><strong id="score">0</strong></div>
-      <div style="text-align:center"><button class="primary" onclick="location.reload()">Play Again</button></div>
+
+      <div id="careerSummaryPanel" class="panel" style="margin-top:24px;"></div>
+
+      <div class="actions" style="justify-content:center;flex-wrap:wrap;">
+        <button class="primary" onclick="shareCareerSummary()">Share Career Summary</button>
+        <button class="secondary" onclick="copyCareerSummary()">Copy Summary</button>
+        <button id="saveGuestButton" class="secondary" onclick="saveGuestCareer()" style="display:none;">Create Account &amp; Save</button>
+        <button class="secondary" onclick="location.reload()">Play Again</button>
+      </div>
     </section>
 
     <section id="ucl" class="screen">
@@ -1358,95 +1616,331 @@
 
     let currentUser = null;
 
-    async function register() {
-      const email = document.getElementById("authEmail").value.trim();
-      const password = document.getElementById("authPassword").value;
+    // Username-only public authentication.
+    // Supabase Password Auth still expects an email-shaped identifier internally,
+    // so we deterministically map each username to a private synthetic identifier.
+    const VISION_AUTH_DOMAIN = "auth.thevision.game";
 
+    function normalizeUsername(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function validUsername(username) {
+      return /^[a-z0-9_]{3,20}$/.test(username);
+    }
+
+    function authIdentifierForUsername(username) {
+      return `${normalizeUsername(username)}@${VISION_AUTH_DOMAIN}`;
+    }
+
+    async function usernameIsAvailable(username) {
+      const { data, error } = await supabaseClient.rpc(
+        "is_username_available",
+        { requested_username: normalizeUsername(username) }
+      );
+      if (error) throw error;
+      return data === true;
+    }
+
+    async function saveUsernameProfile(user, username) {
+      const normalized = normalizeUsername(username);
+      const { error } = await supabaseClient
+        .from("profiles")
+        .upsert(
+          { id: user.id, username: normalized },
+          { onConflict: "id" }
+        );
+      if (error) throw error;
+    }
+
+    function playAsGuest() {
+      guestMode = true;
+      currentUser = null;
+      pendingGuestMigration = false;
+      loadGuestStorage();
+      document.getElementById("status").textContent = "Guest";
+      document.getElementById("authMessage").textContent = "";
+      showMainMenu();
+    }
+
+    function saveGuestCareer() {
+      pendingGuestMigration = true;
+      guestMode = true;
+      document.getElementById("status").textContent = "Create Account";
+      show("auth");
+      const message = document.getElementById("authMessage");
+      message.textContent = "Create an account or login to save this guest career and scouting record.";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function migrateGuestDataToAccount() {
+      if (!currentUser || !pendingGuestMigration) return;
+
+      // Keep guest career numbers from colliding with existing account careers.
+      let careerOffset = 0;
+      const { data: existingCareers, error: careerReadError } = await supabaseClient
+        .from("career_history")
+        .select("career_number")
+        .eq("user_id", currentUser.id)
+        .order("career_number", { ascending: false })
+        .limit(1);
+
+      if (!careerReadError && existingCareers?.length) {
+        careerOffset = Number(existingCareers[0].career_number) || 0;
+      }
+
+      // Merge guest collection counts with any collection the account already owns.
+      const guestPlayerIds = Object.keys(guestCollection).map(Number).filter(Number.isFinite);
+      let existingCollection = [];
+
+      if (guestPlayerIds.length) {
+        const { data, error } = await supabaseClient
+          .from("player_collection")
+          .select("*")
+          .eq("user_id", currentUser.id)
+          .in("player_id", guestPlayerIds);
+
+        if (error) {
+          console.error("Existing collection lookup failed:", error);
+        } else {
+          existingCollection = data || [];
+        }
+      }
+
+      const existingById = new Map(
+        existingCollection.map(row => [String(row.player_id), row])
+      );
+
+      const collectionRows = Object.entries(guestCollection).map(([playerId, item]) => {
+        const existing = existingById.get(String(playerId));
+        const guestCount = Number(item.times_discovered || 1);
+        const existingCount = Number(existing?.times_discovered || 0);
+
+        return {
+          user_id: currentUser.id,
+          player_id: Number(playerId),
+          first_career: existing?.first_career ?? (item.first_career ? Number(item.first_career) + careerOffset : null),
+          first_season: existing?.first_season ?? item.first_season ?? null,
+          times_discovered: existingCount + guestCount,
+          last_career: item.last_career ? Number(item.last_career) + careerOffset : existing?.last_career ?? null,
+          last_season: item.last_season ?? existing?.last_season ?? null
+        };
+      });
+
+      if (collectionRows.length) {
+        const { error } = await supabaseClient
+          .from("player_collection")
+          .upsert(collectionRows, { onConflict: "user_id,player_id" });
+        if (error) console.error("Guest collection migration failed:", error);
+      }
+
+      if (guestDiscoveries.length) {
+        const rows = guestDiscoveries.map(d => ({
+          user_id: currentUser.id,
+          player_id: Number(d.player_id),
+          career_number: Number(d.career_number || 0) + careerOffset,
+          season: d.season,
+          game: d.game || null,
+          ovr: Number.isFinite(Number(d.ovr)) ? Number(d.ovr) : null,
+          age: Number.isFinite(Number(d.age)) ? Number(d.age) : null,
+          position: d.position || null
+        }));
+
+        const { error } = await supabaseClient
+          .from("player_discoveries")
+          .insert(rows);
+        if (error) console.error("Guest discovery migration failed:", error);
+      }
+
+      if (Object.keys(guestSignings).length) {
+        const signingRows = Object.values(guestSignings).map(item => ({
+          user_id: currentUser.id,
+          player_id: Number(item.player_id),
+          first_career: item.first_career ? Number(item.first_career) + careerOffset : null,
+          first_season: item.first_season || null,
+          times_signed: Number(item.times_signed || 1),
+          last_career: item.last_career ? Number(item.last_career) + careerOffset : null,
+          last_season: item.last_season || null
+        }));
+
+        const { data: existingSignings, error: signingReadError } = await supabaseClient
+          .from("player_signings")
+          .select("*")
+          .eq("user_id", currentUser.id)
+          .in("player_id", signingRows.map(r => r.player_id));
+
+        if (signingReadError) {
+          console.error("Existing signing lookup failed:", signingReadError);
+        } else {
+          const existingById = new Map((existingSignings || []).map(r => [String(r.player_id), r]));
+          const merged = signingRows.map(r => {
+            const existing = existingById.get(String(r.player_id));
+            return {
+              ...r,
+              first_career: existing?.first_career ?? r.first_career,
+              first_season: existing?.first_season ?? r.first_season,
+              times_signed: Number(existing?.times_signed || 0) + Number(r.times_signed || 0),
+              last_career: r.last_career ?? existing?.last_career,
+              last_season: r.last_season ?? existing?.last_season
+            };
+          });
+          const { error } = await supabaseClient
+            .from("player_signings")
+            .upsert(merged, { onConflict: "user_id,player_id" });
+          if (error) console.error("Guest signing migration failed:", error);
+        }
+      }
+
+      if (guestCareers.length) {
+        const rows = guestCareers.map(c => ({
+          user_id: currentUser.id,
+          career_number: Number(c.career_number) + careerOffset,
+          team_name: c.team_name || "The Vision FC",
+          formation: c.formation || null,
+          final_ovr: Number.isFinite(Number(c.final_ovr)) ? Number(c.final_ovr) : null,
+          league_titles: Number(c.league_titles || 0),
+          ucl_titles: Number(c.ucl_titles || 0),
+          best_position: Number.isFinite(Number(c.best_position)) ? Number(c.best_position) : null,
+          worst_position: Number.isFinite(Number(c.worst_position)) ? Number(c.worst_position) : null,
+          players_scouted: Number(c.players_scouted || 0),
+          unique_players_discovered: Number(c.unique_players_discovered || 0)
+        }));
+
+        const { error } = await supabaseClient
+          .from("career_history")
+          .upsert(rows, { onConflict: "user_id,career_number" });
+        if (error) console.error("Guest career migration failed:", error);
+      }
+
+      pendingGuestMigration = false;
+      guestMode = false;
+      localStorage.removeItem(GUEST_COLLECTION_KEY);
+      localStorage.removeItem(GUEST_DISCOVERIES_KEY);
+      localStorage.removeItem(GUEST_SIGNINGS_KEY);
+      localStorage.removeItem(GUEST_CAREERS_KEY);
+      localStorage.removeItem(GUEST_CAREER_COUNT_KEY);
+      guestCollection = {};
+      guestDiscoveries = [];
+      guestCareers = [];
+    }
+
+    async function register() {
+      const username = normalizeUsername(document.getElementById("authUsername").value);
+      const password = document.getElementById("authPassword").value;
       const message = document.getElementById("authMessage");
 
-      if (!email || !password) {
-        message.textContent = "Enter an email and password.";
+      if (!validUsername(username)) {
+        message.textContent = "Username must be 3–20 characters using only letters, numbers, or _.";
         return;
       }
 
-      const { data, error } = await supabaseClient.auth.signUp({
-        email,
+      if (password.length < 8) {
+        message.textContent = "Password must be at least 8 characters.";
+        return;
+      }
+
+      try {
+        if (!(await usernameIsAvailable(username))) {
+          message.textContent = "That username is already taken.";
+          return;
+        }
+
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: authIdentifierForUsername(username),
+          password,
+          options: {
+            data: { username }
+          }
+        });
+
+        if (error) throw error;
+
+        if (!data.session) {
+          message.textContent =
+            "Account created, but Supabase email confirmation is enabled. Disable 'Confirm email' in Authentication → Providers → Email, then try again.";
+          return;
+        }
+
+        currentUser = data.session.user;
+        await saveUsernameProfile(currentUser, username);
+        await migrateGuestDataToAccount();
+        message.textContent = "";
+        await showMainMenu();
+      } catch (error) {
+        console.error("Registration failed:", error);
+        message.textContent = error.message || "Could not create account.";
+      }
+    }
+
+    async function login() {
+      const username = normalizeUsername(document.getElementById("authUsername").value);
+      const password = document.getElementById("authPassword").value;
+      const message = document.getElementById("authMessage");
+
+      if (!validUsername(username)) {
+        message.textContent = "Enter a valid username.";
+        return;
+      }
+
+      if (!password) {
+        message.textContent = "Enter your password.";
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: authIdentifierForUsername(username),
         password
       });
 
       if (error) {
         console.error(error);
-        message.textContent = error.message;
-        return;
-      }
-
-      if (data.session) {
-        currentUser = data.session.user;
-        showMainMenu();
-      } else {
-        show("auth");
-      }
-
-      message.textContent =
-        "Account created. Check your email to confirm your account.";
-    }
-
-    async function login() {
-      const email = document.getElementById("authEmail").value.trim();
-      const password = document.getElementById("authPassword").value;
-
-      const message = document.getElementById("authMessage");
-
-      if (!email || !password) {
-        message.textContent = "Enter an email and password.";
-        return;
-      }
-
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
-
-      if (error) {
-        console.error(error);
-        message.textContent = error.message;
+        message.textContent = "Incorrect username or password.";
         return;
       }
 
       currentUser = data.user;
 
-      message.textContent = "";
+      try {
+        await saveUsernameProfile(currentUser, username);
+      } catch (profileError) {
+        console.error("Could not save username profile:", profileError);
+      }
 
-      showMainMenu();
+      await migrateGuestDataToAccount();
+      message.textContent = "";
+      await showMainMenu();
     }
 
     async function showMainMenu() {
-      if (!currentUser) {
+      if (!currentUser && !guestMode) {
         show("auth");
         return;
       }
 
-      await loadAchievements();
-      await loadUserAchievements();
+      if (currentUser) {
+        await loadAchievements();
+        await loadUserAchievements();
+      }
 
       const welcome = document.getElementById("welcomeMessage");
 
-      let username = currentUser.email;
+      if (currentUser) {
+        let username = "Manager";
+        const { data, error } = await supabaseClient
+          .from("profiles")
+          .select("username")
+          .eq("id", currentUser.id)
+          .single();
 
-      const { data, error } = await supabaseClient
-        .from("profiles")
-        .select("username")
-        .eq("id", currentUser.id)
-        .single();
-
-      if (!error && data && data.username) {
-        username = data.username;
+        if (!error && data && data.username) username = data.username;
+        welcome.textContent = `Welcome back, ${username}!`;
+        document.getElementById("menuAccountButton").textContent = "Logout";
+        document.getElementById("status").textContent = "Home";
+      } else {
+        welcome.textContent = "Guest mode · your scouting record is saved on this device.";
+        document.getElementById("menuAccountButton").textContent = "Exit Guest";
+        document.getElementById("status").textContent = "Guest";
       }
-
-      welcome.textContent = `Welcome back!`;
-
-      document.getElementById("status").textContent = "Home";
 
       show("menu");
     }
@@ -1474,6 +1968,13 @@
     }
 
     async function logout() {
+      if (guestMode && !currentUser) {
+        guestMode = false;
+        document.getElementById("status").textContent = "Ready";
+        show("auth");
+        return;
+      }
+
       const { error } = await supabaseClient.auth.signOut();
 
       if (error) {
@@ -1482,9 +1983,8 @@
       }
 
       currentUser = null;
-
+      guestMode = false;
       document.getElementById("status").textContent = "Ready";
-
       show("auth");
     }
 
@@ -1584,12 +2084,61 @@
 
 
     let pools = null, allPlayers = null, selections = [], used = new Set(), options = [], chosen = null, round = 0, placements = {};
-    let budget = 200000000;
+    let budget = 250000000;
     let plData = {};
     let uclData = {};
     let seasonResults = [];
     let achievementDefinitions = [];
     let unlockedAchievements = new Set();
+
+    // Account / guest progression.
+    let guestMode = false;
+    let pendingGuestMigration = false;
+    let careerNumber = 0;
+    let careerSaved = false;
+    let careerDiscoveryIds = new Set();
+    let careerDiscoveryCount = 0;
+    let guestCollection = {};
+    let guestDiscoveries = [];
+    let guestSignings = {};
+    let guestCareers = [];
+    let scoutingRecordPage = 1;
+    let scoutingRecordFilter = "all";
+    const SCOUTING_RECORD_PAGE_SIZE = 30;
+
+    const GUEST_COLLECTION_KEY = "the_vision_guest_collection_v1";
+    const GUEST_DISCOVERIES_KEY = "the_vision_guest_discoveries_v1";
+    const GUEST_SIGNINGS_KEY = "the_vision_guest_signings_v1";
+    const GUEST_CAREERS_KEY = "the_vision_guest_careers_v1";
+    const GUEST_CAREER_COUNT_KEY = "the_vision_guest_career_count_v1";
+
+    function loadGuestStorage() {
+      try {
+        guestCollection = JSON.parse(localStorage.getItem(GUEST_COLLECTION_KEY) || "{}") || {};
+        guestDiscoveries = JSON.parse(localStorage.getItem(GUEST_DISCOVERIES_KEY) || "[]") || [];
+        guestSignings = JSON.parse(localStorage.getItem(GUEST_SIGNINGS_KEY) || "{}") || {};
+        guestCareers = JSON.parse(localStorage.getItem(GUEST_CAREERS_KEY) || "[]") || [];
+      } catch (e) {
+        console.warn("Guest storage could not be loaded:", e);
+        guestCollection = {};
+        guestDiscoveries = [];
+        guestSignings = {};
+        guestCareers = [];
+      }
+    }
+
+    function saveGuestStorage() {
+      try {
+        localStorage.setItem(GUEST_COLLECTION_KEY, JSON.stringify(guestCollection));
+        localStorage.setItem(GUEST_DISCOVERIES_KEY, JSON.stringify(guestDiscoveries));
+        localStorage.setItem(GUEST_SIGNINGS_KEY, JSON.stringify(guestSignings));
+        localStorage.setItem(GUEST_CAREERS_KEY, JSON.stringify(guestCareers));
+      } catch (e) {
+        console.warn("Guest storage could not be saved:", e);
+      }
+    }
+
+    loadGuestStorage();
 
     function parseValue(valStr) {
       if (!valStr || typeof valStr !== 'string') return 0;
@@ -1748,21 +2297,389 @@
     }
 
 
-    async function showAchievements() {
+    async function getNextCareerNumber() {
+      if (guestMode && !currentUser) {
+        const next = Number(localStorage.getItem(GUEST_CAREER_COUNT_KEY) || 0) + 1;
+        localStorage.setItem(GUEST_CAREER_COUNT_KEY, String(next));
+        return next;
+      }
+
+      if (currentUser) {
+        const { data, error } = await supabaseClient
+          .from("career_history")
+          .select("career_number")
+          .eq("user_id", currentUser.id)
+          .order("career_number", { ascending: false })
+          .limit(1);
+
+        if (!error && data && data.length) return Number(data[0].career_number) + 1;
+        if (error) console.warn("Could not read career history:", error);
+      }
+
+      const fallbackKey = `the_vision_${currentUser?.id || "local"}_career_count_v1`;
+      const next = Number(localStorage.getItem(fallbackKey) || 0) + 1;
+      localStorage.setItem(fallbackKey, String(next));
+      return next;
+    }
+
+    async function recordPlayerDiscovery(player, season, game, version) {
+      if (!player || player.player_id == null) return;
+
+      const playerId = Number(player.player_id);
+      const age = getPlayerAge(player, round);
+      const ovr = Number(player.overall);
+      careerDiscoveryIds.add(String(playerId));
+      careerDiscoveryCount++;
+
+      const discovery = {
+        player_id: playerId,
+        career_number: careerNumber,
+        season,
+        game,
+        ovr: Number.isFinite(ovr) ? ovr : null,
+        age: Number.isFinite(Number(age)) ? Number(age) : null,
+        position: player.position || null
+      };
 
       if (!currentUser) {
+        const existing = guestCollection[String(playerId)];
+        guestCollection[String(playerId)] = existing
+          ? {
+              ...existing,
+              times_discovered: Number(existing.times_discovered || 0) + 1,
+              last_career: careerNumber,
+              last_season: season
+            }
+          : {
+              player_id: playerId,
+              first_career: careerNumber,
+              first_season: season,
+              times_discovered: 1,
+              last_career: careerNumber,
+              last_season: season
+            };
+
+        guestDiscoveries.push(discovery);
+        saveGuestStorage();
+        return;
+      }
+
+      const { data: existing, error: fetchError } = await supabaseClient
+        .from("player_collection")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .eq("player_id", playerId)
+        .maybeSingle();
+
+      if (fetchError) {
+        console.error("Collection lookup failed:", fetchError);
+      } else if (existing) {
+        const { error } = await supabaseClient
+          .from("player_collection")
+          .update({
+            times_discovered: Number(existing.times_discovered || 0) + 1,
+            last_career: careerNumber,
+            last_season: season,
+            updated_at: new Date().toISOString()
+          })
+          .eq("user_id", currentUser.id)
+          .eq("player_id", playerId);
+        if (error) console.error("Collection update failed:", error);
+      } else {
+        const { error } = await supabaseClient
+          .from("player_collection")
+          .insert({
+            user_id: currentUser.id,
+            player_id: playerId,
+            first_career: careerNumber,
+            first_season: season,
+            times_discovered: 1,
+            last_career: careerNumber,
+            last_season: season
+          });
+        if (error) console.error("Collection insert failed:", error);
+      }
+
+      const { error: discoveryError } = await supabaseClient
+        .from("player_discoveries")
+        .insert({
+          user_id: currentUser.id,
+          ...discovery
+        });
+
+      if (discoveryError) console.error("Discovery log failed:", discoveryError);
+    }
+
+    async function recordPlayerSigning(player, season) {
+      if (!player || player.player_id == null) return;
+
+      const playerId = Number(player.player_id);
+      if (!Number.isFinite(playerId)) return;
+
+      if (!currentUser) {
+        const existing = guestSignings[String(playerId)];
+        guestSignings[String(playerId)] = existing
+          ? {
+              ...existing,
+              times_signed: Number(existing.times_signed || 0) + 1,
+              last_career: careerNumber,
+              last_season: season
+            }
+          : {
+              player_id: playerId,
+              first_career: careerNumber,
+              first_season: season,
+              times_signed: 1,
+              last_career: careerNumber,
+              last_season: season
+            };
+        saveGuestStorage();
+        return;
+      }
+
+      const { data: existing, error: fetchError } = await supabaseClient
+        .from("player_signings")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .eq("player_id", playerId)
+        .maybeSingle();
+
+      if (fetchError) {
+        console.error("Signing lookup failed:", fetchError);
+        return;
+      }
+
+      const payload = existing
+        ? {
+            times_signed: Number(existing.times_signed || 0) + 1,
+            last_career: careerNumber,
+            last_season: season,
+            updated_at: new Date().toISOString()
+          }
+        : {
+            user_id: currentUser.id,
+            player_id: playerId,
+            first_career: careerNumber,
+            first_season: season,
+            times_signed: 1,
+            last_career: careerNumber,
+            last_season: season
+          };
+
+      const query = existing
+        ? supabaseClient.from("player_signings").update(payload).eq("user_id", currentUser.id).eq("player_id", playerId)
+        : supabaseClient.from("player_signings").insert(payload);
+
+      const { error } = await query;
+      if (error) console.error("Signing record failed:", error);
+    }
+
+    async function loadScoutingRecordData() {
+      let collectionRows = [];
+      let signingRows = [];
+      let discoveries = [];
+
+      if (currentUser) {
+        const [collectionResult, signingResult, discoveryResult] = await Promise.all([
+          supabaseClient.from("player_collection").select("*").eq("user_id", currentUser.id),
+          supabaseClient.from("player_signings").select("*").eq("user_id", currentUser.id),
+          supabaseClient.from("player_discoveries").select("*").eq("user_id", currentUser.id)
+        ]);
+
+        if (collectionResult.error) console.error("Collection load failed:", collectionResult.error);
+        if (signingResult.error) console.error("Signing load failed:", signingResult.error);
+        if (discoveryResult.error) console.error("Discovery load failed:", discoveryResult.error);
+
+        collectionRows = collectionResult.data || [];
+        signingRows = signingResult.data || [];
+        discoveries = discoveryResult.data || [];
+      } else {
+        loadGuestStorage();
+        collectionRows = Object.values(guestCollection);
+        signingRows = Object.values(guestSignings);
+        discoveries = guestDiscoveries;
+      }
+
+      const discoveredIds = new Set(collectionRows.map(r => String(r.player_id)));
+      const signedIds = new Set(signingRows.map(r => String(r.player_id)));
+
+      const master = allPlayers
+        ? (Array.isArray(allPlayers.players) ? allPlayers.players : Object.values(allPlayers.players || {}))
+        : [];
+
+      const players = master
+        .map(p => realPlayer(p) || p)
+        .filter(Boolean)
+        .sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), undefined, { sensitivity: "base" }));
+
+      return { players, discoveredIds, signedIds, discoveries, collectionRows, signingRows };
+    }
+
+    async function renderScoutingRecord() {
+      const container = document.getElementById("scoutingRecord");
+      if (!container) return;
+
+      container.innerHTML = '<div class="panel"><div class="kicker">Loading</div><h3>Reading the scouting archive…</h3></div>';
+
+      if (!allPlayers) {
+        try {
+          const response = await fetch("all_players_processed.json");
+          if (response.ok) allPlayers = await response.json();
+        } catch (e) {
+          console.warn("Could not load player archive:", e);
+        }
+      }
+
+      const { players, discoveredIds, signedIds, discoveries, collectionRows, signingRows } = await loadScoutingRecordData();
+      const totalPlayers = players.length || 1603;
+      const discoveredCount = discoveredIds.size;
+      const signedCount = signedIds.size;
+      const discoveredPct = totalPlayers ? ((discoveredCount / totalPlayers) * 100).toFixed(1) : "0.0";
+      const signedPct = totalPlayers ? ((signedCount / totalPlayers) * 100).toFixed(1) : "0.0";
+
+      const totalEncounters = discoveries.length || collectionRows.reduce((n, r) => n + Number(r.times_discovered || 0), 0);
+      const totalSignings = signingRows.reduce((n, r) => n + Number(r.times_signed || 0), 0);
+
+      const signedOrDiscovered = player => {
+        const id = String(player.player_id);
+        if (signedIds.has(id)) return "signed";
+        if (discoveredIds.has(id)) return "discovered";
+        return "undiscovered";
+      };
+
+      const filteredPlayers = players.filter(player => {
+        const state = signedOrDiscovered(player);
+        if (scoutingRecordFilter === "discovered") {
+          return state === "discovered" || state === "signed";
+        }
+        if (scoutingRecordFilter === "signed") {
+          return state === "signed";
+        }
+        if (scoutingRecordFilter === "undiscovered") {
+          return state === "undiscovered";
+        }
+        return true;
+      });
+
+      const maxPage = Math.max(1, Math.ceil(filteredPlayers.length / SCOUTING_RECORD_PAGE_SIZE));
+      scoutingRecordPage = Math.min(Math.max(1, scoutingRecordPage), maxPage);
+      const start = (scoutingRecordPage - 1) * SCOUTING_RECORD_PAGE_SIZE;
+      const pagePlayers = filteredPlayers.slice(start, start + SCOUTING_RECORD_PAGE_SIZE);
+
+      container.innerHTML = `
+        <div class="scoutingRecordHeader">
+          <div>
+            <div class="kicker">Manager's Player Archive</div>
+            <div class="scoutingRecordTitle">Scouting Record</div>
+            <div class="scoutingRecordIntro">Every player is listed alphabetically. Unknown players remain anonymous until you discover them; signed players are marked separately from players you have only scouted.</div>
+          </div>
+          <div class="badge">${filteredPlayers.length ? `${start + 1}–${Math.min(start + SCOUTING_RECORD_PAGE_SIZE, filteredPlayers.length)} / ${filteredPlayers.length}` : "0 / 0"}</div>
+        </div>
+
+        <div class="recordFilterBar">
+          <div class="recordFilterLabel">Show</div>
+          <select id="scoutingRecordFilter" onchange="setScoutingRecordFilter(this.value)">
+            <option value="all" ${scoutingRecordFilter === "all" ? "selected" : ""}>Everyone</option>
+            <option value="discovered" ${scoutingRecordFilter === "discovered" ? "selected" : ""}>Discovered</option>
+            <option value="signed" ${scoutingRecordFilter === "signed" ? "selected" : ""}>Signed</option>
+            <option value="undiscovered" ${scoutingRecordFilter === "undiscovered" ? "selected" : ""}>Not discovered</option>
+          </select>
+          <div class="recordFilterCount">${filteredPlayers.length} players shown</div>
+        </div>
+
+        <div class="recordProgress">
+          <div class="recordProgressCard">
+            <div class="recordProgressLabel"><span>Discovered</span><span>${discoveredCount} / ${totalPlayers} · ${discoveredPct}%</span></div>
+            <div class="recordProgressTrack"><div class="recordProgressFill" style="width:${discoveredPct}%"></div></div>
+            <div class="note">${totalEncounters} total scouting encounters</div>
+          </div>
+          <div class="recordProgressCard signed">
+            <div class="recordProgressLabel"><span>Signed</span><span>${signedCount} / ${totalPlayers} · ${signedPct}%</span></div>
+            <div class="recordProgressTrack"><div class="recordProgressFill" style="width:${signedPct}%"></div></div>
+            <div class="note">${totalSignings} total signings</div>
+          </div>
+        </div>
+
+        <div class="recordLegend">
+          <span class="recordLegendItem"><i class="recordLegendSwatch unknown"></i> ??? Not discovered</span>
+          <span class="recordLegendItem"><i class="recordLegendSwatch discovered"></i> Discovered · not signed</span>
+          <span class="recordLegendItem"><i class="recordLegendSwatch signed"></i> Signed</span>
+        </div>
+
+        <div class="recordGrid">
+          ${pagePlayers.map(player => {
+            const state = signedOrDiscovered(player);
+            const name = String(player.name || `Player ${player.player_id}`);
+            const position = player.position || "—";
+            const ovr = getCurrentOvr(player, seasons[FINAL_SEASON_INDEX][2]);
+            const age = getPlayerAge(player, FINAL_SEASON_INDEX);
+            const collection = collectionRows.find(r => String(r.player_id) === String(player.player_id));
+            const signing = signingRows.find(r => String(r.player_id) === String(player.player_id));
+
+            if (state === "undiscovered") {
+              return `
+                <div class="recordCard undiscovered">
+                  <div class="recordCardStatus">Unknown</div>
+                  <div class="recordCardCode">ARCHIVE ENTRY #${player.player_id}</div>
+                  <div class="recordCardName">???</div>
+                  <div class="recordCardMeta">This player has not entered your scouting book yet.</div>
+                </div>`;
+            }
+
+            return `
+              <div class="recordCard ${state}">
+                <div class="recordCardStatus">${state === "signed" ? "Signed" : "Discovered"}</div>
+                <div class="recordCardCode">${state === "signed" ? `SIGNED ${Number(signing?.times_signed || 1)}×` : `SEEN ${Number(collection?.times_discovered || 1)}×`}</div>
+                <div class="recordCardName">${name}</div>
+                <div class="recordCardMeta">${position} · OVR ${ovr || "—"}${age ? ` · AGE ${age}` : ""}</div>
+              </div>`;
+          }).join("")}
+        </div>
+
+        <div class="recordPagination">
+          <button class="secondary" onclick="changeScoutingRecordPage(-1)" ${scoutingRecordPage <= 1 ? "disabled" : ""}>← Previous</button>
+          <div class="recordPageLabel">Page ${scoutingRecordPage} / ${maxPage}</div>
+          <button class="secondary" onclick="changeScoutingRecordPage(1)" ${scoutingRecordPage >= maxPage ? "disabled" : ""}>Next →</button>
+        </div>
+      `;
+    }
+
+    function setScoutingRecordFilter(filter) {
+      const allowed = ["all", "discovered", "signed", "undiscovered"];
+      scoutingRecordFilter = allowed.includes(filter) ? filter : "all";
+      scoutingRecordPage = 1;
+      renderScoutingRecord();
+    }
+
+    function changeScoutingRecordPage(delta) {
+      scoutingRecordPage += delta;
+      renderScoutingRecord();
+    }
+
+    async function showCollection() {
+      // Backwards-compatible alias: Scouting Record now lives inside Achievements.
+      await showAchievements();
+    }
+
+    async function showAchievements() {
+
+      if (!currentUser && !guestMode) {
         show("auth");
         return;
       }
 
       await loadAchievements();
-      await loadUserAchievements();
+      if (currentUser) {
+        await loadUserAchievements();
+      } else {
+        unlockedAchievements = new Set();
+      }
 
       renderAchievements();
-
       document.getElementById("status").textContent = "Achievements";
-
       show("achievements");
+      scoutingRecordPage = 1;
+      await renderScoutingRecord();
     }
 
 
@@ -1980,7 +2897,11 @@
           }
         } catch (e) { console.warn("Failed to load ucl.csv:", e) }
       } catch (e) { alert("season_pools.json must be in the same folder as index.html."); return }
-      selections = []; used.clear(); placements = {}; round = 0; budget = 200000000; seasonResults = [];
+      selections = []; used.clear(); placements = {}; round = 0; budget = 250000000; seasonResults = [];
+      careerDiscoveryIds = new Set();
+      careerDiscoveryCount = 0;
+      careerSaved = false;
+      careerNumber = await getNextCareerNumber();
 
       // Random identity codes are regenerated for every new career.
       playerCodeMap = new Map();
@@ -2075,6 +2996,11 @@
       options = chosenOpts.map(o => normalizePlayerAge(o, round));
       chosen = null;
 
+      // Every card presented to the manager counts as a discovery.
+      for (const discovered of options) {
+        recordPlayerDiscovery(discovered, season, game, version);
+      }
+
       // Calculate prices
       options.forEach(o => {
         const r = realPlayer(o);
@@ -2162,7 +3088,7 @@
       return p;
     }
 
-    function draft() {
+    async function draft() {
       const prevOvr = getLiveOvr();
       const [season, game, version] = seasons[round];
       const source = options[chosen];
@@ -2176,6 +3102,7 @@
       };
       selections.push(p); used.add(String(p.player_id));
       budget -= p.price;
+      await recordPlayerSigning(p, season);
       const firstEmpty = formations[document.getElementById("formation").value].findIndex((_, i) => !placements[i]);
       if (firstEmpty >= 0) placements[firstEmpty] = p;
       const newOvr = getLiveOvr();
@@ -2400,7 +3327,7 @@
       if (!real || !real.overall_history) return "Career history unavailable.";
       return Object.entries(real.overall_history).filter(([s, v]) => typeof v === "number").sort((a, b) => a[0].localeCompare(b[0])).map(([s, v]) => `${s}: ${v}`).join(" · ");
     }
-    function reveal() {
+    async function reveal() {
       let squadTotal = 0;
       const currentFormation = getFormationSlots();
       const currentVersion = seasons[FINAL_SEASON_INDEX][2]; // Final season
@@ -2459,7 +3386,137 @@
       }
       document.getElementById("status").textContent = "Revealed";
       unlockAchievement("first_career");
+      renderCareerSummary();
+      await saveCareerHistory();
       show("reveal");
+    }
+
+    function getCareerStats() {
+      const positions = seasonResults.map(r => Number(r.pos)).filter(Number.isFinite);
+      const leagueTitles = seasonResults.filter(r => Number(r.pos) === 1).length;
+      const uclTitles = seasonResults.filter(r => r.ucl?.playerChampion).length;
+      return {
+        leagueTitles,
+        uclTitles,
+        bestPosition: positions.length ? Math.min(...positions) : null,
+        worstPosition: positions.length ? Math.max(...positions) : null,
+        finalOvr: Number(document.getElementById("score")?.textContent || 0) || getLiveOvr(),
+        playersScouted: careerDiscoveryCount,
+        uniquePlayers: careerDiscoveryIds.size
+      };
+    }
+
+    function buildCareerSummaryText() {
+      const stats = getCareerStats();
+      const team = getCurrentPlayerTeamName();
+      const best = stats.bestPosition ? `${stats.bestPosition}${stats.bestPosition === 1 ? "st" : stats.bestPosition === 2 ? "nd" : stats.bestPosition === 3 ? "rd" : "th"}` : "—";
+      const worst = stats.worstPosition ? `${stats.worstPosition}${stats.worstPosition === 1 ? "st" : stats.worstPosition === 2 ? "nd" : stats.worstPosition === 3 ? "rd" : "th"}` : "—";
+      return [
+        `THE VISION — CAREER #${careerNumber}`,
+        team,
+        `Formation: ${formationName()}`,
+        `Final XI OVR: ${stats.finalOvr}`,
+        `League titles: ${stats.leagueTitles}`,
+        `UCL titles: ${stats.uclTitles}`,
+        `Best finish: ${best}`,
+        `Worst finish: ${worst}`,
+        `Players scouted: ${stats.playersScouted}`,
+        `Unique players discovered: ${stats.uniquePlayers}`,
+        "",
+        "Can you build the perfect team without knowing who you're signing?",
+        "Play The Vision at https://the-vision-scouting.vercel.app/"
+      ].join("\n");
+    }
+
+    async function shareCareerSummary() {
+      const summary = buildCareerSummaryText();
+      try {
+        if (navigator.share) {
+          await navigator.share({
+            title: `The Vision — Career #${careerNumber}`,
+            text: summary
+          });
+          return;
+        }
+      } catch (e) {
+        if (e?.name === "AbortError") return;
+      }
+
+      await copyCareerSummary();
+      alert("Career summary copied to your clipboard.");
+    }
+
+    async function copyCareerSummary() {
+      const summary = buildCareerSummaryText();
+      try {
+        await navigator.clipboard.writeText(summary);
+      } catch (e) {
+        const area = document.createElement("textarea");
+        area.value = summary;
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+    }
+
+    async function saveCareerHistory() {
+      if (careerSaved) return;
+      careerSaved = true;
+
+      const stats = getCareerStats();
+      const row = {
+        career_number: careerNumber,
+        team_name: getCurrentPlayerTeamName(),
+        formation: formationName(),
+        final_ovr: stats.finalOvr,
+        league_titles: stats.leagueTitles,
+        ucl_titles: stats.uclTitles,
+        best_position: stats.bestPosition,
+        worst_position: stats.worstPosition,
+        players_scouted: stats.playersScouted,
+        unique_players_discovered: stats.uniquePlayers
+      };
+
+      if (!currentUser) {
+        guestCareers.push(row);
+        saveGuestStorage();
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from("career_history")
+        .upsert({
+          user_id: currentUser.id,
+          ...row
+        }, { onConflict: "user_id,career_number" });
+
+      if (error) console.error("Career history save failed:", error);
+    }
+
+    function renderCareerSummary() {
+      const stats = getCareerStats();
+      const team = getCurrentPlayerTeamName();
+      const best = stats.bestPosition ? `${stats.bestPosition}${stats.bestPosition === 1 ? "st" : stats.bestPosition === 2 ? "nd" : stats.bestPosition === 3 ? "rd" : "th"}` : "—";
+      const worst = stats.worstPosition ? `${stats.worstPosition}${stats.worstPosition === 1 ? "st" : stats.worstPosition === 2 ? "nd" : stats.worstPosition === 3 ? "rd" : "th"}` : "—";
+
+      document.getElementById("careerSummaryPanel").innerHTML = `
+        <div class="kicker">Career Archive · #${careerNumber}</div>
+        <h2 style="font-family:Georgia,serif;font-size:30px;margin:5px 0 16px;">${team}</h2>
+        <div class="stats">
+          <div class="stat"><small>FINAL OVR</small><b>${stats.finalOvr}</b></div>
+          <div class="stat"><small>LEAGUE TITLES</small><b>${stats.leagueTitles}</b></div>
+          <div class="stat"><small>UCL TITLES</small><b>${stats.uclTitles}</b></div>
+          <div class="stat"><small>BEST FINISH</small><b>${best}</b></div>
+          <div class="stat"><small>WORST FINISH</small><b>${worst}</b></div>
+          <div class="stat"><small>UNIQUE DISCOVERIES</small><b>${stats.uniquePlayers}</b></div>
+        </div>
+        <div class="note" style="margin-top:12px;">${stats.playersScouted} scouting cards encountered across ${SEASON_COUNT} seasons.</div>
+      `;
+      document.getElementById("saveGuestButton").style.display =
+        (!currentUser && guestMode) ? "inline-block" : "none";
     }
 
     function checkOracleAchievement() {
@@ -2586,6 +3643,12 @@
          const playerTeamGoals = t1.isPlayer ? g1 : g2;
          distributeGoals(playerTeamGoals);
       }
+    }
+
+    async function collectPlayer(player) {
+      if (!player) return;
+      const [season, game, version] = seasons[Math.min(round, FINAL_SEASON_INDEX)];
+      await recordPlayerDiscovery(player, season, game, version);
     }
 
     function distributeGoals(goals) {
