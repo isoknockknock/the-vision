@@ -1245,7 +1245,7 @@
     <section id="final" class="screen">
       <div class="top">
         <div>
-          <div class="kicker">11 rounds complete</div>
+          <div class="kicker">${SEASON_COUNT} rounds complete</div>
           <div class="title">Your final XI</div>
         </div>
         <div class="badge" id="finalFormation"></div>
@@ -1527,7 +1527,29 @@
       ["2014/2015", "FIFA 16", "160058"], ["2015/2016", "FIFA 17", "170099"], ["2016/2017", "FIFA 18", "180084"],
       ["2017/2018", "FIFA 19", "190075"], ["2018/2019", "FIFA 20", "200061"], ["2019/2020", "FIFA 21", "210064"],
       ["2020/2021", "FIFA 22", "220069"], ["2021/2022", "FIFA 23", "230054"], ["2022/2023", "FC 24", "240050"],
-      ["2023/2024", "FC 25", "250044"], ["2024/2025", "FC 26", "260006"]];
+      ["2023/2024", "FC 25", "250044"], ["2024/2025", "FC 26", "260006"], ["2025/2026", "FC 27", "270001"]
+    ];
+
+    const SEASON_COUNT = seasons.length;
+    const FINAL_SEASON_INDEX = SEASON_COUNT - 1;
+
+    // Some SoFIFA exports use a different FC 27 version suffix.
+    // Prefer the configured version, but fall back to any matching 27xxxx key.
+    function resolveHistoryVersion(history, version) {
+      if (!history) return version;
+      if (Object.prototype.hasOwnProperty.call(history, version)) return version;
+      if (String(version).startsWith("270")) {
+        const fallback = Object.keys(history).find(k => String(k).startsWith("270"));
+        if (fallback) return fallback;
+      }
+      return version;
+    }
+
+    function getHistoryValue(history, version) {
+      if (!history) return undefined;
+      const key = resolveHistoryVersion(history, version);
+      return history[key];
+    }
 
     const formations = {
       433: [["GK", 50, 91], ["LB", 20, 76], ["CB", 40, 82], ["CB", 60, 82], ["RB", 80, 76], ["CM", 35, 53], ["CDM", 50, 59], ["CM", 65, 53], ["LW", 20, 31], ["ST", 50, 25], ["RW", 80, 31]],
@@ -1632,21 +1654,21 @@
       const r = realPlayer(p);
       if (!r || !r.overall_history) return p.overall || 0;
 
-      let ovr = r.overall_history[currentVersion];
+      let ovr = getHistoryValue(r.overall_history, currentVersion);
       if (!ovr || ovr <= 1) {
         const versionList = seasons.map(s => s[2]);
         const currentIndex = versionList.indexOf(currentVersion);
 
         // Check backwards first
         for (let i = currentIndex - 1; i >= 0; i--) {
-          let previousOvr = r.overall_history[versionList[i]];
+          let previousOvr = getHistoryValue(r.overall_history, versionList[i]);
           if (previousOvr && previousOvr > 1) {
             return previousOvr;
           }
         }
         // Check forwards if backwards didn't find anything
         for (let i = currentIndex + 1; i < versionList.length; i++) {
-          let nextOvr = r.overall_history[versionList[i]];
+          let nextOvr = getHistoryValue(r.overall_history, versionList[i]);
           if (nextOvr && nextOvr > 1) {
             return nextOvr;
           }
@@ -1709,7 +1731,7 @@
     function getLiveOvr() {
       let total = 0, count = 0;
       const slots = getFormationSlots();
-      const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
+      const currentVersion = round < SEASON_COUNT ? seasons[Math.min(round, FINAL_SEASON_INDEX)][2] : seasons[FINAL_SEASON_INDEX][2];
       for (let i = 0; i < 11; i++) {
         let p = placements[i];
         if (p) {
@@ -1975,14 +1997,19 @@
       // Generate default squad
       if (allPlayers) {
         const ps = Array.isArray(allPlayers.players) ? allPlayers.players : Object.values(allPlayers.players);
+        // Build the default XI using the final season when available.
+        // getCurrentOvr() deliberately falls back to the nearest available
+        // historical rating, so adding FC 27 does not empty this pool when
+        // some players do not have a 270xxx history entry yet.
         let pool = ps.filter(p => {
-          let ovr26 = p.overall_history ? p.overall_history["260006"] : 0;
-          return ovr26 > 0 && ovr26 < 80;
+          const latestOvr = Number(getCurrentOvr(p, seasons[FINAL_SEASON_INDEX][2]) || 0);
+          return latestOvr > 0 && latestOvr < 80;
         });
         pool = pool.sort(() => Math.random() - 0.5);
 
         const currentFormation = getFormationSlots();
         currentFormation.forEach((slot, i) => {
+          if (!pool.length) return;
           const targetPos = slot[0];
           let pIndex = pool.findIndex(p => {
             if (p.position === targetPos) return true;
@@ -1993,6 +2020,7 @@
           });
 
           if (pIndex === -1) pIndex = 0;
+          if (!pool[pIndex]) return;
 
           const p = pool[pIndex];
           pool.splice(pIndex, 1);
@@ -2002,9 +2030,12 @@
             anonymous_id: getPlayerCode(p),
             position: p.position,
             club: p.season_stats ? Object.values(p.season_stats)[0]?.club : "Unknown",
-            overall: p.overall_history["260006"],
-            potential: p.potential_history ? p.potential_history["260006"] : p.overall_history["260006"],
-            season: "FC 26",
+            overall: getHistoryValue(p.overall_history, seasons[FINAL_SEASON_INDEX][2]),
+            potential: p.potential_history
+              ? (getHistoryValue(p.potential_history, seasons[FINAL_SEASON_INDEX][2]) ?? getHistoryValue(p.overall_history, seasons[FINAL_SEASON_INDEX][2]))
+              : getHistoryValue(p.overall_history, seasons[FINAL_SEASON_INDEX][2]),
+            age: getPlayerAge(p, FINAL_SEASON_INDEX),
+            season: seasons[FINAL_SEASON_INDEX][1],
             price: 0,
             is_default: true
           };
@@ -2022,7 +2053,7 @@
     function formationName() { return document.getElementById("formation").options[document.getElementById("formation").selectedIndex].text }
 
     function nextRound() {
-      if (round === 11) { openFinal(); return }
+      if (round >= SEASON_COUNT) { openFinal(); return }
       const [season, game, version] = seasons[round], d = pools[season];
       let available = (d.players || []).filter(p => {
         if (used.has(String(p.player_id))) return false;
@@ -2041,7 +2072,8 @@
           if (gkCount < 1) { gkCount++; chosenOpts.push(p); }
         } else { chosenOpts.push(p); }
       }
-      options = chosenOpts; chosen = null;
+      options = chosenOpts.map(o => normalizePlayerAge(o, round));
+      chosen = null;
 
       // Calculate prices
       options.forEach(o => {
@@ -2049,12 +2081,13 @@
         if (!r) { o.price = 0; return; }
         const val = parseValue(r.value);
         const ovrCurrent = Number(o.overall || 0);
-        const ovr26 = r.overall_history ? Number(r.overall_history["260006"] || 1) : 1;
-        o.price = Math.floor((val * ovrCurrent) / (ovr26 || 1));
+        const currentVersion = seasons[round][2];
+        const seasonBaseOvr = Number(getHistoryValue(r.overall_history, currentVersion) || ovrCurrent || 1);
+        o.price = Math.floor((val * ovrCurrent) / (seasonBaseOvr || 1));
       });
 
-      document.getElementById("status").textContent = `Round ${round + 1} / 11`;
-      document.getElementById("round").textContent = `Round ${round + 1} of 11`;
+      document.getElementById("status").textContent = `Round ${round + 1} / ${SEASON_COUNT}`;
+      document.getElementById("round").textContent = `Round ${round + 1} of ${SEASON_COUNT}`;
       document.getElementById("season").textContent = season;
       document.getElementById("options").innerHTML = options.map((p, i) => {
         const canAfford = budget >= p.price;
@@ -2065,7 +2098,7 @@
     <div class="stat"><small>PRICE</small><b style="color:${canAfford ? '#2c7a2c' : '#a00'}">${formatMoney(p.price)}</b></div>
     <div class="stat"><small>OVERALL</small><b>${p.overall ?? "N/A"}</b></div>
     <div class="stat"><small>POTENTIAL</small><b>${p.potential ?? "N/A"}</b></div>
-    <div class="stat"><small>GOALS</small><b>${p.goals ?? 0}</b></div>
+    <div class="stat"><small>AGE</small><b>${p.age ?? "N/A"}</b></div>
    </div>
   </div>`
       }).join("");
@@ -2099,9 +2132,48 @@
       document.querySelector("#draft .actions").innerHTML = `<button class="primary" onclick="simulateCurrentSeason()" style="width:100%">Simulate Season</button>`;
     }
 
+    // Resolve a player's age for a specific season.
+    // The season pool is preferred, then the master database, and finally
+    // the FC27 age is moved backwards one year per season. This is kept in
+    // one function so scouting cards, squad cards, and drafted players all
+    // use exactly the same age logic.
+    function getPlayerAge(p, roundIndex = FINAL_SEASON_INDEX) {
+      if (!p) return null;
+
+      // 1. Age from the master player record (this is the FC27/current age).
+      const real = realPlayer(p);
+      const masterAge = Number(real?.age);
+      if (Number.isFinite(masterAge) && masterAge > 0) {
+        const seasonsBack = Math.max(0, FINAL_SEASON_INDEX - roundIndex);
+        return Math.round(masterAge - seasonsBack);
+      }
+
+      // 2. Age explicitly stored on the season-pool player.
+      const poolAge = Number(p.age);
+      if (Number.isFinite(poolAge) && poolAge > 0) return Math.round(poolAge);
+
+      return null;
+    }
+
+    function normalizePlayerAge(p, roundIndex = FINAL_SEASON_INDEX) {
+      if (!p) return p;
+      const age = getPlayerAge(p, roundIndex);
+      p.age = age;
+      return p;
+    }
+
     function draft() {
       const prevOvr = getLiveOvr();
-      const [season, game, version] = seasons[round], p = { ...options[chosen], season, game, version };
+      const [season, game, version] = seasons[round];
+      const source = options[chosen];
+      const real = realPlayer(source);
+      const p = {
+        ...source,
+        season,
+        game,
+        version,
+        age: getPlayerAge(source, round)
+      };
       selections.push(p); used.add(String(p.player_id));
       budget -= p.price;
       const firstEmpty = formations[document.getElementById("formation").value].findIndex((_, i) => !placements[i]);
@@ -2133,7 +2205,7 @@
       const pitch = document.getElementById(target); if (!pitch) return;
       pitch.innerHTML = '<div class="circle"></div>';
       const slots = getFormationSlots();
-      const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
+      const currentVersion = round < SEASON_COUNT ? seasons[Math.min(round, FINAL_SEASON_INDEX)][2] : seasons[FINAL_SEASON_INDEX][2];
       slots.forEach((slot, i) => {
         const [label, x, y] = slot, p = placements[i];
         const w = document.createElement("div"); w.className = "slotWrap"; w.style.left = x + "%"; w.style.top = y + "%";
@@ -2219,7 +2291,7 @@
 
     function renderSquad() {
       const box = document.getElementById("squad");
-      const currentVersion = round < 11 ? seasons[round][2] : seasons[10][2];
+      const currentVersion = round < SEASON_COUNT ? seasons[Math.min(round, FINAL_SEASON_INDEX)][2] : seasons[FINAL_SEASON_INDEX][2];
 
       const groups = {
         goalkeepers: [],
@@ -2332,7 +2404,7 @@
     function reveal() {
       let squadTotal = 0;
       const currentFormation = getFormationSlots();
-      const currentVersion = seasons[10][2]; // Final season
+      const currentVersion = seasons[FINAL_SEASON_INDEX][2]; // Final season
       const revealPitch = document.getElementById("revealPitch");
       revealPitch.innerHTML = '<div class="circle" style="border-color:#555"></div>';
 
