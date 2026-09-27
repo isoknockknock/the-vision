@@ -301,60 +301,148 @@
     .pitch {
       position: relative;
       width: 100%;
-      aspect-ratio: 1.2;
+      aspect-ratio: 1.30;
+      max-height: 760px;
       background:
-        repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 2px, transparent 2px 8px),
-        #6f9b68;
-      border: 2px solid rgba(30,55,30,.75);
-      border-radius: 1px;
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,.045) 0,
+          rgba(255,255,255,.045) 8.333%,
+          rgba(0,0,0,.025) 8.333%,
+          rgba(0,0,0,.025) 16.666%
+        ),
+        linear-gradient(180deg, #4f8a4e 0%, #3f7b43 100%);
+      border: 3px solid rgba(248,246,232,.95);
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: inset 0 0 0 3px rgba(255,255,255,.08), 3px 4px 0 rgba(40,55,25,.16);
+      box-shadow:
+        0 10px 24px rgba(30,45,20,.20),
+        inset 0 0 0 1px rgba(20,55,25,.55),
+        inset 0 0 28px rgba(20,45,20,.14);
     }
 
-    .pitch:before {
+    .pitch::before {
       content: "";
       position: absolute;
-      bottom: 0;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,255,255,.06), transparent 18%, transparent 82%, rgba(0,0,0,.06));
+      z-index: 0;
+    }
+
+    /* Half-pitch markings: the goal is at the bottom and the halfway line
+       is at the top. This intentionally shows only one half of the field. */
+    .pitchMark {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      border-color: rgba(250,248,235,.94);
+    }
+
+    .pitchHalfwayLine {
+      left: 0;
+      right: 0;
+      top: 0;
+      border-top: 3px solid rgba(250,248,235,.96);
+    }
+
+    /* Centre semicircle: the visible half of the centre circle at midfield. */
+    /* True centre-circle geometry: a full circle centred on the halfway line,
+       with its upper half clipped outside the half-pitch. */
+    .pitchCenterArc {
+      width: 25%;
+      aspect-ratio: 1 / 1;
+      left: 37.5%;
+      top: -12.5%;
+      border: 3px solid rgba(250,248,235,.94);
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
+
+    .pitchCenterSpot {
+      width: 7px;
+      height: 7px;
+      left: calc(50% - 3.5px);
+      top: -3.5px;
+      background: rgba(250,248,235,.96);
+      border-radius: 50%;
+    }
+
+    .penaltyArea {
       left: 20%;
       right: 20%;
-      height: 35%;
-      border: 2px solid rgba(250,245,225,.82);
-      border-bottom: none;
+      height: 30%;
+      border: 3px solid rgba(250,248,235,.94);
+      border-bottom: 0;
     }
 
-    .pitch:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
+    .penaltyArea.bottom { bottom: -1px; }
+
+    .goalArea {
       left: 35%;
       right: 35%;
-      height: 15%;
-      border: 2px solid rgba(250,245,225,.82);
-      border-bottom: none;
+      height: 13%;
+      border: 3px solid rgba(250,248,235,.94);
+      border-bottom: 0;
     }
 
-    .circle {
-      position: absolute;
-      width: 20%;
-      aspect-ratio: 1;
-      border: 2px solid rgba(250,245,225,.82);
+    .goalArea.bottom { bottom: -1px; }
+
+    .penaltySpot {
+      width: 7px;
+      height: 7px;
+      left: calc(50% - 3.5px);
+      bottom: 16%;
+      background: rgba(250,248,235,.96);
       border-radius: 50%;
-      left: 40%;
-      bottom: 25%;
-      z-index: 1;
-      clip-path: polygon(0 0,100% 0,100% 50%,0 50%);
     }
 
-    .pitch .halfCircle {
-    position: absolute;
-    width: 20%;
-    aspect-ratio: 2 / 1;
-    left: 40%;
-    top: -1px;
-    border: 2px solid rgba(250,245,225,.82);
-    border-bottom: none;
-    border-radius: 50% 50% 0 0;
-    z-index: 1;
+    /* True penalty semicircle: use a real circle and reveal exactly its
+       upper half. This gives a mathematically clean D-shaped arc. */
+    .penaltyArc {
+      width: 20%;
+      aspect-ratio: 1 / 1;
+      left: 40%;
+      bottom: 17.5%;
+      border: 3px solid rgba(250,248,235,.94);
+      border-radius: 50%;
+      clip-path: inset(0 0 50% 0);
+      box-sizing: border-box;
+    }
+
+    .goal {
+      position: absolute;
+      width: 14%;
+      height: 3.5%;
+      left: 43%;
+      bottom: -3px;
+      border: 3px solid rgba(250,248,235,.94);
+      border-bottom: 0;
+      z-index: 1;
+      background: rgba(255,255,255,.025);
+    }
+
+    .cornerArc {
+      position: absolute;
+      width: 3.2%;
+      aspect-ratio: 1;
+      bottom: -1px;
+      border: 2px solid rgba(250,248,235,.92);
+      z-index: 1;
+    }
+
+    .cornerArc.left {
+      left: -1px;
+      border-left: 0;
+      border-bottom: 0;
+      border-radius: 0 100% 0 0;
+    }
+
+    .cornerArc.right {
+      right: -1px;
+      border-right: 0;
+      border-bottom: 0;
+      border-radius: 100% 0 0 0;
     }
 
     .slotWrap {
@@ -1271,6 +1359,214 @@
       font-family: "JMH Typewriter", monospace;
     }
 
+    /* --- Help --- */
+    .headerRight {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .helpButton {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      min-width: 42px;
+      padding: 7px 9px;
+      background: var(--paper-yellow);
+      color: var(--ink);
+      border: 1px solid rgba(37,35,31,.55);
+      box-shadow: 2px 2px 0 rgba(40,30,15,.14);
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    .helpButton:hover { transform: translate(-1px,-1px) rotate(-1deg); }
+
+    .helpOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(37,35,31,.42);
+    }
+
+    .helpPaper {
+      position: relative;
+      width: min(560px, 100%);
+      max-height: min(86vh, 720px);
+      overflow-y: auto;
+      padding: 32px 30px 24px;
+      background: var(--paper);
+      border: 1px solid rgba(37,35,31,.4);
+      box-shadow: 8px 10px 0 rgba(55,40,15,.22);
+      transform: rotate(-.35deg);
+    }
+
+    .helpTape {
+      position: absolute;
+      width: 86px;
+      height: 18px;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%) rotate(2deg);
+      background: rgba(163,255,223,.72);
+    }
+
+    .helpPaper h2 {
+      margin: 4px 0 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 32px;
+    }
+
+    .helpSteps p {
+      margin: 0;
+      padding: 11px 0;
+      border-top: 1px dashed rgba(37,35,31,.28);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .helpSteps p:last-child { margin-bottom: 18px; }
+
+    .helpClose {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      background: transparent;
+      border: 1px solid rgba(37,35,31,.4);
+      box-shadow: none;
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .helpClose:hover { transform: none; box-shadow: none; }
+
+    /* --- Final reveal player cards --- */
+    .revealSquadGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .revealSquadCard {
+      position: relative;
+      min-width: 0;
+      padding: 16px 14px 13px;
+      background: var(--paper);
+      border: 1px solid rgba(37,35,31,.32);
+      box-shadow: 4px 5px 0 rgba(55,40,15,.12);
+      transform: rotate(-.35deg);
+      overflow: hidden;
+    }
+
+    .revealSquadCard:nth-child(3n + 2) { transform: rotate(.4deg); }
+    .revealSquadCard:nth-child(3n) { transform: rotate(-.6deg); }
+
+    .revealSquadCard::before {
+      content: "";
+      position: absolute;
+      width: 58px;
+      height: 14px;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(163,255,223,.72);
+    }
+
+    .revealSquadPosition {
+      font: 9px monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    .revealSquadName {
+      margin-top: 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      line-height: 1.05;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .revealSquadMeta {
+      margin-top: 8px;
+      font: 10px monospace;
+      color: var(--muted);
+    }
+
+    .revealPitchCard {
+      width: 150px;
+      max-width: 150px;
+    }
+
+    .revealPitchDetails {
+      background:#fffdfa;
+      color:#111;
+      padding:4px 8px;
+      border-radius:5px;
+      font-family:monospace;
+      font-size:11px;
+      border:2px solid #fffdfa;
+      box-shadow:2px 2px 0 rgba(0,0,0,.5);
+    }
+
+    @media (max-width: 700px) {
+      .revealSquadGrid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .revealSquadCard,
+      .revealSquadCard:nth-child(3n + 2),
+      .revealSquadCard:nth-child(3n) {
+        transform: none;
+      }
+
+      /* Keep the pitch useful on phones without forcing long player cards
+         into overlapping absolute-positioned areas. Full cards are listed below. */
+      #revealPitch .revealPitchCard {
+        width: 42px;
+        max-width: 42px;
+      }
+
+      #revealPitch .revealPitchDetails {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border-width: 2px;
+        font-size: 0;
+      }
+
+      #revealPitch .revealPitchDetails strong {
+        display: block;
+        font-family: Georgia, serif;
+        font-size: 10px;
+        line-height: 1;
+        max-width: 34px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      #revealPitch .revealPitchDetails .revealPitchOvr,
+      #revealPitch .revealPitchDetails .revealPitchPosition {
+        display: none;
+      }
+    }
+
     /* --- Mobile --- */
     @media (max-width: 900px) {
       .main { grid-template-columns: 1fr; }
@@ -1279,6 +1575,8 @@
       .newspaper-columns { column-count: 1; }
     }
 
+    .draftMain { grid-template-columns: minmax(0, 1fr) 390px; gap: 16px; }
+
     @media (max-width: 700px) {
       .app { width: min(100% - 18px, 1280px); padding-top: 12px; }
       .header { margin-bottom: 18px; }
@@ -1286,28 +1584,67 @@
       .title { font-size: 29px; }
       .hero { padding: 48px 18px; margin-top: 5vh; }
       .hero h1 { font-size: 43px; }
-      .pitchRow { gap: 4px; }
-      .formationControls { flex-basis: 40px; }
-      .formationArrow { width: 35px; height: 35px; }
+      .draftMain { grid-template-columns: 1fr !important; }
+      .pitchRow { gap: 6px; align-items: stretch; }
+      .pitch { width: 100%; aspect-ratio: 1.30; max-height: none; border-width: 2px; border-radius: 6px; }
+      .formationControls { flex: 0 0 34px; gap: 4px; }
+      .formationArrow { width: 32px; height: 32px; padding: 0; }
+      .formationControlsLabel { font-size: 7px; }
+      .slotWrap { width: 56px; }
+      .slot { width: 34px; height: 34px; font-size: 7px; border-width: 2px; }
+      .label { max-width: 56px; font-size: 7px; padding: 2px 2px; }
+      .pitchCenterArc { width: 25%; border-width: 2px; }
+      .pitchCenterSpot, .penaltySpot { width: 5px; height: 5px; }
+      .pitchCenterSpot { left: calc(50% - 2.5px); top: -2.5px; }
+      .penaltySpot { left: calc(50% - 2.5px); }
+      .penaltyArea, .goalArea { border-width: 2px; }
+      .penaltyArc { border-width: 2px; }
       .options { gap: 13px; }
       .uclSummary { grid-template-columns: 1fr; }
       .achievementGrid { grid-template-columns: 1fr; }
       .newspaper-meta { flex-direction: column; gap: 5px; }
       .newspaper-masthead { font-size: 48px; }
+      .headerRight { gap: 6px; }
+      .helpButton { min-width: 34px; padding: 7px 8px; }
+      .helpButton span { display: none; }
+      .helpPaper { padding: 30px 20px 20px; }
+      .helpPaper h2 { font-size: 28px; }
     }
   </style>
 </head>
 
 <body>
   <div class="app">
-    <div id="injuryModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fffdfa; padding:25px; border:2px solid #2c2c2c; border-radius:5px; z-index:100; box-shadow: 4px 4px 0 rgba(0,0,0,0.1); max-width:400px; text-align:center;">
+    <div id="helpModal" class="helpOverlay" style="display:none;">
+      <div class="helpPaper" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <div class="helpTape"></div>
+        <button type="button" class="helpClose" onclick="closeHelp()" aria-label="Close help">×</button>
+        <div class="kicker">Manager's notes</div>
+        <h2 id="helpTitle">How to play</h2>
+        <div class="helpSteps">
+          <p><b>1. Choose your formation.</b><br>Select how you want your team to line up.</p>
+          <p><b>2. Scout three players.</b><br>Each round gives you three anonymous candidates, with their current rating, potential, age and value. Pick one or skip the round.</p>
+          <p><b>3. Build your XI.</b><br>The players are added to your squad. Tap a squad player, then tap a pitch slot to move them.</p>
+          <p><b>4. Adjust positions.</b><br>You can tap two occupied pitch slots to swap them. The arrows beside the pitch change the midfield mentality when available.</p>
+          <p><b>5. Simulate the season.</b><br>Once you finish a round, simulate the season to see your league and Champions League results.</p>
+          <p><b>6. Reveal the players.</b><br>At the end, reveal your final XI and see how your scouting decisions turned out.</p>
+        </div>
+        <button type="button" class="primary" onclick="closeHelp()">Got it</button>
+      </div>
+    </div>
+
+    <div id="injuryModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fffdfa; padding:25px; border:2px solid #2c2c2c; border-radius:5px; z-index:100; box-shadow: 4px 4px 0 rgba(0,0,0,0.1); max-width:430px; width:calc(100% - 32px); text-align:center;">
       <h3 style="margin-top:0; font-family:Georgia, serif;">Injury Report</h3>
       <p id="injuryMessage" style="font-family:monospace; color:#555; line-height:1.5;"></p>
-      <button class="primary" onclick="document.getElementById('injuryModal').style.display='none'" style="margin-top:15px;">OK</button>
+      <div id="injuryReplacementArea" style="margin-top:16px; text-align:left;"></div>
+      <button id="injuryConfirmButton" class="primary" onclick="confirmInjuryReplacement()" style="margin-top:15px; width:100%;">Select Replacement</button>
     </div>
     <div class="header">
       <div class="logo">The Vision</div>
-      <div class="badge" id="status">Ready</div>
+      <div class="headerRight">
+        <button type="button" class="helpButton" onclick="openHelp()" aria-label="Open help">? <span>HELP</span></button>
+        <div class="badge" id="status">Ready</div>
+      </div>
     </div>
 
     <section id="auth" class="screen active">
@@ -1455,7 +1792,7 @@
         </div>
       </div>
 
-      <div class="main" style="display:grid; grid-template-columns:minmax(0,1fr) 390px; gap:16px; align-items:start;">
+      <div class="main draftMain">
         <div style="display:flex; flex-direction:column; gap:16px;">
           <div class="panel" id="liveFormationPanel">
             <div class="pitchRow">
@@ -1464,9 +1801,7 @@
                 <div class="formationControlsLabel">mentality</div>
                 <button type="button" id="formationDown" class="formationArrow selected" onclick="setFormationMode('down')" aria-label="Defensive: CDM">▼</button>
               </div>
-              <div class="pitch" id="pitch" style="max-width:800px; margin:auto;">
-                <div class="circle"></div>
-              </div>
+              <div class="pitch" id="pitch" style="max-width:800px; margin:auto;"></div>
             </div>
           </div>
 
@@ -1501,9 +1836,7 @@
         <div class="badge" id="finalFormation"></div>
       </div>
       <div class="panel">
-        <div class="pitch" id="finalPitch" style="aspect-ratio:1.2; max-width:800px; margin:auto;">
-          <div class="circle"></div>
-        </div>
+        <div class="pitch" id="finalPitch" style="max-width:800px; margin:auto;"></div>
       </div>
       <div class="actions"><button class="secondary" onclick="backToDraft()">Back</button><button class="primary"
           onclick="reveal()">Reveal Players</button></div>
@@ -1515,10 +1848,9 @@
         <div class="title" style="font-size:45px">Final Squad</div>
       </div>
       <div class="panel" style="background:#fffdfa; border: 2px solid #2c2c2c; padding:20px; border-radius:5px;">
-        <div class="pitch" id="revealPitch" style="max-width:900px; margin:auto;">
-          <div class="circle"></div>
-        </div>
+        <div class="pitch" id="revealPitch" style="max-width:900px; margin:auto;"></div>
       </div>
+      <div id="revealSquadGrid" class="revealSquadGrid" aria-label="Final XI players"></div>
       <div class="score"><small>FINAL SQUAD OVR</small><strong id="score">0</strong></div>
 
       <div id="careerSummaryPanel" class="panel" style="margin-top:24px;"></div>
@@ -1654,10 +1986,17 @@
     }
 
     function playAsGuest() {
+      // Guest mode is intentionally one completed run only. Starting another
+      // guest run after a completed career clears the previous guest record.
+      if (localStorage.getItem(GUEST_RUN_COMPLETED_KEY) === "1") {
+        resetGuestRunStorage();
+      } else {
+        loadGuestStorage();
+      }
+
       guestMode = true;
       currentUser = null;
       pendingGuestMigration = false;
-      loadGuestStorage();
       document.getElementById("status").textContent = "Guest";
       document.getElementById("authMessage").textContent = "";
       showMainMenu();
@@ -1819,8 +2158,10 @@
       localStorage.removeItem(GUEST_SIGNINGS_KEY);
       localStorage.removeItem(GUEST_CAREERS_KEY);
       localStorage.removeItem(GUEST_CAREER_COUNT_KEY);
+      localStorage.removeItem(GUEST_RUN_COMPLETED_KEY);
       guestCollection = {};
       guestDiscoveries = [];
+      guestSignings = {};
       guestCareers = [];
     }
 
@@ -2111,6 +2452,21 @@
     const GUEST_SIGNINGS_KEY = "the_vision_guest_signings_v1";
     const GUEST_CAREERS_KEY = "the_vision_guest_careers_v1";
     const GUEST_CAREER_COUNT_KEY = "the_vision_guest_career_count_v1";
+    const GUEST_RUN_COMPLETED_KEY = "the_vision_guest_run_completed_v1";
+
+    function resetGuestRunStorage() {
+      localStorage.removeItem(GUEST_COLLECTION_KEY);
+      localStorage.removeItem(GUEST_DISCOVERIES_KEY);
+      localStorage.removeItem(GUEST_SIGNINGS_KEY);
+      localStorage.removeItem(GUEST_CAREERS_KEY);
+      localStorage.removeItem(GUEST_CAREER_COUNT_KEY);
+      localStorage.removeItem(GUEST_RUN_COMPLETED_KEY);
+
+      guestCollection = {};
+      guestDiscoveries = [];
+      guestSignings = {};
+      guestCareers = [];
+    }
 
     function loadGuestStorage() {
       try {
@@ -2118,6 +2474,13 @@
         guestDiscoveries = JSON.parse(localStorage.getItem(GUEST_DISCOVERIES_KEY) || "[]") || [];
         guestSignings = JSON.parse(localStorage.getItem(GUEST_SIGNINGS_KEY) || "{}") || {};
         guestCareers = JSON.parse(localStorage.getItem(GUEST_CAREERS_KEY) || "[]") || [];
+
+        // A guest is allowed exactly one completed career. If an older version
+        // left completed guest data behind, treat it as a completed run too so
+        // the next guest session starts clean.
+        if (guestCareers.length > 0) {
+          localStorage.setItem(GUEST_RUN_COMPLETED_KEY, "1");
+        }
       } catch (e) {
         console.warn("Guest storage could not be loaded:", e);
         guestCollection = {};
@@ -2152,8 +2515,9 @@
       if (num >= 1000) return "€" + (num / 1000).toFixed(0) + "K";
       return "€" + num;
     }
-    // Every player gets a unique random two-letter identity code for this career.
-    // Real names are only shown on the final reveal.
+    // Players encountered during a career get a unique random two-letter identity code.
+    // Codes are assigned lazily so the two-letter space is never exhausted by
+    // players who are never shown. Real names are only shown on the final reveal.
     let playerCodeMap = new Map();
     let usedPlayerCodes = new Set();
 
@@ -2278,7 +2642,7 @@
     }
 
     function getLiveOvr() {
-      let total = 0, count = 0;
+      let total = 0;
       const slots = getFormationSlots();
       const currentVersion = round < SEASON_COUNT ? seasons[Math.min(round, FINAL_SEASON_INDEX)][2] : seasons[FINAL_SEASON_INDEX][2];
       for (let i = 0; i < 11; i++) {
@@ -2286,10 +2650,11 @@
         if (p) {
           let actualOvr = getCurrentOvr(p, currentVersion);
           total += getBoostedOvr(getEffectiveOvr(actualOvr, p.position, slots[i][0]), slots[i][0]);
-          count++;
         }
       }
-      return count > 0 ? Math.floor(total / count) : 0;
+      // Squad OVR is always the average of an XI. A missing player therefore
+      // counts as 0 rather than shrinking the denominator.
+      return Math.floor(total / 11);
     }
     function updateLiveStats() {
       document.getElementById("budgetText").textContent = formatMoney(budget);
@@ -2898,6 +3263,10 @@
         } catch (e) { console.warn("Failed to load ucl.csv:", e) }
       } catch (e) { alert("season_pools.json must be in the same folder as index.html."); return }
       selections = []; used.clear(); placements = {}; round = 0; budget = 250000000; seasonResults = [];
+      draftInProgress = false;
+      swapSelection = null;
+      chosen = null;
+      options = [];
       careerDiscoveryIds = new Set();
       careerDiscoveryCount = 0;
       careerSaved = false;
@@ -2907,13 +3276,9 @@
       playerCodeMap = new Map();
       usedPlayerCodes = new Set();
 
-      // Pre-assign a code to every player in the master database.
-      if (allPlayers) {
-        const masterPlayers = Array.isArray(allPlayers.players)
-          ? allPlayers.players
-          : Object.values(allPlayers.players);
-        masterPlayers.forEach(assignPlayerCode);
-      }
+      // Codes are assigned lazily when a player is actually shown/used.
+      // This keeps the two-letter code space unique for players encountered
+      // during a career instead of exhausting it across the whole database.
 
       // Generate default squad
       if (allPlayers) {
@@ -2961,6 +3326,7 @@
             is_default: true
           };
           selections.push(draftP);
+          used.add(String(draftP.player_id));
           placements[i] = draftP;
         });
       }
@@ -3045,14 +3411,10 @@
 
 
     function skipDraft() {
-      const prevOvr = getLiveOvr();
-      const newOvr = getLiveOvr();
-
-      const diff = newOvr - prevOvr;
+      // Skipping does not change the squad OVR, so there is no meaningful
+      // OVR delta to calculate here.
       const ovrChangeEl = document.getElementById("ovrChange");
-      if (diff > 0) { ovrChangeEl.innerHTML = `<span style="color:#2c7a2c;">(+${diff})</span>`; }
-      else if (diff < 0) { ovrChangeEl.innerHTML = `<span style="color:#a00;">(${diff})</span>`; }
-      else { ovrChangeEl.innerHTML = `<span style="color:#555;">(0)</span>`; }
+      if (ovrChangeEl) ovrChangeEl.innerHTML = `<span style="color:#555;">(0)</span>`;
 
       document.getElementById("options").style.display = "none";
       document.querySelector("#draft .actions").innerHTML = `<button class="primary" onclick="simulateCurrentSeason()" style="width:100%">Simulate Season</button>`;
@@ -3088,11 +3450,35 @@
       return p;
     }
 
+    let draftInProgress = false;
+
     async function draft() {
+      // Prevent double-clicks / rapid repeated taps from drafting the same
+      // player more than once while the async signing request is processing.
+      if (draftInProgress) return;
+      if (chosen == null || !options[chosen]) return;
+
+      draftInProgress = true;
+      const draftBtn = document.getElementById("draftBtn");
+      if (draftBtn) {
+        draftBtn.disabled = true;
+        draftBtn.textContent = "Drafting…";
+      }
+
       const prevOvr = getLiveOvr();
       const [season, game, version] = seasons[round];
       const source = options[chosen];
-      const real = realPlayer(source);
+
+      // A second protection layer in case this function is triggered by
+      // something other than the button while the player is already used.
+      if (used.has(String(source.player_id))) {
+        draftInProgress = false;
+        if (draftBtn) {
+          draftBtn.disabled = false;
+          draftBtn.textContent = "Draft";
+        }
+        return;
+      }
       const p = {
         ...source,
         season,
@@ -3100,9 +3486,30 @@
         version,
         age: getPlayerAge(source, round)
       };
-      selections.push(p); used.add(String(p.player_id));
+
+      // Commit the local draft state before the async persistence call so a
+      // second click cannot draft the same player. If persistence fails,
+      // roll the local state back so the player can be drafted again.
+      selections.push(p);
+      used.add(String(p.player_id));
       budget -= p.price;
-      await recordPlayerSigning(p, season);
+
+      try {
+        await recordPlayerSigning(p, season);
+      } catch (e) {
+        console.error("Player signing save failed:", e);
+        selections.pop();
+        used.delete(String(p.player_id));
+        budget += p.price;
+        draftInProgress = false;
+        if (draftBtn) {
+          draftBtn.disabled = false;
+          draftBtn.textContent = "Draft";
+        }
+        alert("The signing could not be saved. Please try drafting the player again.");
+        return;
+      }
+
       const firstEmpty = formations[document.getElementById("formation").value].findIndex((_, i) => !placements[i]);
       if (firstEmpty >= 0) placements[firstEmpty] = p;
       const newOvr = getLiveOvr();
@@ -3116,6 +3523,10 @@
       updateLiveStats(); renderPitch(); renderSquad();
       document.getElementById("options").style.display = "none";
       document.querySelector("#draft .actions").innerHTML = `<button class="primary" onclick="simulateCurrentSeason()" style="width:100%">Simulate Season</button>`;
+
+      // The async lock is only for the duration of this draft operation.
+      // Release it now so the next season can draft normally.
+      draftInProgress = false;
     }
 
     function formationChanged() {
@@ -3130,7 +3541,17 @@
     function renderPitch(target = "pitch") {
       updateFormationControls();
       const pitch = document.getElementById(target); if (!pitch) return;
-      pitch.innerHTML = '<div class="circle"></div>';
+      pitch.innerHTML = `
+        <div class="pitchMark pitchHalfwayLine"></div>
+        <div class="pitchMark pitchCenterArc"></div>
+        <div class="pitchMark pitchCenterSpot"></div>
+        <div class="pitchMark penaltyArea bottom"></div>
+        <div class="pitchMark goalArea bottom"></div>
+        <div class="pitchMark penaltySpot"></div>
+        <div class="pitchMark penaltyArc"></div>
+        <div class="goal bottom"></div>
+        <div class="cornerArc left"></div>
+        <div class="cornerArc right"></div>`;
       const slots = getFormationSlots();
       const currentVersion = round < SEASON_COUNT ? seasons[Math.min(round, FINAL_SEASON_INDEX)][2] : seasons[FINAL_SEASON_INDEX][2];
       slots.forEach((slot, i) => {
@@ -3207,9 +3628,20 @@
           if (old2 >= 0 && old2 !== index) delete placements[old2];
         }
       } else if (type === 'squad' && swapSelection.type === 'pitch') {
-        // Swap pitch to squad
-        if (p1) { placements[old1] = p2; } else { delete placements[old1]; }
-        placements[swapSelection.index] = p2;
+        // Pitch slot was selected first. Put the clicked squad player into
+        // that slot. If the squad player was already on the pitch, move the
+        // player from the selected pitch slot into the squad player's old slot.
+        const pitchIndex = swapSelection.index;
+
+        if (old2 >= 0) {
+          // Both players are already on the pitch: exchange their positions.
+          placements[pitchIndex] = p2;
+          placements[old2] = p1;
+        } else {
+          // Squad player was not on the pitch: remove the old pitch player
+          // from the XI and put the squad player into the selected slot.
+          placements[pitchIndex] = p2;
+        }
       }
 
       swapSelection = null;
@@ -3332,7 +3764,19 @@
       const currentFormation = getFormationSlots();
       const currentVersion = seasons[FINAL_SEASON_INDEX][2]; // Final season
       const revealPitch = document.getElementById("revealPitch");
-      revealPitch.innerHTML = '<div class="circle" style="border-color:#555"></div>';
+      const revealSquadGrid = document.getElementById("revealSquadGrid");
+      revealPitch.innerHTML = `
+        <div class="pitchMark pitchHalfwayLine"></div>
+        <div class="pitchMark pitchCenterArc"></div>
+        <div class="pitchMark pitchCenterSpot"></div>
+        <div class="pitchMark penaltyArea bottom"></div>
+        <div class="pitchMark goalArea bottom"></div>
+        <div class="pitchMark penaltySpot"></div>
+        <div class="pitchMark penaltyArc"></div>
+        <div class="goal bottom"></div>
+        <div class="cornerArc left"></div>
+        <div class="cornerArc right"></div>`;
+      revealSquadGrid.innerHTML = "";
 
       let historyHtml = '<div style="margin-top:24px;"><h3 style="font-family:Georgia,serif;font-size:20px;border-bottom:1px solid #ddd;padding-bottom:8px;margin-bottom:12px;">Season Results</h3><div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:12px;">';
       seasonResults.forEach(r => {
@@ -3358,6 +3802,7 @@
         else if (effectiveOvr < actualOvr) penaltyText = `<br><span style='color:#ffb8b8;'>- ${actualOvr - effectiveOvr} Penalty</span>`;
 
         const w = document.createElement("div");
+        w.className = "revealPitchCard";
         w.style.position = "absolute";
         w.style.transform = "translate(-50%,-50%)";
         w.style.left = x + "%";
@@ -3365,14 +3810,30 @@
         w.style.textAlign = "center";
         w.style.zIndex = "3";
 
+        const shortName = name.length > 8 ? name.split(/\s+/).map(part => part[0]).join("").slice(0, 3) : name;
         w.innerHTML = `
-   <div style="background:#fffdfa; color:#111; padding:4px 8px; border-radius:5px; font-family:monospace; font-size:11px; border:2px solid #fffdfa; box-shadow: 2px 2px 0 rgba(0,0,0,0.5);">
-    <strong style="font-family:Georgia,serif; font-size:14px; display:block;">${name}</strong>
-    <div style="color:#666; margin-top:2px;">OVR ${effectiveOvr}${getFormationBoost(label) ? ` (+${getFormationBoost(label)})` : ''}</div>
-    <div style="background:#2c2c2c; color:#fff; display:inline-block; padding:2px 4px; border-radius:2px; font-size:9px; margin-top:4px;">${label}</div>
-   </div>
-  `;
+          <div class="revealPitchDetails">
+            <strong>${name}</strong>
+            <div class="revealPitchOvr" style="color:#666; margin-top:2px;">OVR ${effectiveOvr}</div>
+            <div class="revealPitchPosition" style="background:#2c2c2c; color:#fff; display:inline-block; padding:2px 4px; border-radius:2px; font-size:9px; margin-top:4px;">${label}</div>
+          </div>
+        `;
+        const pitchName = w.querySelector("strong");
+        pitchName.dataset.fullName = name;
+        pitchName.textContent = name;
+        if (window.matchMedia("(max-width: 700px)").matches) {
+          pitchName.textContent = shortName;
+        }
         revealPitch.appendChild(w);
+
+        const card = document.createElement("div");
+        card.className = "revealSquadCard";
+        card.innerHTML = `
+          <div class="revealSquadPosition">${label} · ${p.position || "—"}</div>
+          <div class="revealSquadName">${name}</div>
+          <div class="revealSquadMeta">OVR ${effectiveOvr}</div>
+        `;
+        document.getElementById("revealSquadGrid").appendChild(card);
       });
 
       const finalSquadOvr = Math.floor(squadTotal / 11);
@@ -3406,6 +3867,29 @@
       };
     }
 
+    function buildFinalXIShareLines() {
+      const currentFormation = getFormationSlots();
+      const currentVersion = seasons[FINAL_SEASON_INDEX][2];
+      const lines = ["FINAL XI:"];
+
+      currentFormation.forEach(([label], i) => {
+        const p = placements[i];
+        if (!p) {
+          lines.push(`${label}: —`);
+          return;
+        }
+
+        const r = realPlayer(p);
+        const name = r?.name || "Unknown Player";
+        const actualOvr = getCurrentOvr(p, currentVersion);
+        const positionOvr = getEffectiveOvr(actualOvr, p.position, label);
+        const effectiveOvr = getBoostedOvr(positionOvr, label);
+        lines.push(`${label}: ${name} (${effectiveOvr} OVR)`);
+      });
+
+      return lines;
+    }
+
     function buildCareerSummaryText() {
       const stats = getCareerStats();
       const team = getCurrentPlayerTeamName();
@@ -3422,6 +3906,8 @@
         `Worst finish: ${worst}`,
         `Players scouted: ${stats.playersScouted}`,
         `Unique players discovered: ${stats.uniquePlayers}`,
+        "",
+        ...buildFinalXIShareLines(),
         "",
         "Can you build the perfect team without knowing who you're signing?",
         "Play The Vision at https://the-vision-scouting.vercel.app/"
@@ -3464,7 +3950,6 @@
 
     async function saveCareerHistory() {
       if (careerSaved) return;
-      careerSaved = true;
 
       const stats = getCareerStats();
       const row = {
@@ -3483,6 +3968,10 @@
       if (!currentUser) {
         guestCareers.push(row);
         saveGuestStorage();
+        // Keep the completed run available on the reveal screen for optional
+        // account migration. The next guest session will start fresh.
+        localStorage.setItem(GUEST_RUN_COMPLETED_KEY, "1");
+        careerSaved = true;
         return;
       }
 
@@ -3493,7 +3982,12 @@
           ...row
         }, { onConflict: "user_id,career_number" });
 
-      if (error) console.error("Career history save failed:", error);
+      if (error) {
+        console.error("Career history save failed:", error);
+        return;
+      }
+
+      careerSaved = true;
     }
 
     function renderCareerSummary() {
@@ -3513,7 +4007,6 @@
           <div class="stat"><small>WORST FINISH</small><b>${worst}</b></div>
           <div class="stat"><small>UNIQUE DISCOVERIES</small><b>${stats.uniquePlayers}</b></div>
         </div>
-        <div class="note" style="margin-top:12px;">${stats.playersScouted} scouting cards encountered across ${SEASON_COUNT} seasons.</div>
       `;
       document.getElementById("saveGuestButton").style.display =
         (!currentUser && guestMode) ? "inline-block" : "none";
@@ -3587,6 +4080,12 @@
     let currentSeasonStandings = null;
 
     function simulateCurrentSeason() {
+      const xiCount = Array.from({ length: 11 }, (_, i) => placements[i]).filter(Boolean).length;
+      if (xiCount !== 11) {
+        alert('You must have 11 players in your XI before simulating the season.');
+        return;
+      }
+
       for (let i = 0; i < 11; i++) {
         if (placements[i]) placements[i].seasonGoals = 0;
       }
@@ -3682,6 +4181,12 @@
     }
 
     function finishSeason() {
+      const xiCount = Array.from({ length: 11 }, (_, i) => placements[i]).filter(Boolean).length;
+      if (xiCount !== 11) {
+        alert('You must have 11 players in your XI before finishing the season.');
+        return;
+      }
+
       const standings = currentSeasonStandings;
       for (let i = 0; i < standings.length; i++) {
         for (let j = 0; j < i; j++) {
@@ -3908,15 +4413,41 @@
     }
 
     function makeUCLMatchups(teamsA, teamsB) {
-      const a = shuffleArray(teamsA);
-      const b = shuffleArray(teamsB);
-      return a.map((team, i) => simulateUCLMatch(team, b[i], true));
+      const a = shuffleArray(teamsA).filter(Boolean);
+      const b = shuffleArray(teamsB).filter(Boolean);
+
+      // A malformed bracket must never be allowed to create an undefined
+      // team. The CSV itself is validated when it loads; this is a second
+      // defensive layer for tournament construction.
+      if (a.length !== b.length) {
+        console.error("UCL matchup size mismatch:", {
+          sideA: a,
+          sideB: b
+        });
+        return [];
+      }
+
+      return a
+        .map((team, i) => {
+          const opponent = b[i];
+          if (!team || !opponent) return null;
+          return simulateUCLMatch(team, opponent, true);
+        })
+        .filter(Boolean);
     }
 
     function pairWinnerMatches(matches) {
       // Preserve the bracket order: winners of adjacent matches
       // advance into the same next-round tie.
-      const winners = matches.map(m => m.winner);
+      const winners = (matches || [])
+        .map(m => m?.winner)
+        .filter(Boolean);
+
+      if (winners.length < 2 || winners.length % 2 !== 0) {
+        console.error("Invalid UCL winner count for next round:", winners.length, winners);
+        return [];
+      }
+
       const out = [];
       for (let i = 0; i < winners.length; i += 2) {
         out.push(simulateUCLMatch(winners[i], winners[i + 1], true));
@@ -3925,6 +4456,14 @@
     }
 
     function renderUCLMatch(match, twoLegs = true, showScores = true) {
+      if (!match?.teamA?.team || !match?.teamB?.team || !match?.winner?.team) {
+        console.error("Skipping malformed UCL match:", match);
+        return `
+          <div class="uclMatch">
+            <div class="uclTeam"><div class="uclTeamName">MATCH DATA ERROR</div></div>
+          </div>`;
+      }
+
       const a = match.teamA, b = match.teamB;
       const winnerName = match.winner?.team;
       const playerName = getCurrentPlayerTeamName();
@@ -3991,6 +4530,21 @@
 
     function renderUCLStep() {
       const data = currentUCLData;
+      if (!data?.champion?.team) {
+        console.error("Cannot render UCL: invalid tournament data", data);
+        document.getElementById("uclStatus").textContent = "Error";
+        document.getElementById("uclSummary").innerHTML = `
+          <div class="score" style="margin:20px 0;">
+            <small>TOURNAMENT DATA ERROR</small>
+            <p style="margin:10px 0 0;color:#a00;font-family:monospace;font-size:11px;">
+              The Champions League bracket could not be constructed. No undefined teams were inserted.
+            </p>
+          </div>`;
+        document.getElementById("uclBracket").innerHTML = "";
+        document.querySelector("#ucl .actions").innerHTML = `<button class="primary" onclick="continueAfterUCL()">Continue</button>`;
+        return;
+      }
+
       const playerTeam = getCurrentPlayerTeamName();
       const playerWon = data.champion.team === playerTeam;
       const latest = seasonResults[seasonResults.length - 1];
@@ -4100,18 +4654,80 @@
         return false;
       }
 
-      const withoutPlayer = rows.filter(t => t.team !== playerTeam);
-      const availableR = withoutPlayer.filter(t => t.role === "r");
-      const availableIR = withoutPlayer.filter(t => t.role === "ir");
-      const protectedP = withoutPlayer.filter(t => t.role === "p");
+      const isNewFormat = game === "FC 26" || game === "FC 27";
+      const expectedTotal = isNewFormat ? 24 : 16;
+      const expectedR = 8;
+      const expectedIR = 8;
+      const expectedP = isNewFormat ? 8 : 0;
 
-      const playerEntry = { team: playerTeam, ovr: playerOvr, role: "r", isPlayer: true };
+      // Validate the loaded CSV before constructing the bracket. This catches
+      // bad data without ever allowing an undefined team into the UI.
+      const sourceCounts = rows.reduce((acc, row) => {
+        acc[row.role] = (acc[row.role] || 0) + 1;
+        return acc;
+      }, {});
 
-      // Every qualifying player team replaces one random r team.
-      if (availableR.length > 0) {
-        availableR[Math.floor(Math.random() * availableR.length)] = playerEntry;
+      if (
+        rows.length !== expectedTotal ||
+        Number(sourceCounts.r || 0) !== expectedR ||
+        Number(sourceCounts.ir || 0) !== expectedIR ||
+        Number(sourceCounts.p || 0) !== expectedP
+      ) {
+        console.error("Invalid UCL source data:", {
+          game,
+          expected: { total: expectedTotal, r: expectedR, ir: expectedIR, p: expectedP },
+          actual: sourceCounts,
+          rows
+        });
+        return false;
+      }
+
+      const playerRow = rows.find(t => t.team === playerTeam) || null;
+      const playerOriginalRole = playerRow?.role || "r";
+
+      const availableR = rows.filter(t => t.team !== playerTeam && t.role === "r");
+      const availableIR = rows.filter(t => t.team !== playerTeam && t.role === "ir");
+      const protectedP = rows.filter(t => t.team !== playerTeam && t.role === "p");
+
+      const playerEntry = {
+        team: playerTeam,
+        ovr: playerOvr,
+        role: playerOriginalRole,
+        isPlayer: true
+      };
+
+      // Replace a team from the player's ORIGINAL CSV role.
+      // This fixes the previous undefined-team bug when the user's team was
+      // one of the eight protected FC26/FC27 teams.
+      function replaceRandomTeam(pool, replacement) {
+        if (!pool.length) return false;
+        pool[Math.floor(Math.random() * pool.length)] = replacement;
+        return true;
+      }
+
+      if (playerOriginalRole === "ir") {
+        replaceRandomTeam(availableIR, playerEntry);
+      } else if (playerOriginalRole === "p" && isNewFormat) {
+        replaceRandomTeam(protectedP, playerEntry);
       } else {
-        availableR.push(playerEntry);
+        replaceRandomTeam(availableR, playerEntry);
+      }
+
+      // Refuse to render a broken bracket.
+      if (
+        availableR.length !== expectedR ||
+        availableIR.length !== expectedIR ||
+        (isNewFormat && protectedP.length !== expectedP)
+      ) {
+        console.error("UCL bracket construction failed:", {
+          game,
+          playerTeam,
+          playerOriginalRole,
+          r: availableR.length,
+          ir: availableIR.length,
+          p: protectedP.length
+        });
+        return false;
       }
 
       let playoffMatches = [];
@@ -4120,38 +4736,60 @@
 
       function checkEliminatedRound(matches, roundName) {
         if (eliminatedRound) return;
-        let playerMatch = matches.find(m => m.teamA.team === playerTeam || m.teamB.team === playerTeam);
-        if (playerMatch) {
-          if (playerMatch.winner.team !== playerTeam) {
-            eliminatedRound = roundName;
-          }
+        const playerMatch = (matches || []).find(m =>
+          m?.teamA?.team === playerTeam || m?.teamB?.team === playerTeam
+        );
+        if (playerMatch && playerMatch.winner?.team !== playerTeam) {
+          eliminatedRound = roundName;
         }
       }
 
-      if (game === "FC 26" || game == "FC 27") {
-        // 2024/25: 8 r vs 8 ir in the play-off.
+      if (isNewFormat) {
         playoffMatches = makeUCLMatchups(availableR, availableIR);
+        if (playoffMatches.length !== 8) {
+          console.error("UCL play-off construction failed.", playoffMatches);
+          return false;
+        }
         checkEliminatedRound(playoffMatches, "Play-offs");
-        const playoffWinners = playoffMatches.map(m => m.winner);
+        const playoffWinners = playoffMatches.map(m => m.winner).filter(Boolean);
 
-        // The eight play-off winners are drawn against the eight protected p teams.
         round16Matches = makeUCLMatchups(playoffWinners, protectedP);
+        if (round16Matches.length !== 8) {
+          console.error("UCL Round-of-16 construction failed.", round16Matches);
+          return false;
+        }
         checkEliminatedRound(round16Matches, "Round of 16");
       } else {
-        // 2014/15 through 2023/24: the 16-team field goes straight into the R16.
         round16Matches = makeUCLMatchups(availableR, availableIR);
+        if (round16Matches.length !== 8) {
+          console.error("UCL Round-of-16 construction failed.", round16Matches);
+          return false;
+        }
         checkEliminatedRound(round16Matches, "Round of 16");
       }
 
       const quarterMatches = pairWinnerMatches(round16Matches);
+      if (quarterMatches.length !== 4) return false;
       checkEliminatedRound(quarterMatches, "Quarter-finals");
+
       const semiMatches = pairWinnerMatches(quarterMatches);
+      if (semiMatches.length !== 2) return false;
       checkEliminatedRound(semiMatches, "Semi-finals");
+
+      if (!semiMatches[0]?.winner || !semiMatches[1]?.winner) {
+        console.error("UCL final could not be constructed.", semiMatches);
+        return false;
+      }
+
       const finalMatch = simulateUCLMatch(
         semiMatches[0].winner,
         semiMatches[1].winner,
         false
       );
+      if (!finalMatch?.winner) {
+        console.error("UCL final simulation failed.", finalMatch);
+        return false;
+      }
       checkEliminatedRound([finalMatch], "Final");
 
       const champion = finalMatch.winner;
@@ -4164,7 +4802,7 @@
         semiMatches,
         finalMatch,
         champion,
-        hasPlayoff: game === "FC 26" || game === "FC 27",
+        hasPlayoff: isNewFormat,
         eliminatedRound
       };
 
@@ -4172,7 +4810,7 @@
         qualified: true,
         champion: champion.team,
         playerChampion: champion.team === playerTeam,
-        eliminatedRound: eliminatedRound
+        eliminatedRound: eliminatedRound || null
       };
 
       if (champion.team === playerTeam) {
@@ -4233,18 +4871,205 @@
       show("ucl");
     }
 
+    let pendingInjurySlot = null;
+    let pendingInjuryPlayer = null;
+    let pendingInjuryReplacement = null;
+    let pendingInjuryCandidates = [];
+
+    function getMasterPlayers() {
+      if (!allPlayers) return [];
+      return Array.isArray(allPlayers.players)
+        ? allPlayers.players
+        : Object.values(allPlayers.players || {});
+    }
+
+    function buildInjuryReplacementCandidate(masterPlayer) {
+      const nextRoundIndex = Math.min(round + 1, FINAL_SEASON_INDEX);
+      const nextSeason = seasons[nextRoundIndex];
+      const version = nextSeason[2];
+      const real = realPlayer(masterPlayer) || masterPlayer;
+
+      return {
+        ...masterPlayer,
+        player_id: masterPlayer.player_id ?? masterPlayer.id,
+        position: masterPlayer.position,
+        anonymous_id: getPlayerCode(masterPlayer),
+        club: masterPlayer.club || (masterPlayer.season_stats
+          ? Object.values(masterPlayer.season_stats)[0]?.club
+          : "Unknown"),
+        overall: getHistoryValue(real?.overall_history, version) ?? getCurrentOvr(masterPlayer, version),
+        potential: real?.potential_history
+          ? (getHistoryValue(real.potential_history, version) ?? getHistoryValue(real.overall_history, version))
+          : (masterPlayer.potential ?? getHistoryValue(real?.overall_history, version)),
+        age: getPlayerAge(masterPlayer, nextRoundIndex),
+        season: nextSeason[1],
+        game: nextSeason[0],
+        version,
+        price: 0,
+        is_injury_replacement: true
+      };
+    }
+
+    function getEligibleInjuryReplacements() {
+      const occupied = new Set(
+        Object.values(placements)
+          .filter(Boolean)
+          .map(p => String(p.player_id))
+      );
+
+      const unavailable = new Set(used);
+      if (pendingInjuryPlayer?.player_id != null) {
+        unavailable.add(String(pendingInjuryPlayer.player_id));
+      }
+
+      const injuredPosition = String(pendingInjuryPlayer?.position || "")
+        .trim()
+        .toUpperCase();
+
+      if (!injuredPosition) return [];
+
+      const candidates = getMasterPlayers().filter(p => {
+        if (!p) return false;
+        const id = p.player_id ?? p.id;
+        if (id == null) return false;
+        if (unavailable.has(String(id))) return false;
+        if (occupied.has(String(id))) return false;
+
+        const position = String(p.position || "").trim().toUpperCase();
+        if (position !== injuredPosition) return false;
+
+        if (p.injured_until != null && Number(p.injured_until) >= round + 1) {
+          return false;
+        }
+
+        return true;
+      });
+
+      // Sample from the full ~1600-player master database, then offer only
+      // three random candidates to the manager.
+      return shuffleArray(candidates)
+        .slice(0, 3)
+        .map(buildInjuryReplacementCandidate);
+    }
+
+    function showInjuryReplacement(slotIndex, injuredPlayer) {
+      pendingInjurySlot = slotIndex;
+      pendingInjuryPlayer = injuredPlayer;
+      pendingInjuryReplacement = null;
+      pendingInjuryCandidates = getEligibleInjuryReplacements();
+
+      const area = document.getElementById('injuryReplacementArea');
+      const button = document.getElementById('injuryConfirmButton');
+
+      document.getElementById('injuryMessage').innerText =
+        `Oh no! ${"Player " + getPlayerCode(injuredPlayer)} was injured and will miss the entire next campaign. Select a replacement before continuing.`;
+
+      if (!pendingInjuryCandidates.length) {
+        area.innerHTML = `<div class="note" style="color:#a00;font-weight:bold;">No eligible ${injuredPlayer.position || ''} replacement is available. The season cannot continue with fewer than 11 players.</div>`;
+        button.disabled = true;
+        button.textContent = 'No Replacement Available';
+      } else {
+        area.innerHTML = `
+          <div style="font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">${injuredPlayer.position || 'Position'} Replacement</div>
+          <div style="display:grid;gap:7px;max-height:220px;overflow:auto;">
+            ${pendingInjuryCandidates.map((p, i) => `
+              <button type="button" class="secondary injuryReplacementOption" data-index="${i}" onclick="selectInjuryReplacement(${i})" style="text-align:left;width:100%;">
+                ${getPlayerCode(p)} · ${p.position || 'N/A'} · OVR ${getCurrentOvr(p, p.version)}
+              </button>
+            `).join('')}
+          </div>
+        `;
+        button.disabled = true;
+        button.textContent = 'Select a Replacement';
+        button.style.cursor = 'not-allowed';
+      }
+
+      document.getElementById('injuryModal').style.display = 'block';
+    }
+
+    function selectInjuryReplacement(index) {
+      const p = pendingInjuryCandidates[index];
+      if (!p) return;
+
+      pendingInjuryReplacement = p;
+      document.querySelectorAll('.injuryReplacementOption').forEach((button, i) => {
+        const selected = i === index;
+        button.style.background = selected ? 'var(--ink)' : '';
+        button.style.color = selected ? 'var(--paper)' : '';
+      });
+
+      const button = document.getElementById('injuryConfirmButton');
+      button.disabled = false;
+      button.textContent = `Confirm ${getPlayerCode(p)} as Replacement`;
+      button.style.cursor = 'pointer';
+    }
+
+    async function confirmInjuryReplacement() {
+      if (pendingInjurySlot == null || !pendingInjuryReplacement) return;
+
+      const replacement = pendingInjuryReplacement;
+      const replacedSlot = pendingInjurySlot;
+      const [nextSeason] = seasons[Math.min(round + 1, FINAL_SEASON_INDEX)];
+
+      // The replacement occupies the exact same tactical slot and becomes a
+      // real signing in this career, preventing it from being offered again.
+      selections.push(replacement);
+      used.add(String(replacement.player_id));
+      placements[replacedSlot] = replacement;
+
+      try {
+        await recordPlayerSigning(replacement, nextSeason);
+      } catch (e) {
+        console.error("Injury replacement signing save failed:", e);
+        selections.pop();
+        used.delete(String(replacement.player_id));
+        placements[replacedSlot] = pendingInjuryPlayer;
+        alert("The replacement could not be saved. Please try again.");
+        return;
+      }
+
+      pendingInjurySlot = null;
+      pendingInjuryPlayer = null;
+      pendingInjuryReplacement = null;
+      pendingInjuryCandidates = [];
+
+      document.getElementById('injuryModal').style.display = 'none';
+      document.getElementById('injuryReplacementArea').innerHTML = '';
+      const button = document.getElementById('injuryConfirmButton');
+      button.disabled = true;
+      button.textContent = 'Select Replacement';
+      button.style.cursor = 'pointer';
+      updateLiveStats();
+      renderPitch();
+      renderSquad();
+
+      advanceAfterUCL();
+    }
+
     function continueAfterUCL() {
-      if (Math.random() < 0.10) {
-        let active = [];
+      if (round < FINAL_SEASON_INDEX && Math.random() < 0.10) {
+        const active = [];
         for (let i = 0; i < 11; i++) if (placements[i]) active.push(i);
-        if (active.length > 0) {
-          let i = active[Math.floor(Math.random() * active.length)];
-          let p = placements[i];
+
+        if (active.length === 11) {
+          const i = active[Math.floor(Math.random() * active.length)];
+          const p = placements[i];
           p.injured_until = round + 1;
           placements[i] = null;
-          document.getElementById('injuryMessage').innerText = `Oh no! ${"Player " + getPlayerCode(p)} was injured and will miss the entire next campaign!`;
-          document.getElementById('injuryModal').style.display = 'block';
+          showInjuryReplacement(i, p);
+          return;
         }
+      }
+
+      advanceAfterUCL();
+    }
+
+    function advanceAfterUCL() {
+      // Never advance into another season with fewer than 11 players.
+      const xiCount = Array.from({ length: 11 }, (_, i) => placements[i]).filter(Boolean).length;
+      if (xiCount !== 11) {
+        alert('You must have 11 players in your XI before continuing.');
+        return;
       }
 
       const latest = seasonResults[seasonResults.length - 1];
@@ -4268,6 +5093,24 @@
       do { k++; p *= Math.random(); } while (p > L);
       return k - 1;
     }
+
+    function openHelp() {
+      const modal = document.getElementById("helpModal");
+      if (!modal) return;
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeHelp() {
+      const modal = document.getElementById("helpModal");
+      if (!modal) return;
+      modal.style.display = "none";
+      document.body.style.overflow = "";
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeHelp();
+    });
 
     checkAuth();
 
