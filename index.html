@@ -1448,6 +1448,161 @@
 
     .helpClose:hover { transform: none; box-shadow: none; }
 
+
+    /* --- Site footer --- */
+    .siteFooter {
+      position: relative;
+      margin-top: 58px;
+      padding: 26px 18px 12px;
+      background: var(--board);
+      border-top: 2px solid var(--ink);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+    }
+
+    .siteFooter::before {
+      content: "";
+      position: absolute;
+      width: 82px;
+      height: 16px;
+      top: -9px;
+      left: 12%;
+      transform: rotate(-1.8deg);
+      background: rgba(163,255,223,.72);
+      box-shadow: 0 1px 2px rgba(60,45,20,.08);
+      pointer-events: none;
+    }
+
+    .footerLinks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px 13px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Tiny pinned notes — deliberately irregular like notes on the manager's board. */
+    .footerLink {
+      position: relative;
+      display: inline-block;
+      min-width: 94px;
+      padding: 12px 10px 10px;
+      color: var(--ink);
+      text-decoration: none;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      background: var(--paper-yellow);
+      border: 1px solid rgba(37,35,31,.16);
+      box-shadow: 2px 4px 5px rgba(55,40,15,.14);
+      transform: rotate(-1.8deg);
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+
+    .footerLink:nth-child(2) {
+      background: var(--paper-blue);
+      transform: rotate(1.5deg);
+    }
+
+    .footerLink:nth-child(3) {
+      background: var(--paper-green);
+      transform: rotate(-.8deg);
+    }
+
+    .footerLink:nth-child(4) {
+      background: var(--paper-red);
+      transform: rotate(2deg);
+    }
+
+    .footerLink:nth-child(5) {
+      background: #adeb9f;
+      transform: rotate(-1deg);
+    }
+
+    .footerLink:nth-child(6) {
+      background: #e5d6a9;
+      transform: rotate(1.2deg);
+    }
+
+    .footerLink::before {
+      content: "";
+      position: absolute;
+      width: 35px;
+      height: 8px;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(163,255,223,.68);
+      box-shadow: 0 1px 1px rgba(60,45,20,.08);
+    }
+
+    .footerLink:hover,
+    .footerLink:focus-visible {
+      transform: translateY(-3px) rotate(-1.8deg);
+      box-shadow: 3px 7px 8px rgba(55,40,15,.18);
+      outline: none;
+    }
+
+    .footerLink:nth-child(2):hover,
+    .footerLink:nth-child(2):focus-visible { transform: translateY(-3px) rotate(1.5deg); }
+    .footerLink:nth-child(3):hover,
+    .footerLink:nth-child(3):focus-visible { transform: translateY(-3px) rotate(-.8deg); }
+    .footerLink:nth-child(4):hover,
+    .footerLink:nth-child(4):focus-visible { transform: translateY(-3px) rotate(2deg); }
+    .footerLink:nth-child(5):hover,
+    .footerLink:nth-child(5):focus-visible { transform: translateY(-3px) rotate(-1deg); }
+    .footerLink:nth-child(6):hover,
+    .footerLink:nth-child(6):focus-visible { transform: translateY(-3px) rotate(1.2deg); }
+
+    .footerBottom {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      padding-top: 9px;
+      border-top: 1px dashed rgba(37,35,31,.28);
+      color: var(--muted);
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .footerMark {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11px;
+      color: var(--ink);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    @media (max-width: 700px) {
+      .siteFooter {
+        margin-top: 42px;
+        padding: 22px 8px 10px;
+      }
+
+      .footerLinks {
+        justify-content: center;
+        gap: 11px 9px;
+      }
+
+      .footerLink {
+        min-width: 82px;
+        padding: 11px 8px 9px;
+        font-size: 8px;
+      }
+
+      .footerBottom {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+
     /* --- Final reveal player cards --- */
     .revealSquadGrid {
       display: grid;
@@ -1932,6 +2087,22 @@
       </div>
     </section>
   </div>
+
+
+    <footer class="siteFooter" aria-label="Site footer">
+      <nav class="footerLinks" aria-label="Footer navigation">
+        <a class="footerLink" href="#">Twitter</a>
+        <a class="footerLink" href="https://www.instagram.com/thevisionscouting/">Instagram</a>
+        
+        
+        
+        <a class="footerLink" href="info.html#about">About</a>
+        <a class="footerLink" href="info.html#privacy">Privacy Policy</a>
+        <a class="footerLink" href="info.html#terms">Terms</a>
+        <a class="footerLink" href="info.html#contact">Contact Us</a>
+      </nav>
+
+    </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>The Vision</title>
+  <link rel="icon" type="image/png" href="fav.png">
+
+  <style>
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter.ttf") format("truetype");
+      font-weight: 400;
+    }
+
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter-Bold.ttf") format("truetype");
+      font-weight: 700;
+    }
+
+    :root {
+      --board: #d7c8a6;
+      --paper: #f8f1dd;
+      --paper-blue: #dce7e7;
+      --paper-yellow: #f2d76b;
+      --paper-green: #c8d9b9;
+      --ink: #25231f;
+      --muted: #6d675d;
+      --rule: rgba(37,35,31,.26);
+      --tape: rgba(163,255,223,.72);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "JMH Typewriter", monospace;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.18) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 70% 80%, rgba(80,60,30,.08) 0 1px, transparent 1.5px),
+        repeating-linear-gradient(0deg, rgba(70,50,20,.025) 0 1px, transparent 1px 5px),
+        var(--board);
+      background-size: 9px 9px, 13px 13px, 100% 5px, auto;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .22;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.18), transparent 20%, transparent 80%, rgba(80,50,20,.12)),
+        repeating-linear-gradient(7deg, transparent 0 4px, rgba(80,60,30,.035) 5px);
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(980px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 55px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      padding: 0 4px 12px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .logo {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 900;
+      font-size: 31px;
+      letter-spacing: -.8px;
+    }
+
+    .back {
+      display: inline-block;
+      padding: 7px 11px;
+      background: var(--paper-yellow);
+      border: 1px solid rgba(37,35,31,.5);
+      box-shadow: 2px 2px 0 rgba(40,30,15,.14);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      transform: rotate(1deg);
+      transition: transform .12s, box-shadow .12s;
+    }
+
+    .back:hover {
+      transform: translate(-1px,-1px) rotate(0deg);
+      box-shadow: 3px 3px 0 rgba(40,30,15,.18);
+    }
+
+    .intro {
+      position: relative;
+      background:
+        repeating-linear-gradient(0deg, rgba(80,55,20,.018) 0 1px, transparent 1px 4px),
+        var(--paper);
+      border: 1px solid rgba(37,35,31,.28);
+      box-shadow: 6px 7px 0 rgba(65,48,22,.12);
+      padding: 38px clamp(22px, 5vw, 54px) 34px;
+      margin-bottom: 28px;
+      transform: rotate(-.2deg);
+    }
+
+    .intro::before,
+    .infoSection::before {
+      content: "";
+      position: absolute;
+      width: 78px;
+      height: 17px;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-1.5deg);
+      background: var(--tape);
+      box-shadow: 0 1px 2px rgba(60,45,20,.08);
+    }
+
+    .kicker {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      margin: 7px 0 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(43px, 8vw, 70px);
+      line-height: .92;
+      letter-spacing: -2px;
+    }
+
+    .intro p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .contents {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 0 0 28px;
+    }
+
+    .contents a {
+      padding: 7px 10px;
+      border-bottom: 1px dashed var(--ink);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .contents a:hover {
+      background: rgba(248,241,221,.45);
+    }
+
+    .infoSection {
+      position: relative;
+      background:
+        repeating-linear-gradient(0deg, rgba(80,55,20,.018) 0 1px, transparent 1px 4px),
+        var(--paper);
+      border: 1px solid rgba(37,35,31,.28);
+      box-shadow: 5px 6px 0 rgba(65,48,22,.11);
+      padding: 30px clamp(20px, 5vw, 46px) 34px;
+      margin-bottom: 25px;
+    }
+
+    .infoSection:nth-of-type(2) {
+      transform: rotate(.22deg);
+      background:
+        repeating-linear-gradient(0deg, rgba(80,55,20,.018) 0 1px, transparent 1px 4px),
+        #f4edd8;
+    }
+
+    .infoSection:nth-of-type(3) {
+      transform: rotate(-.18deg);
+    }
+
+    .sectionHeader {
+      display: flex;
+      align-items: baseline;
+      gap: 13px;
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+      border-bottom: 3px double var(--ink);
+    }
+
+    .sectionNumber {
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: 1px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(27px, 5vw, 38px);
+      line-height: 1;
+    }
+
+    h3 {
+      margin: 24px 0 7px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 9px 0;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    ul {
+      margin: 9px 0 15px;
+      padding-left: 21px;
+    }
+
+    li {
+      margin: 7px 0;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .lead {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .date {
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .contactNote {
+      display: inline-block;
+      position: relative;
+      margin-top: 10px;
+      padding: 15px 18px;
+      background: var(--paper-yellow);
+      box-shadow: 4px 5px 0 rgba(55,40,15,.13);
+      transform: rotate(-.7deg);
+    }
+
+    .contactNote::before {
+      content: "";
+      position: absolute;
+      width: 55px;
+      height: 13px;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(2deg);
+      background: var(--tape);
+    }
+
+    .contactNote strong {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+    }
+
+    .footer {
+      margin-top: 34px;
+      padding: 24px 12px 5px;
+      border-top: 3px double var(--ink);
+      text-align: center;
+    }
+
+    .footerBrand {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .footer p {
+      color: var(--muted);
+      font-size: 9px;
+      margin: 5px 0 0;
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        width: min(100% - 18px, 980px);
+        padding-top: 12px;
+      }
+
+      .header {
+        margin-bottom: 23px;
+      }
+
+      .logo {
+        font-size: 26px;
+      }
+
+      .intro {
+        padding: 32px 19px 28px;
+      }
+
+      .infoSection {
+        padding: 27px 18px 30px;
+      }
+
+      .contents {
+        gap: 4px;
+      }
+
+      .contents a {
+        font-size: 8px;
+        padding: 6px 7px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <header class="header">
+      <a href="index.html" class="logo">The Vision</a>
+      <a href="index.html" class="back">← Back to the club</a>
+    </header>
+
+    <section class="intro">
+      <div class="kicker">Club office · Information</div>
+      <h1>The Vision</h1>
+      <p>
+        Find out more about the game, how your information is handled,
+        and the terms that apply.
+      </p>
+    </section>
+
+    <nav class="contents" aria-label="Page sections">
+      <a href="#about">About</a>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#terms">Terms</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <main>
+
+      <section class="infoSection" id="about">
+        <div class="sectionHeader">
+          <span class="sectionNumber">01</span>
+          <h2>About</h2>
+        </div>
+
+        <p>
+            The Vision is a scouting and management game where you build your own football club.
+            You scout players, sign them to your team, and then watch how your squad performs over the season.
+        </p>
+        
+        <p>
+          Each season, you're given a small group of players to scout.
+          Their names remain hidden while you evaluate their position,
+          rating, potential, age, value, and other available information.
+        </p>
+
+        <p>
+          You decide who makes the cut, build your squad, and then see how your team performs over the season.
+        </p>
+
+        <p>
+          Your scouting record keeps track of the players you've discovered and
+          signed along the way, while your achievements document the story of your club.
+        </p>
+
+      </section>
+
+      <section class="infoSection" id="privacy">
+        <div class="sectionHeader">
+          <span class="sectionNumber">02</span>
+          <h2>Privacy Policy</h2>
+        </div>
+
+        <div class="date">Last updated: September 2026</div>
+
+        <p class="lead">
+          The Vision is designed to collect as little personal information as
+          reasonably necessary to operate the game.
+        </p>
+
+        <h3>Information we may collect</h3>
+        <p>
+          Depending on the features you use, The Vision may store information such as:
+        </p>
+
+        <ul>
+          <li>Your username or account information</li>
+          <li>Your game progress and scouting record</li>
+          <li>Achievements and other gameplay data</li>
+          <li>Basic technical information required to operate and secure the website</li>
+        </ul>
+
+        <p>
+          We do not need information such as your real name, home address,
+          or phone number to play the game.
+        </p>
+
+        <h3>How we use information</h3>
+        <p>Information is used to:</p>
+
+        <ul>
+          <li>Provide and maintain The Vision</li>
+          <li>Save your game progress</li>
+          <li>Provide account-related features</li>
+          <li>Improve the game and fix technical problems</li>
+          <li>Prevent abuse or unauthorized access</li>
+        </ul>
+
+        <p>We do not sell your personal information.</p>
+
+        <h3>Local storage</h3>
+        <p>
+          Some gameplay information may be stored directly in your browser using
+          technologies such as local storage. Clearing your browser's stored
+          website data may remove information saved locally.
+        </p>
+
+        <h3>Third-party services</h3>
+        <p>
+          The Vision may use third-party services for things such as hosting,
+          authentication, analytics, or other technical functionality.
+          Those services may process information according to their own privacy policies.
+        </p>
+
+        <h3>Changes to this policy</h3>
+        <p>
+          This Privacy Policy may be updated as The Vision develops.
+          When significant changes are made, the updated date at the top of
+          this page will be changed.
+        </p>
+      </section>
+
+      <section class="infoSection" id="terms">
+        <div class="sectionHeader">
+          <span class="sectionNumber">03</span>
+          <h2>Terms</h2>
+        </div>
+
+        <div class="date">Last updated: September 2026</div>
+
+        <p class="lead">
+          By using The Vision, you agree to use the website and game responsibly
+          and in accordance with these terms.
+        </p>
+
+        <h3>Using The Vision</h3>
+        <p>
+          You may use The Vision for personal, non-commercial gameplay and entertainment.
+        </p>
+
+        <p>You agree not to:</p>
+
+        <ul>
+          <li>Attempt to disrupt or damage the service</li>
+          <li>Attempt to gain unauthorized access to accounts or systems</li>
+          <li>Abuse bugs or vulnerabilities</li>
+          <li>Scrape, copy, or reproduce substantial parts of the game without permission</li>
+          <li>Use the service for unlawful purposes</li>
+        </ul>
+
+        <h3>Accounts</h3>
+        <p>
+          If The Vision provides accounts, you are responsible for keeping your
+          account credentials secure and for activity carried out through your account.
+        </p>
+
+        <p>
+          Do not create accounts impersonating another person or using information
+          intended to deceive other users.
+        </p>
+
+        <h3>Game data</h3>
+        <p>
+          Gameplay, scouting records, achievements, statistics, designs,
+          and other game features are part of The Vision.
+        </p>
+
+        <p>
+          Game progress may be changed, reset, or removed when necessary to maintain,
+          update, or improve the service.
+        </p>
+
+        <h3>Availability</h3>
+        <p>
+          The Vision is provided on an ongoing basis, but we cannot guarantee that
+          the service will always be available, uninterrupted, or error-free.
+        </p>
+
+        <p>
+          Features may be added, changed, or removed as the game develops.
+        </p>
+
+        <h3>Changes to these terms</h3>
+        <p>
+          These Terms may be updated as The Vision evolves. Continued use of the
+          service after an update means you accept the revised terms.
+        </p>
+      </section>
+
+      <section class="infoSection" id="contact">
+        <div class="sectionHeader">
+          <span class="sectionNumber">04</span>
+          <h2>Contact</h2>
+        </div>
+
+        <p class="lead">
+          Have a question, found a bug, or just want to get in touch?
+        </p>
+
+        <div class="contactNote">
+          <strong>Contact us</strong><br>
+          <span>thevisionscouting@gmail.com</span>
+        </div>
+
+        <p>
+          For privacy-related questions, please include
+          <b>"Privacy"</b> in the subject of your message.
+        </p>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <div class="footerBrand">The Vision</div>
+      <p>Do you have The Vision?</p>
+    </footer>
+
+  </div>
+</body>
+</html>
