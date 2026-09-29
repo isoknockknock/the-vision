@@ -3010,25 +3010,59 @@
       if (error) console.error("Signing record failed:", error);
     }
 
+    // Supabase returns at most 1,000 rows by default. The scouting archive can
+    // contain more than 1,000 unique players, so fetch these aggregate tables
+    // in pages. We intentionally do NOT load player_discoveries here: that table
+    // contains one row per encounter and can grow very large. The per-player
+    // times_discovered value in player_collection is the source of truth for
+    // the total encounter count.
+    async function fetchAllRows(queryFactory, label) {
+      const rows = [];
+      const pageSize = 1000;
+      let from = 0;
+
+      while (true) {
+        const { data, error } = await queryFactory(from, from + pageSize - 1);
+
+        if (error) {
+          console.error(`${label} load failed:`, error);
+          break;
+        }
+
+        const page = data || [];
+        rows.push(...page);
+
+        if (page.length < pageSize) break;
+        from += pageSize;
+      }
+
+      return rows;
+    }
+
     async function loadScoutingRecordData() {
       let collectionRows = [];
       let signingRows = [];
       let discoveries = [];
 
       if (currentUser) {
-        const [collectionResult, signingResult, discoveryResult] = await Promise.all([
-          supabaseClient.from("player_collection").select("*").eq("user_id", currentUser.id),
-          supabaseClient.from("player_signings").select("*").eq("user_id", currentUser.id),
-          supabaseClient.from("player_discoveries").select("*").eq("user_id", currentUser.id)
+        [collectionRows, signingRows] = await Promise.all([
+          fetchAllRows(
+            (from, to) => supabaseClient
+              .from("player_collection")
+              .select("*")
+              .eq("user_id", currentUser.id)
+              .range(from, to),
+            "Collection"
+          ),
+          fetchAllRows(
+            (from, to) => supabaseClient
+              .from("player_signings")
+              .select("*")
+              .eq("user_id", currentUser.id)
+              .range(from, to),
+            "Signings"
+          )
         ]);
-
-        if (collectionResult.error) console.error("Collection load failed:", collectionResult.error);
-        if (signingResult.error) console.error("Signing load failed:", signingResult.error);
-        if (discoveryResult.error) console.error("Discovery load failed:", discoveryResult.error);
-
-        collectionRows = collectionResult.data || [];
-        signingRows = signingResult.data || [];
-        discoveries = discoveryResult.data || [];
       } else {
         loadGuestStorage();
         collectionRows = Object.values(guestCollection);
@@ -3073,7 +3107,13 @@
       const discoveredPct = totalPlayers ? ((discoveredCount / totalPlayers) * 100).toFixed(1) : "0.0";
       const signedPct = totalPlayers ? ((signedCount / totalPlayers) * 100).toFixed(1) : "0.0";
 
-      const totalEncounters = discoveries.length || collectionRows.reduce((n, r) => n + Number(r.times_discovered || 0), 0);
+      // Do NOT use discoveries.length here. Supabase caps a normal select at
+      // 1,000 rows, which made this value get stuck at exactly 1,000.
+      // player_collection stores the cumulative encounter count per player.
+      const totalEncounters = collectionRows.reduce(
+        (n, r) => n + Math.max(0, Number(r.times_discovered || 0)),
+        0
+      );
       const totalSignings = signingRows.reduce((n, r) => n + Number(r.times_signed || 0), 0);
 
       const signedOrDiscovered = player => {
