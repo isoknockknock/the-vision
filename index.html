@@ -4629,15 +4629,42 @@
       };
     }
 
-    function makeUCLMatchups(teamsA, teamsB) {
+    /*
+     * UCL BRACKET ORDER
+     * -----------------
+     * There are two fundamentally different operations here:
+     *
+     *  1. DRAW a round: randomisation is allowed.
+     *  2. ADVANCE a round: randomisation is NEVER allowed.
+     *
+     * The old implementation used shuffleArray() every time matchups were
+     * created. That meant the eight play-off winners could be shuffled before
+     * entering the Round of 16, breaking the visual bracket path.
+     *
+     * Every match now has a permanent `bracketSlot`. A winner inherits the
+     * slot/path of the match it came from, and the next round pairs adjacent
+     * slots: 0+1, 2+3, 4+5, 6+7, etc.
+     */
+
+    function createUCLMatch(teamA, teamB, bracketSlot, roundKey) {
+      const match = simulateUCLMatch(teamA, teamB, true);
+
+      if (!match) return null;
+
+      match.bracketSlot = bracketSlot;
+      match.roundKey = roundKey;
+
+      return match;
+    }
+
+    // Used only for the initial draw of a bracket round.
+    function drawUCLMatchups(teamsA, teamsB, roundKey) {
       const a = shuffleArray(teamsA).filter(Boolean);
       const b = shuffleArray(teamsB).filter(Boolean);
 
-      // A malformed bracket must never be allowed to create an undefined
-      // team. The CSV itself is validated when it loads; this is a second
-      // defensive layer for tournament construction.
       if (a.length !== b.length) {
         console.error("UCL matchup size mismatch:", {
+          roundKey,
           sideA: a,
           sideB: b
         });
@@ -4648,28 +4675,75 @@
         .map((team, i) => {
           const opponent = b[i];
           if (!team || !opponent) return null;
-          return simulateUCLMatch(team, opponent, true);
+
+          // This slot is now permanent. Nothing in later rounds is allowed
+          // to reshuffle it.
+          return createUCLMatch(team, opponent, i, roundKey);
         })
         .filter(Boolean);
     }
 
-    function pairWinnerMatches(matches) {
-      // Preserve the bracket order: winners of adjacent matches
-      // advance into the same next-round tie.
-      const winners = (matches || [])
+    // Used whenever teams are ALREADY in bracket order. Never shuffle here.
+    function makeFixedUCLMatchups(teamsA, teamsB, roundKey) {
+      const a = teamsA.filter(Boolean);
+      const b = teamsB.filter(Boolean);
+
+      if (a.length !== b.length) {
+        console.error("UCL fixed matchup size mismatch:", {
+          roundKey,
+          sideA: a,
+          sideB: b
+        });
+        return [];
+      }
+
+      return a
+        .map((team, i) => {
+          const opponent = b[i];
+          if (!team || !opponent) return null;
+
+          return createUCLMatch(team, opponent, i, roundKey);
+        })
+        .filter(Boolean);
+    }
+
+    function pairWinnerMatches(matches, roundKey) {
+      // Sort by the permanent slot, rather than trusting array order.
+      // This makes the bracket robust even if the matches are later stored,
+      // rendered, or passed around in a different array order.
+      const orderedMatches = (matches || [])
+        .filter(Boolean)
+        .slice()
+        .sort((a, b) => Number(a.bracketSlot) - Number(b.bracketSlot));
+
+      const winners = orderedMatches
         .map(m => m?.winner)
         .filter(Boolean);
 
       if (winners.length < 2 || winners.length % 2 !== 0) {
-        console.error("Invalid UCL winner count for next round:", winners.length, winners);
+        console.error(
+          "Invalid UCL winner count for next round:",
+          winners.length,
+          winners
+        );
         return [];
       }
 
       const out = [];
+
       for (let i = 0; i < winners.length; i += 2) {
-        out.push(simulateUCLMatch(winners[i], winners[i + 1], true));
+        // The new slot is based on the path, not on a new random draw.
+        out.push(
+          createUCLMatch(
+            winners[i],
+            winners[i + 1],
+            i / 2,
+            roundKey
+          )
+        );
       }
-      return out;
+
+      return out.filter(Boolean);
     }
 
     function renderUCLMatch(match, twoLegs = true, showScores = true) {
@@ -4962,34 +5036,85 @@
       }
 
       if (isNewFormat) {
-        playoffMatches = makeUCLMatchups(availableR, availableIR);
+        // ---------------------------------------------------------------
+        // KNOCKOUT PHASE PLAY-OFFS (the new-format R32 stage)
+        // ---------------------------------------------------------------
+        // This is the ONLY place where the initial R32 draw is randomised.
+        playoffMatches = drawUCLMatchups(
+          availableR,
+          availableIR,
+          "playoffs"
+        );
+
         if (playoffMatches.length !== 8) {
           console.error("UCL play-off construction failed.", playoffMatches);
           return false;
         }
-        checkEliminatedRound(playoffMatches, "Play-offs");
-        const playoffWinners = playoffMatches.map(m => m.winner).filter(Boolean);
 
-        round16Matches = makeUCLMatchups(playoffWinners, protectedP);
+        checkEliminatedRound(playoffMatches, "Play-offs");
+
+        // Keep the winners in their exact play-off slots.
+        //
+        // R32 slot 0 -> R16 slot 0
+        // R32 slot 1 -> R16 slot 1
+        // ...
+        // R32 slot 7 -> R16 slot 7
+        //
+        // No shuffle is performed here.
+        const playoffWinners = playoffMatches
+          .slice()
+          .sort((a, b) => a.bracketSlot - b.bracketSlot)
+          .map(m => m.winner)
+          .filter(Boolean);
+
+        // `protectedP` is also placed into fixed slots. Its order is the
+        // order supplied by the UCL data after the initial team replacement.
+        // It is intentionally NOT shuffled at this stage.
+        const protectedTeamsInBracketOrder = protectedP
+          .filter(Boolean);
+
+        round16Matches = makeFixedUCLMatchups(
+          playoffWinners,
+          protectedTeamsInBracketOrder,
+          "round16"
+        );
+
         if (round16Matches.length !== 8) {
           console.error("UCL Round-of-16 construction failed.", round16Matches);
           return false;
         }
+
         checkEliminatedRound(round16Matches, "Round of 16");
       } else {
-        round16Matches = makeUCLMatchups(availableR, availableIR);
+        // Old-format seasons have no play-off stage. The R16 draw happens
+        // once here and then becomes the permanent bracket.
+        round16Matches = drawUCLMatchups(
+          availableR,
+          availableIR,
+          "round16"
+        );
+
         if (round16Matches.length !== 8) {
           console.error("UCL Round-of-16 construction failed.", round16Matches);
           return false;
         }
+
         checkEliminatedRound(round16Matches, "Round of 16");
       }
 
-      const quarterMatches = pairWinnerMatches(round16Matches);
+      // From this point onward the bracket is completely deterministic:
+      // adjacent winners always remain on the same side of the bracket.
+      const quarterMatches = pairWinnerMatches(
+        round16Matches,
+        "quarterfinals"
+      );
       if (quarterMatches.length !== 4) return false;
       checkEliminatedRound(quarterMatches, "Quarter-finals");
 
-      const semiMatches = pairWinnerMatches(quarterMatches);
+      const semiMatches = pairWinnerMatches(
+        quarterMatches,
+        "semifinals"
+      );
       if (semiMatches.length !== 2) return false;
       checkEliminatedRound(semiMatches, "Semi-finals");
 
@@ -5003,6 +5128,10 @@
         semiMatches[1].winner,
         false
       );
+      if (finalMatch) {
+        finalMatch.bracketSlot = 0;
+        finalMatch.roundKey = "final";
+      }
       if (!finalMatch?.winner) {
         console.error("UCL final simulation failed.", finalMatch);
         return false;
@@ -5012,7 +5141,8 @@
       const champion = finalMatch.winner;
 
       currentUCLData = {
-        season, game,
+        season,
+        game,
         playoffMatches,
         round16Matches,
         quarterMatches,
@@ -5020,7 +5150,18 @@
         finalMatch,
         champion,
         hasPlayoff: isNewFormat,
-        eliminatedRound
+        eliminatedRound,
+
+        // The knockout rounds above already contain permanent bracketSlot
+        // values. Keeping the complete path here makes the rendered bracket
+        // independent of any later array ordering.
+        bracketOrder: {
+          playoffs: playoffMatches.map(m => m.bracketSlot),
+          round16: round16Matches.map(m => m.bracketSlot),
+          quarterfinals: quarterMatches.map(m => m.bracketSlot),
+          semifinals: semiMatches.map(m => m.bracketSlot),
+          final: finalMatch.bracketSlot
+        }
       };
 
       latest.ucl = {
