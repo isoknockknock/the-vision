@@ -4870,7 +4870,7 @@
 
       let resultText = "Tournament in progress...";
       if (isComplete) {
-        resultText = playerWon ? "Your team are the Champions League winners." : `${data.champion.team}`;
+        resultText = data.champion.team;
       } else if (playerEliminated) {
         resultText = `Eliminated in ${data.eliminatedRound}.`;
       }
