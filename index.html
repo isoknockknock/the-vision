@@ -4320,9 +4320,18 @@
       teams.pop();
 
       const myOvr = getLiveOvr();
+
+      // Hidden player-team simulation boost: the displayed OVR remains unchanged.
+      const effectivePlayerOvr = myOvr + 2;
+
       const teamNameInput = document.getElementById("teamName");
       const tName = teamNameInput ? (teamNameInput.value || "The Vision FC") : "The Vision FC";
-      teams.push({ team: tName, ovr: myOvr, isPlayer: true });
+      teams.push({
+        team: tName,
+        ovr: myOvr,
+        effectiveOvr: effectivePlayerOvr,
+        isPlayer: true
+      });
 
       const standings = teams.map(t => ({ ...t, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 }));
 
@@ -4336,13 +4345,26 @@
       renderStandings("Mid-Season Results", "Finish Season", "finishSeason()");
     }
 
-    function simulateMatch(t1, t2) {
-      const D = t1.ovr - t2.ovr;
-      let lambda1 = 1.4 * Math.exp(D / 60) + 0.2;
-      let lambda2 = 1.4 * Math.exp(-D / 60);
+    // League simulation tuning.
+    const LEAGUE_OVR_SCALE = 30;
+    const HOME_ADVANTAGE_OVR = 3;
 
-      if (t1.isPlayer) lambda1 *= 1.04;
-      if (t2.isPlayer) lambda2 *= 1.04;
+    function simulateMatch(t1, t2) {
+      const t1EffectiveOvr = Number.isFinite(t1.effectiveOvr) ? t1.effectiveOvr : t1.ovr;
+      const t2EffectiveOvr = Number.isFinite(t2.effectiveOvr) ? t2.effectiveOvr : t2.ovr;
+
+      // Home advantage is applied only to the simulation, never displayed.
+      const D = (t1EffectiveOvr + HOME_ADVANTAGE_OVR) - t2EffectiveOvr;
+
+      // Keep the overall scoring environment stable; OVR determines the split.
+      const totalExpectedGoals = 2.7;
+      const strength = Math.exp(D / LEAGUE_OVR_SCALE);
+      const reverseStrength = Math.exp(-D / LEAGUE_OVR_SCALE);
+      const homeShare = strength / (strength + reverseStrength);
+      const awayShare = 1 - homeShare;
+
+      const lambda1 = totalExpectedGoals * homeShare;
+      const lambda2 = totalExpectedGoals * awayShare;
 
       let g1 = samplePoisson(lambda1);
       let g2 = samplePoisson(lambda2);
@@ -4407,7 +4429,8 @@
       const standings = currentSeasonStandings;
       for (let i = 0; i < standings.length; i++) {
         for (let j = 0; j < i; j++) {
-          simulateMatch(standings[i], standings[j]);
+          // Second fixture: reverse home/away.
+          simulateMatch(standings[j], standings[i]);
         }
       }
       
