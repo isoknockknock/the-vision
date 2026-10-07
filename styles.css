@@ -1,0 +1,1758 @@
+@font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter.ttf") format("truetype");
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter-Bold.ttf") format("truetype");
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter-Black.ttf") format("truetype");
+      font-weight: 900;
+    }
+    @font-face {
+      font-family: "JMH Typewriter";
+      src: url("./fonts/JMH Typewriter-Thin.ttf") format("truetype");
+      font-weight: 300;
+    }
+
+    @font-face {
+      font-family: "Smile Moon";
+      src: url("./fonts/Smile Moon.otf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    :root {
+      --board: #d7c8a6;
+      --board-dark: #c4b38e;
+      --paper: #f8f1dd;
+      --paper-blue: #dce7e7;
+      --paper-yellow: #f2d76b;
+      --paper-red: #e8aaa0;
+      --paper-green: #c8d9b9;
+      --ink: #25231f;
+      --muted: #6d675d;
+      --red-ink: #a63b31;
+      --green-ink: #416a48;
+      --rule: rgba(37,35,31,.26);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "JMH Typewriter", monospace;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.18) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 70% 80%, rgba(80,60,30,.08) 0 1px, transparent 1.5px),
+        repeating-linear-gradient(0deg, rgba(70,50,20,.025) 0 1px, transparent 1px 5px),
+        var(--board);
+      background-size: 9px 9px, 13px 13px, 100% 5px, auto;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .22;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.18), transparent 20%, transparent 80%, rgba(80,50,20,.12)),
+        repeating-linear-gradient(7deg, transparent 0 4px, rgba(80,60,30,.035) 5px);
+      z-index: 0;
+    }
+
+    button, select, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(1280px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 48px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 26px;
+      padding: 0 4px 12px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .logo {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 900;
+      font-size: 31px;
+      letter-spacing: -.8px;
+    }
+
+    .badge {
+      position: relative;
+      padding: 6px 11px;
+      color: var(--ink);
+      background: var(--paper-yellow);
+      border: 1px solid rgba(37,35,31,.45);
+      box-shadow: 2px 2px 0 rgba(40,30,15,.14);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transform: rotate(1deg);
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* --- Shared editorial / office language --- */
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin: 0 3px 18px;
+      padding-bottom: 11px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .kicker {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: var(--muted);
+    }
+
+    .title {
+      margin-top: 4px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -.5px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 1px solid var(--ink);
+      border-radius: 1px;
+      padding: 10px 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      box-shadow: 2px 2px 0 rgba(35,30,20,.18);
+      transition: transform .12s, box-shadow .12s;
+    }
+
+    button:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 rgba(35,30,20,.2);
+    }
+
+    .primary {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .secondary {
+      background: rgba(248,241,221,.72);
+      color: var(--ink);
+    }
+
+    .primary:disabled {
+      background: #8d887e;
+      border-color: #777168;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 1px 1px 0 rgba(35,30,20,.1);
+    }
+
+    select, input {
+      color: var(--ink);
+      background: rgba(248,241,221,.9);
+      border: 1px solid var(--ink);
+      border-radius: 1px;
+      padding: 9px 11px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      box-shadow: 3px 3px 0 rgba(35,30,20,.14);
+    }
+
+    /* --- Tape / paper primitives --- */
+    .panel,
+    .hero {
+      position: relative;
+      background:
+        repeating-linear-gradient(0deg, rgba(80,55,20,.018) 0 1px, transparent 1px 4px),
+        var(--paper);
+      border: 1px solid rgba(37,35,31,.28);
+      border-radius: 0;
+      box-shadow: 5px 6px 0 rgba(65,48,22,.12);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel::after,
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 76px;
+      height: 18px;
+      left: 50%;
+      top: -10px;
+      transform: translateX(-50%) rotate(-1.5deg);
+      background: rgba(163, 255, 223, 0.72);
+      box-shadow: 0 1px 2px rgba(60,45,20,.08);
+      pointer-events: none;
+    }
+
+    .hero {
+      max-width: 900px;
+      margin: 9vh auto 0;
+      padding: 70px 30px;
+      text-align: center;
+      transform: rotate(-.25deg);
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(48px, 7vw, 70px);
+      line-height: .95;
+      letter-spacing: -2px;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto 28px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* --- Manager board --- */
+    .main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 350px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    #draft > .top {
+      position: relative;
+    }
+
+    #liveFormationPanel {
+      background:
+        linear-gradient(rgba(255,255,255,.06), rgba(255,255,255,.06)),
+        repeating-linear-gradient(0deg, transparent 0 27px, rgba(55,45,25,.065) 28px),
+        repeating-linear-gradient(90deg, transparent 0 27px, rgba(55,45,25,.045) 28px),
+        #e5ddc7;
+      border: 2px solid rgba(48,42,30,.55);
+      box-shadow: 7px 8px 0 rgba(60,45,20,.14);
+    }
+
+    #liveFormationPanel::after {
+      background: rgba(208,190,145,.75);
+    }
+
+    .pitchRow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .pitch {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1.30;
+      max-height: 760px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,.045) 0,
+          rgba(255,255,255,.045) 8.333%,
+          rgba(0,0,0,.025) 8.333%,
+          rgba(0,0,0,.025) 16.666%
+        ),
+        linear-gradient(180deg, #4f8a4e 0%, #3f7b43 100%);
+      border: 3px solid rgba(248,246,232,.95);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow:
+        0 10px 24px rgba(30,45,20,.20),
+        inset 0 0 0 1px rgba(20,55,25,.55),
+        inset 0 0 28px rgba(20,45,20,.14);
+    }
+
+    .pitch::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,255,255,.06), transparent 18%, transparent 82%, rgba(0,0,0,.06));
+      z-index: 0;
+    }
+
+    /* Half-pitch markings: the goal is at the bottom and the halfway line
+       is at the top. This intentionally shows only one half of the field. */
+    .pitchMark {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      border-color: rgba(250,248,235,.94);
+    }
+
+    .pitchHalfwayLine {
+      left: 0;
+      right: 0;
+      top: 0;
+      border-top: 3px solid rgba(250,248,235,.96);
+    }
+
+    /* Centre semicircle: the visible half of the centre circle at midfield. */
+    /* True centre-circle geometry: a full circle centred on the halfway line,
+       with its upper half clipped outside the half-pitch. */
+    .pitchCenterArc {
+      width: 25%;
+      aspect-ratio: 1 / 1;
+      left: 37.5%;
+      top: -12.5%;
+      border: 3px solid rgba(250,248,235,.94);
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
+
+    .pitchCenterSpot {
+      width: 7px;
+      height: 7px;
+      left: calc(50% - 3.5px);
+      top: -3.5px;
+      background: rgba(250,248,235,.96);
+      border-radius: 50%;
+    }
+
+    .penaltyArea {
+      left: 20%;
+      right: 20%;
+      height: 30%;
+      border: 3px solid rgba(250,248,235,.94);
+      border-bottom: 0;
+    }
+
+    .penaltyArea.bottom { bottom: -1px; }
+
+    .goalArea {
+      left: 35%;
+      right: 35%;
+      height: 13%;
+      border: 3px solid rgba(250,248,235,.94);
+      border-bottom: 0;
+    }
+
+    .goalArea.bottom { bottom: -1px; }
+
+    .penaltySpot {
+      width: 7px;
+      height: 7px;
+      left: calc(50% - 3.5px);
+      bottom: 16%;
+      background: rgba(250,248,235,.96);
+      border-radius: 50%;
+    }
+
+    /* True penalty semicircle: use a real circle and reveal exactly its
+       upper half. This gives a mathematically clean D-shaped arc. */
+    .penaltyArc {
+      width: 20%;
+      aspect-ratio: 1 / 1;
+      left: 40%;
+      bottom: 17.5%;
+      border: 3px solid rgba(250,248,235,.94);
+      border-radius: 50%;
+      clip-path: inset(0 0 50% 0);
+      box-sizing: border-box;
+    }
+
+    .goal {
+      position: absolute;
+      width: 14%;
+      height: 3.5%;
+      left: 43%;
+      bottom: -3px;
+      border: 3px solid rgba(250,248,235,.94);
+      border-bottom: 0;
+      z-index: 1;
+      background: rgba(255,255,255,.025);
+    }
+
+    .cornerArc {
+      position: absolute;
+      width: 3.2%;
+      aspect-ratio: 1;
+      bottom: -1px;
+      border: 2px solid rgba(250,248,235,.92);
+      z-index: 1;
+    }
+
+    .cornerArc.left {
+      left: -1px;
+      border-left: 0;
+      border-bottom: 0;
+      border-radius: 0 100% 0 0;
+    }
+
+    .cornerArc.right {
+      right: -1px;
+      border-right: 0;
+      border-bottom: 0;
+      border-radius: 100% 0 0 0;
+    }
+
+    .slotWrap {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 92px;
+      text-align: center;
+      z-index: 3;
+      cursor: pointer;
+    }
+
+    .slot {
+      width: 52px;
+      height: 52px;
+      margin: auto;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      background: #eee5c9;
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      box-shadow: 2px 3px 0 rgba(30,35,20,.25);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 2px;
+      transition: transform .12s;
+    }
+
+    .slotWrap:hover .slot { transform: translateY(-2px); }
+
+    .slot.empty {
+      background: rgba(248,241,221,.25);
+      color: rgba(248,241,221,.85);
+      border: 2px dashed rgba(248,241,221,.85);
+      box-shadow: none;
+    }
+
+    .label {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 3px 5px;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid rgba(37,35,31,.45);
+      font-size: 9px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-shadow: 1px 2px 0 rgba(35,30,20,.13);
+    }
+
+    .formationControls {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex: 0 0 54px;
+    }
+
+    .formationControls.visible { display: flex; }
+
+    .formationArrow {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      background: var(--paper-yellow);
+      color: var(--ink);
+      border: 1px solid rgba(37,35,31,.55);
+    }
+
+    .formationArrow.selected {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .formationControlsLabel {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font: 8px monospace;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* --- Scouting sticky notes --- */
+    .options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 12px;
+    }
+
+    .card {
+      position: relative;
+      min-height: 205px;
+      padding: 22px 16px 15px;
+      background: #adeb9f;
+      border: 0;
+      border-radius: 0;
+      cursor: pointer;
+      box-shadow: 4px 6px 7px rgba(55,40,15,.16);
+      transform: rotate(-1.1deg);
+      transition: transform .14s, box-shadow .14s;
+    }
+
+    .card:nth-child(2) {
+      background: var(--paper-blue);
+      transform: rotate(.8deg);
+    }
+
+    .card:nth-child(3) {
+      background: #f7acf2;
+      transform: rotate(-.35deg);
+    }
+
+    .card::before,
+    .squadPlayer::before,
+    .achievement::before {
+      content: "";
+      position: absolute;
+      width: 52px;
+      height: 15px;
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(163, 255, 223, 0.72);
+    }
+
+    .card:hover {
+      transform: translateY(-5px) rotate(-1.1deg);
+      box-shadow: 5px 10px 12px rgba(55,40,15,.18);
+    }
+
+    .card:nth-child(2):hover { transform: translateY(-5px) rotate(.8deg); }
+    .card:nth-child(3):hover { transform: translateY(-5px) rotate(-.35deg); }
+
+    .card.selected {
+      outline: 3px solid var(--red-ink);
+      outline-offset: -7px;
+      box-shadow: 5px 9px 10px rgba(70,35,20,.2);
+    }
+
+    .card.selected::after {
+      content: "SHORTLISTED";
+      position: absolute;
+      right: 9px;
+      top: 9px;
+      color: var(--red-ink);
+      border: 1px solid var(--red-ink);
+      padding: 2px 4px;
+      font: 8px monospace;
+      transform: rotate(-7deg);
+    }
+
+    .anon {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #5f5a4d;
+    }
+
+    .pos {
+      margin-top: 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 31px;
+      font-weight: 900;
+    }
+
+    .club {
+      margin: 3px 0 13px;
+      color: #625d51;
+      font-size: 11px;
+      font-style: italic;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(37,35,31,.35);
+    }
+
+    .stat {
+      padding: 6px;
+      text-align: center;
+      background: rgba(248,241,221,.3);
+      border: 1px dashed rgba(37,35,31,.28);
+      border-radius: 0;
+    }
+
+    .stat small {
+      display: block;
+      color: #6a6458;
+      font-size: 8px;
+    }
+
+    .stat b {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+    }
+
+    /* --- Squad scouting sheets --- */
+    #draft > .main > div:last-child {
+      position: relative;
+      background: var(--paper-blue);
+      transform: rotate(.35deg);
+    }
+
+    .squadPlayer {
+      position: relative;
+      padding: 12px 11px;
+      margin: 9px 0;
+      background: rgba(248,241,221,.75);
+      border: 1px solid rgba(37,35,31,.25);
+      border-radius: 0;
+      cursor: pointer;
+      box-shadow: 2px 3px 0 rgba(55,40,15,.12);
+    }
+
+    .squadPlayer strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .squadPlayer span {
+      font-size: 10px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .positionGroup { margin-bottom: 16px; }
+
+    .positionGroupTitle {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 2px;
+      border-bottom: 2px solid var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .positionGroupCount {
+      font: 9px monospace;
+      color: var(--muted);
+    }
+
+    /* --- Reveal --- */
+    .revealCard {
+      position: relative;
+      background: var(--paper);
+      border: 0;
+      border-radius: 0;
+      padding: 17px;
+      box-shadow: 4px 5px 0 rgba(55,40,15,.12);
+      transform: rotate(-.4deg);
+    }
+
+    .revealCard .small {
+      color: var(--muted);
+      border-bottom: 1px dashed var(--rule);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+      font-size: 10px;
+    }
+
+    .revealCard h3 {
+      margin: 6px 0;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .career {
+      color: #49453e;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .score {
+      position: relative;
+      text-align: center;
+      margin: 28px auto;
+      max-width: 720px;
+      padding: 20px;
+      background: var(--paper-yellow);
+      border: 0;
+      box-shadow: 6px 7px 0 rgba(55,40,15,.15);
+      transform: rotate(-.5deg);
+    }
+
+    .score::before {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 17px;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%) rotate(2deg);
+      background: rgba(163, 255, 223, 0.72);
+    }
+
+    .score small {
+      color: #635b48;
+      letter-spacing: 2px;
+    }
+
+    .score strong {
+      display: block;
+      margin-top: 4px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 66px;
+    }
+
+    /* --- Newspaper --- */
+    #simulation {
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    #simulation .top {
+      display: block;
+      text-align: center;
+      border-bottom: 4px double var(--ink);
+      padding: 0 0 14px;
+    }
+
+    #simulation .top .kicker {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    #simulation .title {
+      font-size: clamp(42px, 6vw, 68px);
+      text-transform: uppercase;
+      letter-spacing: -2px;
+    }
+
+    .newspaper-sheet {
+      position: relative;
+      background:rgba(178, 180, 179, 0.72);
+      padding: 28px clamp(18px, 4vw, 46px) 34px;
+      box-shadow: 8px 9px 0 rgba(60,45,20,.15);
+      border: 1px solid rgba(37,35,31,.35);
+    }
+
+    .newspaper-masthead {
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 900;
+      font-size: clamp(40px, 7vw, 78px);
+      letter-spacing: -3px;
+      line-height: .88;
+      border-bottom: 5px double var(--ink);
+      padding-bottom: 13px;
+    }
+
+    .newspaper-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--ink);
+      font: 9px monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .news-headline {
+      margin: 25px auto 5px;
+      max-width: 1000px;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 5vw, 58px);
+      line-height: .95;
+      text-transform: uppercase;
+      letter-spacing: -1.8px;
+    }
+
+    .news-deck {
+      max-width: 760px;
+      margin: 9px auto 20px;
+      text-align: center;
+      color: #5d574d;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .news-rule {
+      border: 0;
+      border-top: 1px solid var(--ink);
+      margin: 16px 0;
+    }
+
+    .newspaper-columns {
+      column-count: 2;
+      column-gap: 32px;
+      column-rule: 1px solid rgba(37,35,31,.2);
+    }
+
+    .newspaper-columns > * {
+      break-inside: avoid;
+    }
+
+    #leagueTable {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 13px;
+    }
+
+    #leagueTable th {
+      padding: 7px 5px;
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      text-align: left;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    #leagueTable td {
+      padding: 7px 5px;
+      border-bottom: 1px solid rgba(37,35,31,.22);
+    }
+
+    #leagueTable tbody tr:nth-child(even) {
+      background: rgba(100,80,40,.035);
+    }
+
+    #leagueTable tbody tr[style*="e8f4e8"] {
+      background: #d8e4ca !important;
+      box-shadow: inset 4px 0 0 var(--green-ink);
+    }
+
+    #goalscorersUI > div {
+      border: 0 !important;
+      border-top: 2px solid var(--ink) !important;
+      border-bottom: 2px solid var(--ink) !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      padding: 16px 0 !important;
+    }
+
+    #goalscorersUI h3 {
+      font-family: Georgia, "Times New Roman", serif !important;
+    }
+
+    #simulation .actions {
+      border-top: 4px double var(--ink);
+      padding-top: 14px;
+      justify-content: center;
+    }
+
+    /* --- UCL programme --- */
+    #ucl .panel {
+      background: #e9e1cc;
+    }
+
+    .uclRounds {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(210px, 1fr));
+      gap: 20px;
+      min-width: 1080px;
+      align-items: stretch;
+    }
+
+    .uclRounds.noPlayoff {
+      grid-template-columns: repeat(4, minmax(230px, 1fr));
+    }
+
+    .uclBracket {
+      overflow-x: auto;
+      padding: 15px 4px 20px;
+    }
+
+    .uclRound {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .uclRoundTitle {
+      text-align: center;
+      padding: 9px 7px;
+      border-top: 3px double var(--ink);
+      border-bottom: 1px solid var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      background: transparent;
+    }
+
+    .uclMatches {
+      display: grid;
+      grid-auto-rows: 1fr;
+      align-items: center;
+      flex: 1;
+      gap: 14px;
+      padding-top: 10px;
+    }
+
+    .uclMatch {
+      background: var(--paper);
+      border: 1px solid rgba(37,35,31,.35);
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: 3px 4px 0 rgba(55,40,15,.1);
+      transform: rotate(-.25deg);
+    }
+
+    .uclTeam {
+      display: grid;
+      grid-template-columns: 1fr 34px 34px 40px;
+      align-items: center;
+      min-height: 30px;
+      border-bottom: 1px solid rgba(37,35,31,.2);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11px;
+    }
+
+    .uclTeam:last-child { border-bottom: none; }
+
+    .uclTeamName {
+      padding: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .uclTeamName.playerTeam {
+      font-weight: 900;
+      background: #d7e2ca;
+      border-left: 4px solid var(--green-ink);
+    }
+
+    .uclScore {
+      text-align: center;
+      padding: 5px 2px;
+      border-left: 1px solid rgba(37,35,31,.18);
+    }
+
+    .uclWinner { font-weight: 900; }
+    .uclAggregate { font-weight: 900; }
+
+    .uclSummary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .uclSummaryCard {
+      position: relative;
+      padding: 15px;
+      background: var(--paper);
+      border: 0;
+      border-top: 3px double var(--ink);
+      border-bottom: 1px solid var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      box-shadow: 3px 4px 0 rgba(55,40,15,.08);
+    }
+
+    .uclSummaryCard small {
+      display: block;
+      color: var(--muted);
+      text-transform: uppercase;
+      font: 8px monospace;
+      margin-bottom: 6px;
+    }
+
+    .uclSummaryCard strong {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+    }
+
+    .uclLegend {
+      margin: 5px 0 12px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    /* --- Achievements: wall clippings --- */
+    .achievementGrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .achievement {
+      position: relative;
+      min-height: 130px;
+      background: var(--paper);
+      border: 0;
+      border-radius: 0;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 5px 6px 0 rgba(55,40,15,.13);
+      transform: rotate(-.7deg);
+    }
+
+    .achievement:nth-child(even) { transform: rotate(.6deg); }
+    .achievement.locked { opacity: .45; }
+
+    .achievementIcon {
+      width: 55px;
+      height: 55px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      background: var(--paper-yellow);
+      flex-shrink: 0;
+    }
+
+    .achievementInfo { flex: 1; }
+
+    .achievementName {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .achievementDescription {
+      color: #575248;
+      font-size: 11px;
+      line-height: 1.45;
+      margin-top: 4px;
+    }
+
+    /* --- Integrated Scouting Record / Pokédex --- */
+    .scoutingRecord {
+      margin-top: 34px;
+      padding-top: 24px;
+      border-top: 4px double var(--ink);
+    }
+
+    .scoutingRecordHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 15px;
+    }
+
+    .scoutingRecordTitle {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .scoutingRecordIntro {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+      margin-top: 5px;
+    }
+
+    .recordProgress {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+
+    .recordProgressCard {
+      position: relative;
+      padding: 13px 14px 12px;
+      background: var(--paper);
+      border: 1px solid rgba(37,35,31,.28);
+      box-shadow: 3px 4px 0 rgba(55,40,15,.10);
+      transform: rotate(-.35deg);
+    }
+
+    .recordProgressCard:nth-child(2) { transform: rotate(.35deg); }
+
+    .recordProgressLabel {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 900;
+    }
+
+    .recordProgressTrack {
+      height: 7px;
+      margin-top: 9px;
+      background: rgba(37,35,31,.10);
+      border: 1px solid rgba(37,35,31,.18);
+    }
+
+    .recordProgressFill {
+      height: 100%;
+      background: var(--ink);
+      transition: width .2s ease;
+    }
+
+    .recordProgressCard.signed .recordProgressFill {
+      background: var(--green-ink);
+    }
+
+    .recordFilterBar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 0 0 14px;
+      padding: 10px 12px;
+      background: rgba(248,241,221,.58);
+      border-top: 1px dashed rgba(37,35,31,.32);
+      border-bottom: 1px dashed rgba(37,35,31,.32);
+    }
+
+    .recordFilterBar select {
+      min-width: 170px;
+      padding: 7px 9px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      background: var(--paper);
+    }
+
+    .recordFilterLabel {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 900;
+    }
+
+    .recordFilterCount {
+      margin-left: auto;
+      color: var(--muted);
+      font: 9px monospace;
+      text-transform: uppercase;
+    }
+
+    .recordLegend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .recordLegendItem {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .recordLegendSwatch {
+      width: 17px;
+      height: 12px;
+      border: 1px solid rgba(37,35,31,.28);
+      box-shadow: 1px 1px 0 rgba(55,40,15,.10);
+    }
+
+    .recordLegendSwatch.unknown { background: #d9d1bd; }
+    .recordLegendSwatch.discovered { background: #eee9d9; }
+    .recordLegendSwatch.signed { background: #c2d0ae; }
+
+    .recordGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 13px;
+    }
+
+    .recordCard {
+      position: relative;
+      min-height: 126px;
+      padding: 17px 14px 13px;
+      border: 0;
+      box-shadow: 4px 5px 0 rgba(55,40,15,.12);
+      transform: rotate(-.45deg);
+      overflow: hidden;
+    }
+
+    .recordCard:nth-child(3n) { transform: rotate(.45deg); }
+    .recordCard:nth-child(5n) { transform: rotate(-.75deg); }
+
+    .recordCard::before {
+      content: "";
+      position: absolute;
+      width: 55px;
+      height: 14px;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(163, 255, 223, 0.72);
+    }
+
+    .recordCard.undiscovered {
+      background: #d9d1bd;
+      color: #716b60;
+    }
+
+    .recordCard.discovered {
+      background: #eee9d9;
+      color: #777168;
+    }
+
+    .recordCard.signed {
+      background: #c2d0ae;
+      color: var(--ink);
+      box-shadow: 5px 6px 0 rgba(55,40,15,.16);
+    }
+
+    .recordCardCode {
+      font: 8px monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: .65;
+    }
+
+    .recordCardName {
+      margin-top: 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.02;
+      font-weight: 900;
+    }
+
+    .recordCard.undiscovered .recordCardName {
+      font-family: "JMH Typewriter", monospace;
+      font-size: 28px;
+      letter-spacing: 2px;
+    }
+
+    .recordCard.discovered .recordCardName { color: #777168; }
+    .recordCard.signed .recordCardName { color: #171613; }
+
+    .recordCardMeta {
+      margin-top: 9px;
+      font-size: 9px;
+      line-height: 1.45;
+      opacity: .82;
+    }
+
+    .recordCardStatus {
+      position: absolute;
+      right: 9px;
+      top: 9px;
+      padding: 2px 4px;
+      border: 1px solid currentColor;
+      font: 7px monospace;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      opacity: .72;
+      transform: rotate(2deg);
+    }
+
+    .recordPagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .recordPageLabel {
+      min-width: 100px;
+      text-align: center;
+      font: 9px monospace;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .achievementStatus {
+      margin-top: 8px;
+      font-size: 9px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .achievementUnlocked { color: var(--green-ink); }
+    .achievementLocked { color: #777066; }
+
+    /* --- Injury / notifications --- */
+    #injuryModal {
+      background: var(--paper) !important;
+      border: 2px solid var(--ink) !important;
+      border-radius: 0 !important;
+      box-shadow: 8px 9px 0 rgba(55,40,15,.18) !important;
+    }
+
+    #injuryModal::before {
+      content: "MEDICAL STAFF";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      padding: 3px 10px;
+      background: var(--paper-red);
+      font: 8px monospace;
+      letter-spacing: 1px;
+    }
+
+    /* Existing inline notification styling is overridden here. */
+    body > div:last-of-type {
+      font-family: "JMH Typewriter", monospace;
+    }
+
+    /* --- Help --- */
+    .headerRight {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .helpButton {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      min-width: 42px;
+      padding: 7px 9px;
+      background: var(--paper-yellow);
+      color: var(--ink);
+      border: 1px solid rgba(37,35,31,.55);
+      box-shadow: 2px 2px 0 rgba(40,30,15,.14);
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    .helpButton:hover { transform: translate(-1px,-1px) rotate(-1deg); }
+
+    .helpOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(37,35,31,.42);
+    }
+
+    .helpPaper {
+      position: relative;
+      width: min(560px, 100%);
+      max-height: min(86vh, 720px);
+      overflow-y: auto;
+      padding: 32px 30px 24px;
+      background: var(--paper);
+      border: 1px solid rgba(37,35,31,.4);
+      box-shadow: 8px 10px 0 rgba(55,40,15,.22);
+      transform: rotate(-.35deg);
+    }
+
+    .helpTape {
+      position: absolute;
+      width: 86px;
+      height: 18px;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%) rotate(2deg);
+      background: rgba(163,255,223,.72);
+    }
+
+    .helpPaper h2 {
+      margin: 4px 0 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 32px;
+    }
+
+    .helpSteps p {
+      margin: 0;
+      padding: 11px 0;
+      border-top: 1px dashed rgba(37,35,31,.28);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .helpSteps p:last-child { margin-bottom: 18px; }
+
+    .helpClose {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      background: transparent;
+      border: 1px solid rgba(37,35,31,.4);
+      box-shadow: none;
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .helpClose:hover { transform: none; box-shadow: none; }
+
+
+    /* --- Site footer --- */
+    .siteFooter {
+      position: relative;
+      margin-top: 58px;
+      padding: 26px 18px 12px;
+      background: var(--board);
+      border-top: 2px solid var(--ink);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+    }
+
+    .siteFooter::before {
+      content: "";
+      position: absolute;
+      width: 82px;
+      height: 16px;
+      top: -9px;
+      left: 12%;
+      transform: rotate(-1.8deg);
+      background: rgba(163,255,223,.72);
+      box-shadow: 0 1px 2px rgba(60,45,20,.08);
+      pointer-events: none;
+    }
+
+    .footerLinks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px 13px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Tiny pinned notes — deliberately irregular like notes on the manager's board. */
+    .footerLink {
+      position: relative;
+      display: inline-block;
+      min-width: 94px;
+      padding: 12px 10px 10px;
+      color: var(--ink);
+      text-decoration: none;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      background: var(--paper-yellow);
+      border: 1px solid rgba(37,35,31,.16);
+      box-shadow: 2px 4px 5px rgba(55,40,15,.14);
+      transform: rotate(-1.8deg);
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+
+    .footerLink:nth-child(2) {
+      background: var(--paper-blue);
+      transform: rotate(1.5deg);
+    }
+
+    .footerLink:nth-child(3) {
+      background: var(--paper-green);
+      transform: rotate(-.8deg);
+    }
+
+    .footerLink:nth-child(4) {
+      background: var(--paper-red);
+      transform: rotate(2deg);
+    }
+
+    .footerLink:nth-child(5) {
+      background: #adeb9f;
+      transform: rotate(-1deg);
+    }
+
+    .footerLink:nth-child(6) {
+      background: #e5d6a9;
+      transform: rotate(1.2deg);
+    }
+
+    .footerLink::before {
+      content: "";
+      position: absolute;
+      width: 35px;
+      height: 8px;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(163,255,223,.68);
+      box-shadow: 0 1px 1px rgba(60,45,20,.08);
+    }
+
+    .footerLink:hover,
+    .footerLink:focus-visible {
+      transform: translateY(-3px) rotate(-1.8deg);
+      box-shadow: 3px 7px 8px rgba(55,40,15,.18);
+      outline: none;
+    }
+
+    .footerLink:nth-child(2):hover,
+    .footerLink:nth-child(2):focus-visible { transform: translateY(-3px) rotate(1.5deg); }
+    .footerLink:nth-child(3):hover,
+    .footerLink:nth-child(3):focus-visible { transform: translateY(-3px) rotate(-.8deg); }
+    .footerLink:nth-child(4):hover,
+    .footerLink:nth-child(4):focus-visible { transform: translateY(-3px) rotate(2deg); }
+    .footerLink:nth-child(5):hover,
+    .footerLink:nth-child(5):focus-visible { transform: translateY(-3px) rotate(-1deg); }
+    .footerLink:nth-child(6):hover,
+    .footerLink:nth-child(6):focus-visible { transform: translateY(-3px) rotate(1.2deg); }
+
+    .footerBottom {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      padding-top: 9px;
+      border-top: 1px dashed rgba(37,35,31,.28);
+      color: var(--muted);
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .footerMark {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11px;
+      color: var(--ink);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    @media (max-width: 700px) {
+      .siteFooter {
+        margin-top: 42px;
+        padding: 22px 8px 10px;
+      }
+
+      .footerLinks {
+        justify-content: center;
+        gap: 11px 9px;
+      }
+
+      .footerLink {
+        min-width: 82px;
+        padding: 11px 8px 9px;
+        font-size: 8px;
+      }
+
+      .footerBottom {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+
+    /* --- Final reveal player cards --- */
+    .revealSquadGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .revealSquadCard {
+      position: relative;
+      min-width: 0;
+      padding: 16px 14px 13px;
+      background: var(--paper);
+      border: 1px solid rgba(37,35,31,.32);
+      box-shadow: 4px 5px 0 rgba(55,40,15,.12);
+      transform: rotate(-.35deg);
+      overflow: hidden;
+    }
+
+    .revealSquadCard:nth-child(3n + 2) { transform: rotate(.4deg); }
+    .revealSquadCard:nth-child(3n) { transform: rotate(-.6deg); }
+
+    .revealSquadCard::before {
+      content: "";
+      position: absolute;
+      width: 58px;
+      height: 14px;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(163,255,223,.72);
+    }
+
+    .revealSquadPosition {
+      font: 9px monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    .revealSquadName {
+      margin-top: 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      line-height: 1.05;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .revealSquadMeta {
+      margin-top: 8px;
+      font: 10px monospace;
+      color: var(--muted);
+    }
+
+    .revealPitchCard {
+      width: 150px;
+      max-width: 150px;
+    }
+
+    .revealPitchDetails {
+      background:#fffdfa;
+      color:#111;
+      padding:4px 8px;
+      border-radius:5px;
+      font-family:monospace;
+      font-size:11px;
+      border:2px solid #fffdfa;
+      box-shadow:2px 2px 0 rgba(0,0,0,.5);
+    }
+
+    @media (max-width: 700px) {
+      .revealSquadGrid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .revealSquadCard,
+      .revealSquadCard:nth-child(3n + 2),
+      .revealSquadCard:nth-child(3n) {
+        transform: none;
+      }
+
+      /* Keep the pitch useful on phones without forcing long player cards
+         into overlapping absolute-positioned areas. Full cards are listed below. */
+      #revealPitch .revealPitchCard {
+        width: 42px;
+        max-width: 42px;
+      }
+
+      #revealPitch .revealPitchDetails {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border-width: 2px;
+        font-size: 0;
+      }
+
+      #revealPitch .revealPitchDetails strong {
+        display: block;
+        font-family: Georgia, serif;
+        font-size: 10px;
+        line-height: 1;
+        max-width: 34px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      #revealPitch .revealPitchDetails .revealPitchOvr,
+      #revealPitch .revealPitchDetails .revealPitchPosition {
+        display: none;
+      }
+    }
+
+    /* --- Mobile --- */
+    @media (max-width: 900px) {
+      .main { grid-template-columns: 1fr; }
+      .options, .reveal { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 48px; }
+      .newspaper-columns { column-count: 1; }
+    }
+
+    .draftMain { grid-template-columns: minmax(0, 1fr) 390px; gap: 16px; }
+
+    @media (max-width: 700px) {
+      .app { width: min(100% - 18px, 1280px); padding-top: 12px; }
+      .header { margin-bottom: 18px; }
+      .top { align-items: flex-start; flex-direction: column; }
+      .title { font-size: 29px; }
+      .hero { padding: 48px 18px; margin-top: 5vh; }
+      .hero h1 { font-size: 43px; }
+      .draftMain { grid-template-columns: 1fr !important; }
+      .pitchRow { gap: 6px; align-items: stretch; }
+      .pitch { width: 100%; aspect-ratio: 1.30; max-height: none; border-width: 2px; border-radius: 6px; }
+      .formationControls { flex: 0 0 34px; gap: 4px; }
+      .formationArrow { width: 32px; height: 32px; padding: 0; }
+      .formationControlsLabel { font-size: 7px; }
+      .slotWrap { width: 56px; }
+      .slot { width: 34px; height: 34px; font-size: 7px; border-width: 2px; }
+      .label { max-width: 56px; font-size: 7px; padding: 2px 2px; }
+      .pitchCenterArc { width: 25%; border-width: 2px; }
+      .pitchCenterSpot, .penaltySpot { width: 5px; height: 5px; }
+      .pitchCenterSpot { left: calc(50% - 2.5px); top: -2.5px; }
+      .penaltySpot { left: calc(50% - 2.5px); }
+      .penaltyArea, .goalArea { border-width: 2px; }
+      .penaltyArc { border-width: 2px; }
+      .options { gap: 13px; }
+      .uclSummary { grid-template-columns: 1fr; }
+      .achievementGrid { grid-template-columns: 1fr; }
+      .newspaper-meta { flex-direction: column; gap: 5px; }
+      .newspaper-masthead { font-size: 48px; }
+      .headerRight { gap: 6px; }
+      .helpButton { min-width: 34px; padding: 7px 8px; }
+      .helpButton span { display: none; }
+      .helpPaper { padding: 30px 20px 20px; }
+      .helpPaper h2 { font-size: 28px; }
+    }
