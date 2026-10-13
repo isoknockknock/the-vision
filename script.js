@@ -655,6 +655,7 @@ const SUPABASE_URL = "https://jqxldhimffsafkjghguy.supabase.co";
       return ovr && ovr > 1 ? ovr : (p.overall || 0);
     }
     let formationMode = "down";
+    let currentManagerName = "";
 
     function isToggleFormation() {
       const formation = document.getElementById("formation")?.value;
@@ -1308,6 +1309,19 @@ const SUPABASE_URL = "https://jqxldhimffsafkjghguy.supabase.co";
 
 
     async function start() {
+      currentManagerName = (document.getElementById("managerName")?.value || "").trim();
+      const clubName = (document.getElementById("teamName")?.value || "").trim();
+      if (!currentManagerName) {
+        alert("Please enter a manager name.");
+        document.getElementById("managerName")?.focus();
+        return;
+      }
+      if (!clubName) {
+        alert("Please enter a club name.");
+        document.getElementById("teamName")?.focus();
+        return;
+      }
+      document.getElementById("teamName").value = clubName;
       try {
         const p = await fetch("season_pools.json"); if (!p.ok) throw Error();
         pools = await p.json();
@@ -1441,6 +1455,7 @@ const SUPABASE_URL = "https://jqxldhimffsafkjghguy.supabase.co";
 
     function show(id) { document.querySelectorAll(".screen").forEach(s => s.classList.remove("active")); document.getElementById(id).classList.add("active") }
     function club(c) { return Array.isArray(c) ? c.join(" / ") : (c || "Unknown") }
+    function escapeHtml(value) { return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
     function rating(x) { return x == null ? "N/A" : Number(x).toFixed(2) }
     function formationName() { return document.getElementById("formation").options[document.getElementById("formation").selectedIndex].text }
 
@@ -1615,7 +1630,7 @@ const SUPABASE_URL = "https://jqxldhimffsafkjghguy.supabase.co";
         return;
       }
 
-      const firstEmpty = formations[document.getElementById("formation").value].findIndex((_, i) => !placements[i]);
+      const firstEmpty = getFormationSlots().findIndex((_, i) => !placements[i]);
       if (firstEmpty >= 0) placements[firstEmpty] = p;
       const newOvr = getLiveOvr();
 
@@ -2103,7 +2118,8 @@ const SUPABASE_URL = "https://jqxldhimffsafkjghguy.supabase.co";
 
       document.getElementById("careerSummaryPanel").innerHTML = `
         <div class="kicker">Career Archive · #${careerNumber}</div>
-        <h2 style="font-family:Georgia,serif;font-size:30px;margin:5px 0 16px;">${team}</h2>
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#6d675d;">Managed by ${escapeHtml(currentManagerName || "Manager")}</div>
+        <h2 style="font-family:Georgia,serif;font-size:30px;margin:5px 0 16px;">${escapeHtml(team)}</h2>
         <div class="stats">
           <div class="stat"><small>FINAL OVR</small><b>${stats.finalOvr}</b></div>
           <div class="stat"><small>LEAGUE TITLES</small><b>${stats.leagueTitles}</b></div>
